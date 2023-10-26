@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imgAlumni"
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/tvNama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_toRightOf="@id/imgAlumni"
+            android:text="Nama Alumni"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/tvJurusan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvNama"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/imgAlumni"
+            android:text="Nama Jurusan" />
+
+        <TextView
+            android:id="@+id/tvTahunLulus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvJurusan"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/imgAlumni"
+            android:text="Tahun Lulus" />
+
+    </RelativeLayout>
+
+</LinearLayout>

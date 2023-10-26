@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Register">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:text="Tambah Alumni"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="15dp"
+        android:backgroundTint="#F4F4F4"
+        android:elevation="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNpm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="NPM"
+                android:textColorHint="@color/black"
+                android:inputType="number"
+                android:maxLength="12"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nama"
+                android:textColorHint="@color/black"
+                android:inputType="text"
+                android:maxLength="50"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTempatLahir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tempat Lahir"
+                android:textColorHint="@color/black"
+                android:inputType="text"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTglLahir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tanggal Lahir"
+                android:textColorHint="@color/black"
+                android:inputType="date"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etJk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Jenis Kelamin"
+                android:textColorHint="@color/black"
+                android:inputType="text"
+                android:maxLength="1"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="Email"
+                android:textColorHint="@color/black"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:hint="No.HP"
+                android:textColorHint="@color/black"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAlamat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Alamat"
+                android:textColorHint="@color/black"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Foto"
+                android:textColorHint="@color/black"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTahunLulus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="1"
+                android:hint="Tahun Lulus"
+                android:textColorHint="@color/black"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etJurusan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Jurusan"
+                android:textColorHint="@color/black"/>
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Jurusan"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="17dp"-->
+<!--                android:layout_marginStart="5dp"/>-->
+
+<!--            <Spinner-->
+<!--                android:id="@+id/spinnerJurusan"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:spinnerMode="dropdown"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginBottom="15dp"/>-->
+
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:layout_weight="10">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Foto"-->
+<!--                        android:textSize="17dp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:layout_marginStart="5dp"/>-->
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnFoto"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Pilih Foto"-->
+<!--                        android:layout_marginTop="5dp"/>-->
+
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:layout_weight="1">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Tahun Lulus"-->
+<!--                        android:textSize="17dp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:layout_marginStart="5dp"/>-->
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnTahunLulus"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Pilih Tahun"-->
+<!--                        android:layout_marginTop="5dp"/>-->
+
+<!--                </LinearLayout>-->
+
+<!--            </LinearLayout>-->
+
+            <Button
+                android:id="@+id/btnAddAlumni"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TAMBAH ALUMNI"
+                android:backgroundTint="@color/black"
+                android:layout_margin="20dp"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

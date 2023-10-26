@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Daftar Alumni"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:layout_margin="20dp"/>
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:backgroundTint="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Tambah "/>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_margin="20dp">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnAdd"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:background="@drawable/add"-->
+<!--            android:layout_marginStart="50dp"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnReport"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:background="@drawable/report"-->
+<!--            android:layout_marginLeft="50dp"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnProfile"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:background="@drawable/person"-->
+<!--            android:layout_marginLeft="50dp"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnLogout"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:background="@drawable/logout"-->
+<!--            android:layout_marginLeft="50dp"/>-->
+
+<!--    </LinearLayout>-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"/>
+
+</LinearLayout>
