@@ -1,9 +1,11 @@
 package com.example.sisteminformasialumni;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,8 +50,49 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
         holder.tvEmail.setText(alumni.getEmail());
         holder.tvNoHp.setText(alumni.getNo_hp());
         holder.tvAlamat.setText(alumni.getAlamat());
-        holder.tvJurusan.setText(alumni.getNama_jurusan());
-        holder.tvTahunLulus.setText(String.valueOf(alumni.getTahun_lulus()));
+        holder.tvJurusan.setText(String.valueOf(alumni.getId_jurusan()));
+        holder.tvTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
+
+        holder.imgAlumni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    // Gunakan adapterPosition untuk mengakses elemen dengan benar
+                    Alumni selectedAlumni = alumniList.get(adapterPosition);
+
+                    int alumniId = selectedAlumni.getId_alumni();
+                    int npm = selectedAlumni.getNpm();
+                    String nama = selectedAlumni.getNama();
+                    String tempat_lahir = selectedAlumni.getTempat_lahir();
+                    String tgl_lahir = selectedAlumni.getTgl_lahir();
+                    String jk = selectedAlumni.getJk();
+                    String email = selectedAlumni.getEmail();
+                    String no_hp = selectedAlumni.getNo_hp();
+                    String alamat = selectedAlumni.getAlamat();
+                    String foto = selectedAlumni.getFoto();
+                    int id_jurusan = selectedAlumni.getId_jurusan();
+                    int id_tahun_lulus = selectedAlumni.getId_tahun_lulus();
+
+                    // Menggunakan Intent untuk memanggil class lain
+                    Intent intent = new Intent(mCtx, updateAlumni.class);
+                    intent.putExtra("alumniId", alumniId);
+                    intent.putExtra("npm", npm);
+                    intent.putExtra("nama", nama);
+                    intent.putExtra("tempat_lahir", tempat_lahir);
+                    intent.putExtra("tgl_lahir", tgl_lahir);
+                    intent.putExtra("jk", jk);
+                    intent.putExtra("email", email);
+                    intent.putExtra("no_hp", no_hp);
+                    intent.putExtra("alamat", alamat);
+                    intent.putExtra("foto", foto);
+                    intent.putExtra("jurusan", id_jurusan);
+                    intent.putExtra("tahun_lulus", id_tahun_lulus);
+
+                    mCtx.startActivity(intent);
+                }
+            }
+        });
 
     }
 
@@ -62,6 +105,7 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
 
         TextView tvNama, tvNpm, tvTempatLahir, tvTglLahir, tvJk, tvEmail, tvNoHp, tvAlamat, tvJurusan, tvTahunLulus;
         ImageView imgAlumni;
+
 
         public detailAlumniViewHolder(View itemView) {
             super(itemView);
@@ -77,6 +121,7 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
             tvAlamat = itemView.findViewById(R.id.tvAlamat);
             tvJurusan = itemView.findViewById(R.id.tvJurusan);
             tvTahunLulus = itemView.findViewById(R.id.tvTahunLulus);
+
         }
     }
 

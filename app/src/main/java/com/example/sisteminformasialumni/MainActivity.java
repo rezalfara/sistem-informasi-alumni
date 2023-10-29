@@ -30,11 +30,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private List<Alumni> alumniList;
+    private List<Jurusan> jurusanList; // Daftar jurusan
+    private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
     private RecyclerView recyclerView;
     private AlumniAdapter alumniAdapter;
-
     Button btnCreate;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnCreate = findViewById(R.id.btnAdd);
-
-//        btnReport = findViewById(R.id.btnReport);
-//        btnProfile = findViewById(R.id.btnProfile);
-//        btnLogout = findViewById(R.id.btnLogout);
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         //initializing the productlist
         alumniList = new ArrayList<>();
+        jurusanList = new ArrayList<>();
+        tahunLulusList = new ArrayList<>();
 
         //this method will fetch and parse json
         //to display it in recyclerview
@@ -100,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 //adding the product to product list
                                 alumniList.add(new Alumni(
+                                        alumni.getInt("id_alumni"),
                                         alumni.getInt("npm"),
                                         alumni.getString("nama"),
                                         alumni.getString("tempat_lahir"),
@@ -109,13 +108,13 @@ public class MainActivity extends AppCompatActivity {
                                         alumni.getString("no_hp"),
                                         alumni.getString("alamat"),
                                         alumni.getString("foto"),
-                                        alumni.getString("nama_jurusan"),
-                                        alumni.getInt("tahun_lulus")
+                                        alumni.getInt("id_jurusan"),
+                                        alumni.getInt("id_tahun_lulus")
                                 ));
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivity.this, alumniList);
+                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivity.this, alumniList, jurusanList, tahunLulusList);
                             recyclerView.setAdapter(alumniAdapter);
 
                         } catch (JSONException e) {

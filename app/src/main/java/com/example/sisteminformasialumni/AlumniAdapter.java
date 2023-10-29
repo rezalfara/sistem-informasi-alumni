@@ -19,10 +19,15 @@ import java.util.List;
 public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniViewHolder> {
     private Context mCtx;
     private List<Alumni> alumniList;
+    private List<Jurusan> jurusanList; // Daftar jurusan
+    private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
 
-    public AlumniAdapter(Context mCtx, List<Alumni> alumniList) {
+
+    public AlumniAdapter(Context mCtx, List<Alumni> alumniList, List<Jurusan> jurusanList, List<Tahun_lulus> tahunLulusList) {
         this.mCtx = mCtx;
         this.alumniList = alumniList;
+        this.jurusanList = jurusanList;
+        this.tahunLulusList = tahunLulusList;
     }
 
     @Override
@@ -44,8 +49,8 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
                 .into(holder.imgAlumni);
 
         holder.tvNama.setText(alumni.getNama());
-        holder.tvJurusan.setText(alumni.getNama_jurusan());
-        holder.tvTahunLulus.setText(String.valueOf(alumni.getTahun_lulus()));
+        holder.tvJurusan.setText(String.valueOf(alumni.getId_jurusan()));
+        holder.tvTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
 
         holder.tvNama.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,11 +59,11 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     // Gunakan adapterPosition untuk mengakses elemen dengan benar
                     Alumni selectedAlumni = alumniList.get(adapterPosition);
-                    int alumniNpm = selectedAlumni.getNpm();
+                    int alumniId = selectedAlumni.getId_alumni();
 
                     // Menggunakan Intent untuk memanggil class lain
                     Intent intent = new Intent(mCtx, detailAlumni.class);
-                    intent.putExtra("alumniNpm", alumniNpm);
+                    intent.putExtra("alumniId", alumniId);
                     mCtx.startActivity(intent);
                 }
             }

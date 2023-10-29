@@ -54,10 +54,10 @@ public class tambahAlumni extends AppCompatActivity {
                 String phone = etPhone.getText().toString();
                 String alamat = etAlamat.getText().toString();
                 String foto = etFoto.getText().toString();
-                String tahun_lulus = etTahunLulus.getText().toString();
-                String jurusan = etJurusan.getText().toString();
+                String id_tahun_lulus = etTahunLulus.getText().toString();
+                String id_jurusan = etJurusan.getText().toString();
 
-                if (!(npm.isEmpty() || nama.isEmpty() || tempatLahir.isEmpty() || tglLahir.isEmpty() || jk.isEmpty() || email.isEmpty() || phone.isEmpty() || alamat.isEmpty() || foto.isEmpty() || tahun_lulus.isEmpty() || jurusan.isEmpty())){
+                if (!(npm.isEmpty() || nama.isEmpty() || tempatLahir.isEmpty() || tglLahir.isEmpty() || jk.isEmpty() || email.isEmpty() || phone.isEmpty() || alamat.isEmpty() || foto.isEmpty() || id_jurusan.isEmpty() || id_tahun_lulus.isEmpty())){
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlCreate, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -84,8 +84,8 @@ public class tambahAlumni extends AppCompatActivity {
                             params.put("no_hp", phone);
                             params.put("alamat", alamat);
                             params.put("foto", foto);
-                            params.put("id_tahun_lulus", tahun_lulus);
-                            params.put("id_jurusan", jurusan);
+                            params.put("id_tahun_lulus", id_tahun_lulus);
+                            params.put("id_jurusan", id_jurusan);
 
                             return params;
                         }

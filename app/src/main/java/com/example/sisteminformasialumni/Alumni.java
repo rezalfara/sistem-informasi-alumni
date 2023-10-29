@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 public class Alumni {
+    private int id_alumni;
     private int npm;
     private String nama;
     private String tempat_lahir;
@@ -10,10 +11,11 @@ public class Alumni {
     private String no_hp;
     private String alamat;
     private String foto;
-    private String nama_jurusan;
-    private int tahun_lulus;
+    private int id_jurusan;
+    private int id_tahun_lulus;
 
-    public Alumni(int npm, String nama, String tempat_lahir, String tgl_lahir, String jk, String email, String no_hp, String alamat, String foto, String nama_jurusan, int tahun_lulus) {
+    public Alumni(int id_alumni, int npm, String nama, String tempat_lahir, String tgl_lahir, String jk, String email, String no_hp, String alamat, String foto, int id_jurusan, int id_tahun_lulus) {
+        this.id_alumni = id_alumni;
         this.npm = npm;
         this.nama = nama;
         this.tempat_lahir = tempat_lahir;
@@ -23,8 +25,16 @@ public class Alumni {
         this.no_hp = no_hp;
         this.alamat = alamat;
         this.foto = foto;
-        this.nama_jurusan = nama_jurusan;
-        this.tahun_lulus = tahun_lulus;
+        this.id_jurusan = id_jurusan;
+        this.id_tahun_lulus = id_tahun_lulus;
+    }
+
+    public int getId_alumni() {
+        return id_alumni;
+    }
+
+    public void setId_alumni(int id_alumni) {
+        this.id_alumni = id_alumni;
     }
 
     public int getNpm() {
@@ -99,19 +109,19 @@ public class Alumni {
         this.foto = foto;
     }
 
-    public String getNama_jurusan() {
-        return nama_jurusan;
+    public int getId_jurusan() {
+        return id_jurusan;
     }
 
-    public void setNama_jurusan(String nama_jurusan) {
-        this.nama_jurusan = nama_jurusan;
+    public void setId_jurusan(int id_jurusan) {
+        this.id_jurusan = id_jurusan;
     }
 
-    public int getTahun_lulus() {
-        return tahun_lulus;
+    public int getId_tahun_lulus() {
+        return id_tahun_lulus;
     }
 
-    public void setTahun_lulus(int tahun_lulus) {
-        this.tahun_lulus = tahun_lulus;
+    public void setId_tahun_lulus(int id_tahun_lulus) {
+        this.id_tahun_lulus = id_tahun_lulus;
     }
 }

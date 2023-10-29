@@ -27,22 +27,12 @@ public class detailAlumni extends AppCompatActivity {
     private List<Alumni> detailAlumniList;
     private RecyclerView rvDetailAlumni;
     private detailAlumniAdapter detailAlumniAdapter;
-    Button btnUpdate;
+//    Button btnUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_alumni);
-
-        btnUpdate = findViewById(R.id.btnUpdate);
-
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(detailAlumni.this, Login.class));
-                finish();
-            }
-        });
 
         //getting the recyclerview from xml
         rvDetailAlumni = findViewById(R.id.rvDetailAlumni);
@@ -52,12 +42,11 @@ public class detailAlumni extends AppCompatActivity {
 //        //initializing the productlist
         detailAlumniList = new ArrayList<>();
 
-
         // Menerima data dari Intent
         Intent intent = getIntent();
-        int alumniNpm = intent.getIntExtra("alumniNpm", 0); // 0 adalah nilai default jika data tidak ditemukan
+        int alumniId = intent.getIntExtra("alumniId", 0); // 0 adalah nilai default jika data tidak ditemukan
 
-        loadAlumniByNpm(alumniNpm);
+        loadAlumniById(alumniId);
     }
 
     @Override
@@ -67,9 +56,9 @@ public class detailAlumni extends AppCompatActivity {
         finish();
     }
 
-    private void loadAlumniByNpm(int alumniNpm) {
+    private void loadAlumniById(int alumniId) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlReadById+alumniNpm,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlReadById+alumniId,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -78,6 +67,7 @@ public class detailAlumni extends AppCompatActivity {
                             JSONObject alumni = new JSONObject(response);
 
                             // Mendapatkan data dari objek JSON
+                            int id_alumni = alumni.getInt("id_alumni");
                             int npm = alumni.getInt("npm");
                             String nama = alumni.getString("nama");
                             String tempatLahir = alumni.getString("tempat_lahir");
@@ -87,12 +77,12 @@ public class detailAlumni extends AppCompatActivity {
                             String noHp = alumni.getString("no_hp");
                             String alamat = alumni.getString("alamat");
                             String foto = alumni.getString("foto");
-                            String jurusan = alumni.getString("nama_jurusan");
-                            int tahunLulus = alumni.getInt("tahun_lulus");
+                            int id_jurusan = alumni.getInt("id_jurusan");
+                            int id_tahunLulus = alumni.getInt("id_tahun_lulus");
 
                             // Menambahkan data ke detailAlumniList
                             detailAlumniList.add(new Alumni(
-                                    npm, nama, tempatLahir, tanggalLahir, jenisKelamin, email, noHp, alamat, foto, jurusan, tahunLulus
+                                    id_alumni, npm, nama, tempatLahir, tanggalLahir, jenisKelamin, email, noHp, alamat, foto, id_jurusan, id_tahunLulus
                             ));
 
                             // Membuat adapter dan mengaturnya ke recyclerview
