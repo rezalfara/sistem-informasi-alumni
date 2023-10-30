@@ -2,7 +2,7 @@ package com.example.sisteminformasialumni;
 
 public class Db_Contract {
 
-    public static String ip = "10.115.128.192";
+    public static String ip = "192.168.229.100";
 
     public static final String urlRegister = "http://"+ip+"/project/api-register.php";
     public static final String urlLogin = "http://"+ip+"/project/api-login.php";

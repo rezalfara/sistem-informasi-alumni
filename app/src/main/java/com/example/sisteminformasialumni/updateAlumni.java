@@ -114,6 +114,7 @@ public class updateAlumni extends AppCompatActivity {
                         if (response.equals("sukses")) {
                             // Data berhasil diperbarui
                             // Lakukan tindakan yang sesuai di sini, misalnya menampilkan pesan sukses kepada pengguna
+                            Log.d("Response", response);
                             Toast.makeText(updateAlumni.this, "Data Berhasil DiUpdate", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(updateAlumni.this, detailAlumni.class);
@@ -133,6 +134,7 @@ public class updateAlumni extends AppCompatActivity {
                             startActivity(intent);
 
                         } else {
+                            Log.e("Error", response);
                             // Ini adalah contoh pernyataan log
                             // Operasi gagal
                             // Lakukan tindakan yang sesuai di sini, misalnya menampilkan pesan kesalahan kepada pengguna

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,7 +53,7 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
         holder.tvJurusan.setText(String.valueOf(alumni.getId_jurusan()));
         holder.tvTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
 
-        holder.tvNama.setOnClickListener(new View.OnClickListener() {
+        holder.llAlumniList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int adapterPosition = holder.getAdapterPosition();
@@ -78,12 +79,14 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
 
     class AlumniViewHolder extends RecyclerView.ViewHolder {
 
+        LinearLayout llAlumniList;
         TextView tvNama, tvJurusan, tvTahunLulus;
         ImageView imgAlumni;
 
         public AlumniViewHolder(View itemView) {
             super(itemView);
 
+            llAlumniList = itemView.findViewById(R.id.llAlumniList);
             tvNama = itemView.findViewById(R.id.tvNama);
             tvJurusan = itemView.findViewById(R.id.tvJurusan);
             tvTahunLulus = itemView.findViewById(R.id.tvTahunLulus);

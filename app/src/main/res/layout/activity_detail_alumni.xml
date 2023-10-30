@@ -16,7 +16,6 @@
         android:gravity="center"
         android:layout_margin="20dp"/>
 
-
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvDetailAlumni"
             android:layout_width="match_parent"

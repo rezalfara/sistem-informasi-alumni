@@ -8,12 +8,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapter.detailAlumniViewHolder>{
     private Context mCtx;
@@ -53,7 +62,7 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
         holder.tvJurusan.setText(String.valueOf(alumni.getId_jurusan()));
         holder.tvTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
 
-        holder.imgAlumni.setOnClickListener(new View.OnClickListener() {
+        holder.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int adapterPosition = holder.getAdapterPosition();
@@ -94,6 +103,50 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
             }
         });
 
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    // Gunakan adapterPosition untuk mengakses elemen dengan benar
+                    Alumni selectedAlumni = alumniList.get(adapterPosition);
+
+                    int alumniId = selectedAlumni.getId_alumni();
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlDelete,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    // Tindakan setelah data dihapus (misalnya, menampilkan pesan sukses)
+                                    // Kemungkinan menampilkan pesan sukses atau memperbarui tampilan RecyclerView
+                                    Toast.makeText(mCtx, "Data berhasil dihapus", Toast.LENGTH_SHORT).show();
+
+                                    Intent intent = new Intent(mCtx, MainActivity.class);
+                                    intent.putExtra("alumniId", alumniId);
+                                    mCtx.startActivity(intent);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // Tindakan jika ada kesalahan dalam permintaan (misalnya, menampilkan pesan kesalahan)
+                                    Toast.makeText(mCtx, "Gagal menghapus data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams() {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("alumniId", String.valueOf(alumniId)); // Mengirim ID alumni untuk dihapus
+                            return params;
+                        }
+                    };
+
+                    // Tambahkan permintaan ke RequestQueue
+                    RequestQueue requestQueue = Volley.newRequestQueue(mCtx);
+                    requestQueue.add(stringRequest);
+                }
+            }
+        });
     }
 
     @Override
@@ -105,6 +158,7 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
 
         TextView tvNama, tvNpm, tvTempatLahir, tvTglLahir, tvJk, tvEmail, tvNoHp, tvAlamat, tvJurusan, tvTahunLulus;
         ImageView imgAlumni;
+        Button btnUpdate, btnDelete;
 
 
         public detailAlumniViewHolder(View itemView) {
@@ -121,6 +175,9 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
             tvAlamat = itemView.findViewById(R.id.tvAlamat);
             tvJurusan = itemView.findViewById(R.id.tvJurusan);
             tvTahunLulus = itemView.findViewById(R.id.tvTahunLulus);
+
+            btnUpdate = itemView.findViewById(R.id.btnUpdate);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
 
         }
     }
