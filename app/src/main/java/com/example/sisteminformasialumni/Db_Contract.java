@@ -14,6 +14,5 @@ public class Db_Contract {
 
     public static final String pathImage = "http://"+ip+"/project/img/";
     public static final String urlGetJurusan = "http://"+ip+"/project/api-get-jurusan.php";
-    public static final String urlGetIdJurusan = "http://"+ip+"/project/api-get-id-jurusan-with-selected-jurusan.php";
 
 }
