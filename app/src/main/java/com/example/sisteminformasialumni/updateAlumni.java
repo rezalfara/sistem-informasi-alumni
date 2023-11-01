@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,8 +32,12 @@ import java.util.List;
 import java.util.Map;
 
 public class updateAlumni extends AppCompatActivity {
-    private TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etJk, etEmail, etPhone, etAlamat, etFoto, etTahunLulus, etJurusan;
+    private TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etJk, etEmail, etPhone, etAlamat, etFoto, etTahunLulus;
+    private Spinner spinnerJurusan;
+    private RadioGroup radioGroupGender;
+    private RadioButton radioButtonMale, radioButtonFemale;
     private Button btnUpdateAlumni;
+    private List<Jurusan> jurusanList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +49,17 @@ public class updateAlumni extends AppCompatActivity {
         etNama = findViewById(R.id.etNama);
         etTempatLahir = findViewById(R.id.etTempatLahir);
         etTglLahir = findViewById(R.id.etTglLahir);
-        etJk = findViewById(R.id.etJk);
+//        etJk = findViewById(R.id.etJk);
         etEmail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
         etAlamat = findViewById(R.id.etAlamat);
         etFoto = findViewById(R.id.etFoto);
-        etJurusan = findViewById(R.id.etJurusan);
+        spinnerJurusan = findViewById(R.id.spinnerJurusan);
         etTahunLulus = findViewById(R.id.etTahunLulus);
+
+        radioGroupGender = findViewById(R.id.radioGroupGender);
+        radioButtonMale = findViewById(R.id.radioButtonMale);
+        radioButtonFemale = findViewById(R.id.radioButtonFemale);
 
         btnUpdateAlumni = findViewById(R.id.btnUpdateAlumni);
 
@@ -60,8 +73,10 @@ public class updateAlumni extends AppCompatActivity {
         String no_hp = getIntent().getStringExtra("no_hp");
         String alamat = getIntent().getStringExtra("alamat");
         String foto = getIntent().getStringExtra("foto");
-        int id_jurusan = getIntent().getIntExtra("jurusan",0);
+//        int id_jurusan = getIntent().getIntExtra("jurusan",0);
         int id_tahun_lulus = getIntent().getIntExtra("tahun_lulus",0);
+
+
 
         // Display the data in EditText fields
         etId.setText(String.valueOf(id));
@@ -69,42 +84,129 @@ public class updateAlumni extends AppCompatActivity {
         etNama.setText(nama);
         etTempatLahir.setText(tempat_lahir);
         etTglLahir.setText(tgl_lahir);
-        etJk.setText(jk);
+
+        //Jenis kelamin
+        if (jk.equals("Laki-laki")) {
+            radioButtonMale.setChecked(true); // Radio button "Laki-laki" dipilih
+        } else if (jk.equals("Perempuan")) {
+            radioButtonFemale.setChecked(true); // Radio button "Perempuan" dipilih
+        }
+
+        //Jurusan
+        fetchDataFromMySQL();
+
         etEmail.setText(email);
         etPhone.setText(no_hp);
         etAlamat.setText(alamat);
         etFoto.setText(foto);
-        etJurusan.setText(String.valueOf(id_jurusan));
         etTahunLulus.setText(String.valueOf(id_tahun_lulus));
 
         // Set a click listener for the updateButton
         btnUpdateAlumni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                int selectedGenderId = radioGroupGender.getCheckedRadioButtonId();
+                String gender = "Unknown"; // Nilai default
+
+                if (selectedGenderId == radioButtonMale.getId()) {
+                    gender = "Laki-laki";
+                } else if (selectedGenderId == radioButtonFemale.getId()) {
+                    gender = "Perempuan";
+                }
+
                 // Get the updated data from EditText fields
                 int alumniId = Integer.parseInt(etId.getText().toString());
                 int npm = Integer.parseInt(etNpm.getText().toString());
                 String nama = etNama.getText().toString();
                 String tempat_lahir = etTempatLahir.getText().toString();
                 String tgl_lahir = etTglLahir.getText().toString();
-                String jk = etJk.getText().toString();
+//                String jk = etJk.getText().toString();
                 String email = etEmail.getText().toString();
                 String no_hp = etPhone.getText().toString();
                 String alamat = etAlamat.getText().toString();
                 String foto = etFoto.getText().toString();
-                int id_jurusan = Integer.parseInt(etJurusan.getText().toString());
+                String selectedJurusan = spinnerJurusan.getSelectedItem().toString();
+                int id_jurusan = getIdJurusan(selectedJurusan);
                 int id_tahun_lulus = Integer.parseInt(etTahunLulus.getText().toString());
 
                 // Send a request to your server to update the data
-                updateData(alumniId, npm, nama, tempat_lahir, tgl_lahir, jk, email, no_hp, alamat, foto, id_jurusan, id_tahun_lulus); // Implement this method
+                updateData(alumniId, npm, nama, tempat_lahir, tgl_lahir, gender, email, no_hp, alamat, foto, id_jurusan, id_tahun_lulus); // Implement this method
                 // Provide user feedback (e.g., a Toast message) about the update result
             }
         });
     }
 
-    private void updateData(final int alumniId,final int npm,final String nama,final String tempat_lahir,final String tgl_lahir,final String jk,final String email,final String no_hp,final String alamat,final String foto,final int id_jurusan,final int id_tahun_lulus) {
+    private void fetchDataFromMySQL() {
+        StringRequest request = new StringRequest(Request.Method.GET, Db_Contract.urlGetJurusan, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int id = jsonObject.getInt("id_jurusan"); // Sesuaikan dengan nama kolom di database Anda
+                        String namaJurusan = jsonObject.getString("nama_jurusan"); // Sesuaikan dengan nama kolom di database Anda
+
+                        // Tambahkan data ke dalam jurusanList
+                        Jurusan jurusan = new Jurusan(id, namaJurusan);
+                        jurusanList.add(jurusan);
+                    }
+
+                    List<String> namaJurusanList = new ArrayList<>();
+                    for (Jurusan jurusan : jurusanList) {
+                        namaJurusanList.add(jurusan.getNama_jurusan());
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(updateAlumni.this, android.R.layout.simple_spinner_item, namaJurusanList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerJurusan.setAdapter(adapter);
+
+                    int id_jurusan = getIntent().getIntExtra("jurusan",0);
+
+                    for (int i = 0; i < spinnerJurusan.getCount(); i++) {
+                        if (id_jurusan == jurusanList.get(i).getId_jurusan()) {
+                            // ID jurusan cocok, Anda dapat mengatur Spinner ke item tersebut
+                            spinnerJurusan.setSelection(i);
+                            break; // Keluar dari loop setelah item cocok ditemukan
+                        }
+                    }
+
+                    // Sekarang, jurusanList berisi data dari MySQL
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(updateAlumni.this, "Gagal mengambil data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
+    private int getIdJurusan(String namaJurusan) {
+        int idJurusan = -1; // ID default jika tidak ditemukan
+
+        for (Jurusan jurusan : jurusanList) {
+            if (jurusan.getNama_jurusan().equals(namaJurusan)) {
+                idJurusan = jurusan.getId_jurusan();
+                break; // Keluar dari loop setelah cocok ditemukan
+            }
+        }
+
+        return idJurusan;
+    }
+
+    private void updateData(final int alumniId,final int npm,final String nama,final String tempat_lahir,final String tgl_lahir,final String gender,final String email,final String no_hp,final String alamat,final String foto,final int id_jurusan,final int id_tahun_lulus) {
         // Instantiate a RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
+
+        String jk = gender;
 
         // Create a request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlUpdate,

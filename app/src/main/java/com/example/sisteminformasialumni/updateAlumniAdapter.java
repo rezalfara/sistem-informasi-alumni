@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,11 +43,18 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
         holder.etNpm.setText(String.valueOf(alumni.getNpm()));
         holder.etTempatLahir.setText(alumni.getTempat_lahir());
         holder.etTglLahir.setText(alumni.getTgl_lahir());
-        holder.etJk.setText(alumni.getJk());
+//        holder.etJk.setText(alumni.getJk());
+
+        if (alumni.getJk() == "Laki-laki"){
+            holder.radioButtonMale.setChecked(true);
+        }else if (alumni.getJk() == "Perempuan"){
+            holder.radioButtonFemale.setChecked(true);
+        }
+
         holder.etEmail.setText(alumni.getEmail());
         holder.etPhone.setText(alumni.getNo_hp());
         holder.etAlamat.setText(alumni.getAlamat());
-        holder.etJurusan.setText(String.valueOf(alumni.getId_jurusan()));
+        holder.spinnerJurusan.getSelectedItem().toString();
         holder.etTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
 
     }
@@ -56,7 +66,10 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
 
     class updateAlumniViewHolder extends RecyclerView.ViewHolder {
 
-        TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etJk, etEmail, etPhone, etAlamat, etFoto, etTahunLulus, etJurusan;
+        TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto, etTahunLulus;
+        RadioGroup radioGroupGender;
+        RadioButton radioButtonMale, radioButtonFemale;
+        Spinner spinnerJurusan;
 
         public updateAlumniViewHolder(View itemView) {
             super(itemView);
@@ -66,14 +79,18 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
             etNama = itemView.findViewById(R.id.etNama);
             etTempatLahir = itemView.findViewById(R.id.etTempatLahir);
             etTglLahir = itemView.findViewById(R.id.etTglLahir);
-            etJk = itemView.findViewById(R.id.etJk);
+//            etJk = itemView.findViewById(R.id.etJk);
+            radioGroupGender = itemView.findViewById(R.id.radioGroupGender);
+            radioButtonMale = itemView.findViewById(R.id.radioButtonMale);
+            radioButtonFemale = itemView.findViewById(R.id.radioButtonFemale);
+
             etEmail = itemView.findViewById(R.id.etEmail);
             etPhone = itemView.findViewById(R.id.etPhone);
             etPhone = itemView.findViewById(R.id.etPhone);
             etAlamat = itemView.findViewById(R.id.etAlamat);
             etFoto = itemView.findViewById(R.id.etFoto);
             etTahunLulus = itemView.findViewById(R.id.etTahunLulus);
-            etJurusan = itemView.findViewById(R.id.etJurusan);
+            spinnerJurusan = itemView.findViewById(R.id.spinnerJurusan);
 
         }
     }

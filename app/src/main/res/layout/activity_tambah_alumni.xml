@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Register">
+    tools:context=".tambahAlumni">
 
     <TextView
         android:layout_width="match_parent"
@@ -16,6 +16,10 @@
         android:textStyle="bold"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -65,14 +69,44 @@
                 android:textColorHint="@color/black"
                 android:inputType="date"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etJk"
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/etJk"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Jenis Kelamin"-->
+<!--                android:textColorHint="@color/black"-->
+<!--                android:inputType="text"-->
+<!--                android:maxLength="1"/>-->
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Jenis Kelamin"
-                android:textColorHint="@color/black"
-                android:inputType="text"
-                android:maxLength="1"/>
+                android:text="Jenis Kelamin"
+                android:textSize="18dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"/>
+
+            <RadioGroup
+                android:id="@+id/radioGroupGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true">
+
+                <RadioButton
+                    android:id="@+id/radioButtonMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Laki-laki"
+                    android:checked="true" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Perempuan" />
+            </RadioGroup>
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
@@ -115,85 +149,28 @@
                 android:hint="Tahun Lulus"
                 android:textColorHint="@color/black"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etJurusan"
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/etJurusan"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:inputType="number"-->
+<!--                android:hint="Jurusan"-->
+<!--                android:textColorHint="@color/black"/>-->
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="Jurusan"
-                android:textColorHint="@color/black"/>
+                android:text="Jurusan"
+                android:textSize="18dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
 
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Jurusan"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="17dp"-->
-<!--                android:layout_marginStart="5dp"/>-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/spinnerJurusan"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="40dp"-->
-<!--                android:spinnerMode="dropdown"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginBottom="15dp"/>-->
-
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal">-->
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:layout_weight="10">-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Foto"-->
-<!--                        android:textSize="17dp"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:layout_marginStart="5dp"/>-->
-
-<!--                    <Button-->
-<!--                        android:id="@+id/btnFoto"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Pilih Foto"-->
-<!--                        android:layout_marginTop="5dp"/>-->
-
-<!--                </LinearLayout>-->
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:layout_weight="1">-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Tahun Lulus"-->
-<!--                        android:textSize="17dp"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:layout_marginStart="5dp"/>-->
-
-<!--                    <Button-->
-<!--                        android:id="@+id/btnTahunLulus"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Pilih Tahun"-->
-<!--                        android:layout_marginTop="5dp"/>-->
-
-<!--                </LinearLayout>-->
-
-<!--            </LinearLayout>-->
+            <Spinner
+                android:id="@+id/spinnerJurusan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/btnAddAlumni"
@@ -206,5 +183,7 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+    </ScrollView>
 
 </LinearLayout>

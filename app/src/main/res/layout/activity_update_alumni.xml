@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Register">
+    tools:context=".updateAlumni">
 
     <TextView
         android:layout_width="match_parent"
@@ -14,136 +14,186 @@
         android:text="Update Alumni"
         android:gravity="center"
         android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"/>
 
-    <androidx.cardview.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:cardCornerRadius="15dp"
-        android:backgroundTint="#F4F4F4"
-        android:elevation="10dp">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp">
+            android:layout_margin="20dp"
+            app:cardCornerRadius="15dp"
+            android:backgroundTint="#F4F4F4"
+            android:elevation="10dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etId"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ID"
-                android:textColorHint="@color/black"
-                android:maxLength="12"/>
+                android:orientation="vertical"
+                android:layout_margin="20dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etNpm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="NPM"
-                android:textColorHint="@color/black"
-                android:inputType="number"
-                android:maxLength="12"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etId"
+                    android:inputType="none"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="ID"
+                    android:focusable="false"
+                    android:textColorHint="@color/black"
+                    android:maxLength="12"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etNama"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nama"
-                android:textColorHint="@color/black"
-                android:inputType="text"
-                android:maxLength="50"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etNpm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="NPM"
+                    android:textColorHint="@color/black"
+                    android:inputType="number"
+                    android:maxLength="12"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTempatLahir"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tempat Lahir"
-                android:textColorHint="@color/black"
-                android:inputType="text"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etNama"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nama"
+                    android:textColorHint="@color/black"
+                    android:inputType="text"
+                    android:maxLength="50"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTglLahir"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tanggal Lahir"
-                android:textColorHint="@color/black"
-                android:inputType="date"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTempatLahir"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tempat Lahir"
+                    android:textColorHint="@color/black"
+                    android:inputType="text"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etJk"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Jenis Kelamin"
-                android:textColorHint="@color/black"
-                android:inputType="text"
-                android:maxLength="1"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTglLahir"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tanggal Lahir"
+                    android:textColorHint="@color/black"
+                    android:inputType="date"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="Email"
-                android:textColorHint="@color/black"/>
+                <!--            <com.google.android.material.textfield.TextInputEditText-->
+                <!--                android:id="@+id/etJk"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:hint="Jenis Kelamin"-->
+                <!--                android:textColorHint="@color/black"-->
+                <!--                android:inputType="text"-->
+                <!--                android:maxLength="1"/>-->
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:hint="No.HP"
-                android:textColorHint="@color/black"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Jenis Kelamin"
+                    android:textSize="18dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="5dp"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etAlamat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Alamat"
-                android:textColorHint="@color/black"/>
+                <RadioGroup
+                    android:id="@+id/radioGroupGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerHorizontal="true">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etFoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Foto"
-                android:textColorHint="@color/black"/>
+                    <RadioButton
+                        android:id="@+id/radioButtonMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Laki-laki"
+                        android:checked="true" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTahunLulus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="Tahun Lulus"
-                android:textColorHint="@color/black"/>
+                    <RadioButton
+                        android:id="@+id/radioButtonFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Perempuan" />
+                </RadioGroup>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etJurusan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="Jurusan"
-                android:textColorHint="@color/black"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:hint="Email"
+                    android:textColorHint="@color/black"/>
 
-            <Button
-                android:id="@+id/btnUpdateAlumni"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="UPDATE ALUMNI"
-                android:backgroundTint="@color/black"
-                android:layout_margin="20dp"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:hint="No.HP"
+                    android:textColorHint="@color/black"/>
 
-        </LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAlamat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="Alamat"
+                    android:textColorHint="@color/black"/>
 
-    </androidx.cardview.widget.CardView>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="Foto"
+                    android:textColorHint="@color/black"/>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTahunLulus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:hint="Tahun Lulus"
+                    android:textColorHint="@color/black"/>
+
+                <!--            <com.google.android.material.textfield.TextInputEditText-->
+                <!--                android:id="@+id/etJurusan"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:inputType="number"-->
+                <!--                android:hint="Jurusan"-->
+                <!--                android:textColorHint="@color/black"/>-->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Jurusan"
+                    android:textSize="18dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"/>
+
+                <Spinner
+                    android:id="@+id/spinnerJurusan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnUpdateAlumni"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="UPDATE ALUMNI"
+                    android:backgroundTint="@color/black"
+                    android:layout_margin="20dp"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </ScrollView>
 
 </LinearLayout>
