@@ -32,12 +32,13 @@ import java.util.List;
 import java.util.Map;
 
 public class updateAlumni extends AppCompatActivity {
-    private TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etJk, etEmail, etPhone, etAlamat, etFoto, etTahunLulus;
-    private Spinner spinnerJurusan;
+    private TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etJk, etEmail, etPhone, etAlamat, etFoto;
+    private Spinner spinnerJurusan, spinnerTL;
     private RadioGroup radioGroupGender;
     private RadioButton radioButtonMale, radioButtonFemale;
     private Button btnUpdateAlumni;
     private List<Jurusan> jurusanList = new ArrayList<>();
+    private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +50,12 @@ public class updateAlumni extends AppCompatActivity {
         etNama = findViewById(R.id.etNama);
         etTempatLahir = findViewById(R.id.etTempatLahir);
         etTglLahir = findViewById(R.id.etTglLahir);
-//        etJk = findViewById(R.id.etJk);
         etEmail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
         etAlamat = findViewById(R.id.etAlamat);
         etFoto = findViewById(R.id.etFoto);
         spinnerJurusan = findViewById(R.id.spinnerJurusan);
-        etTahunLulus = findViewById(R.id.etTahunLulus);
+        spinnerTL = findViewById(R.id.spinnerTL);
 
         radioGroupGender = findViewById(R.id.radioGroupGender);
         radioButtonMale = findViewById(R.id.radioButtonMale);
@@ -73,10 +73,7 @@ public class updateAlumni extends AppCompatActivity {
         String no_hp = getIntent().getStringExtra("no_hp");
         String alamat = getIntent().getStringExtra("alamat");
         String foto = getIntent().getStringExtra("foto");
-//        int id_jurusan = getIntent().getIntExtra("jurusan",0);
-        int id_tahun_lulus = getIntent().getIntExtra("tahun_lulus",0);
-
-
+//        int id_tahun_lulus = getIntent().getIntExtra("tahun_lulus",0);
 
         // Display the data in EditText fields
         etId.setText(String.valueOf(id));
@@ -93,13 +90,16 @@ public class updateAlumni extends AppCompatActivity {
         }
 
         //Jurusan
-        fetchDataFromMySQL();
+        fetchDataJurusan();
+
+        //Tahun Lulus
+        fetchDataTahunLulus();
+
 
         etEmail.setText(email);
         etPhone.setText(no_hp);
         etAlamat.setText(alamat);
         etFoto.setText(foto);
-        etTahunLulus.setText(String.valueOf(id_tahun_lulus));
 
         // Set a click listener for the updateButton
         btnUpdateAlumni.setOnClickListener(new View.OnClickListener() {
@@ -121,14 +121,18 @@ public class updateAlumni extends AppCompatActivity {
                 String nama = etNama.getText().toString();
                 String tempat_lahir = etTempatLahir.getText().toString();
                 String tgl_lahir = etTglLahir.getText().toString();
-//                String jk = etJk.getText().toString();
                 String email = etEmail.getText().toString();
                 String no_hp = etPhone.getText().toString();
                 String alamat = etAlamat.getText().toString();
                 String foto = etFoto.getText().toString();
+
+                //TahunLulus
+                String selectedTL = spinnerTL.getSelectedItem().toString();
+                int id_tahun_lulus = getIdTl(Integer.parseInt(selectedTL));
+
+                //Jurusan
                 String selectedJurusan = spinnerJurusan.getSelectedItem().toString();
                 int id_jurusan = getIdJurusan(selectedJurusan);
-                int id_tahun_lulus = Integer.parseInt(etTahunLulus.getText().toString());
 
                 // Send a request to your server to update the data
                 updateData(alumniId, npm, nama, tempat_lahir, tgl_lahir, gender, email, no_hp, alamat, foto, id_jurusan, id_tahun_lulus); // Implement this method
@@ -137,7 +141,7 @@ public class updateAlumni extends AppCompatActivity {
         });
     }
 
-    private void fetchDataFromMySQL() {
+    private void fetchDataJurusan() {
         StringRequest request = new StringRequest(Request.Method.GET, Db_Contract.urlGetJurusan, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -200,6 +204,59 @@ public class updateAlumni extends AppCompatActivity {
         }
 
         return idJurusan;
+    }
+
+    private void fetchDataTahunLulus() {
+        StringRequest request = new StringRequest(Request.Method.GET, Db_Contract.urlGetTahunLulus, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    tahunLulusList.clear(); // Bersihkan list sebelum menambahkan data baru
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int id = jsonObject.getInt("id_tahun_lulus");
+                        int tahunLulus = jsonObject.getInt("tahun_lulus");
+                        Tahun_lulus tahun_lulus = new Tahun_lulus(id, tahunLulus);
+                        tahunLulusList.add(tahun_lulus);
+                    }
+
+                    List<Integer> namaTahunLulusList = new ArrayList<>();
+                    for (Tahun_lulus tahun_lulus : tahunLulusList) {
+                        namaTahunLulusList.add(tahun_lulus.getTahun_lulus());
+                    }
+
+                    ArrayAdapter<Integer> adapter = new ArrayAdapter<>(updateAlumni.this, android.R.layout.simple_spinner_item, namaTahunLulusList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerTL.setAdapter(adapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(updateAlumni.this, "Gagal mengambil data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
+    private int getIdTl(int namaTahunLulus) {
+        int idTl = -1; // ID default jika tidak ditemukan
+
+        for (Tahun_lulus tahun_lulus : tahunLulusList) {
+            if (tahun_lulus.getTahun_lulus() == namaTahunLulus) {
+                idTl = tahun_lulus.getId_tahun_lulus();
+                break; // Keluar dari loop setelah cocok ditemukan
+            }
+        }
+
+        return idTl;
     }
 
     private void updateData(final int alumniId,final int npm,final String nama,final String tempat_lahir,final String tgl_lahir,final String gender,final String email,final String no_hp,final String alamat,final String foto,final int id_jurusan,final int id_tahun_lulus) {

@@ -33,12 +33,13 @@ import java.util.Map;
 
 public class tambahAlumni extends AppCompatActivity {
 
-    private TextInputEditText etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto, etTahunLulus, etJurusan;
+    private TextInputEditText etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto;
     private RadioGroup radioGroupGender;
     private RadioButton radioButtonMale, radioButtonFemale;
-    private Spinner spinnerJurusan;
+    private Spinner spinnerJurusan, spinnerTL;
     private Button btnAddAlumni;
     private List<Jurusan> jurusanList = new ArrayList<>();
+    private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
 
 
     @Override
@@ -50,23 +51,22 @@ public class tambahAlumni extends AppCompatActivity {
         etNama = findViewById(R.id.etNama);
         etTempatLahir = findViewById(R.id.etTempatLahir);
         etTglLahir = findViewById(R.id.etTglLahir);
-//        etJk = findViewById(R.id.etJk);
         etEmail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
         etAlamat = findViewById(R.id.etAlamat);
         etFoto = findViewById(R.id.etFoto);
-        etTahunLulus = findViewById(R.id.etTahunLulus);
-//        etJurusan = findViewById(R.id.etJurusan);
         btnAddAlumni = findViewById(R.id.btnAddAlumni);
 
         radioGroupGender = findViewById(R.id.radioGroupGender);
         radioButtonMale = findViewById(R.id.radioButtonMale);
         radioButtonFemale = findViewById(R.id.radioButtonFemale);
 
+        spinnerTL = findViewById(R.id.spinnerTL);
         spinnerJurusan = findViewById(R.id.spinnerJurusan);
 
         // Mengambil data jurusan dari database
-        fetchDataFromMySQL();
+        fetchDataTahunLulus();
+        fetchDataJurusan();
 
         btnAddAlumni.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +82,10 @@ public class tambahAlumni extends AppCompatActivity {
                     gender = "Perempuan";
                 }
 
+                //TahunLulus
+                String selectedTL = spinnerTL.getSelectedItem().toString();
+                String id_tahun_lulus = String.valueOf(getIdTl(Integer.parseInt(selectedTL)));
+
                 //Jurusan
                 String selectedJurusan = spinnerJurusan.getSelectedItem().toString();
                 String id_jurusan = String.valueOf(getIdJurusan(selectedJurusan));
@@ -94,7 +98,6 @@ public class tambahAlumni extends AppCompatActivity {
                 String phone = etPhone.getText().toString();
                 String alamat = etAlamat.getText().toString();
                 String foto = etFoto.getText().toString();
-                String id_tahun_lulus = etTahunLulus.getText().toString();
 
                 if (!(npm.isEmpty() || nama.isEmpty() || tempatLahir.isEmpty() || tglLahir.isEmpty() || gender.isEmpty() || email.isEmpty() || phone.isEmpty() || alamat.isEmpty() || foto.isEmpty() || id_jurusan.isEmpty() || id_tahun_lulus.isEmpty())){
 
@@ -155,6 +158,19 @@ public class tambahAlumni extends AppCompatActivity {
         return idJurusan;
     }
 
+    private int getIdTl(int namaTahunLulus) {
+        int idTl = -1; // ID default jika tidak ditemukan
+
+        for (Tahun_lulus tahun_lulus : tahunLulusList) {
+            if (tahun_lulus.getTahun_lulus() == namaTahunLulus) {
+                idTl = tahun_lulus.getId_tahun_lulus();
+                break; // Keluar dari loop setelah cocok ditemukan
+            }
+        }
+
+        return idTl;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -163,7 +179,7 @@ public class tambahAlumni extends AppCompatActivity {
         finish();
     }
 
-    private void fetchDataFromMySQL() {
+    private void fetchDataJurusan() {
         StringRequest request = new StringRequest(Request.Method.GET, Db_Contract.urlGetJurusan, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -189,6 +205,47 @@ public class tambahAlumni extends AppCompatActivity {
                     spinnerJurusan.setAdapter(adapter);
 
                     // Sekarang, jurusanList berisi data dari MySQL
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(tambahAlumni.this, "Gagal mengambil data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
+    private void fetchDataTahunLulus() {
+        StringRequest request = new StringRequest(Request.Method.GET, Db_Contract.urlGetTahunLulus, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    tahunLulusList.clear(); // Bersihkan list sebelum menambahkan data baru
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int id = jsonObject.getInt("id_tahun_lulus");
+                        int tahunLulus = jsonObject.getInt("tahun_lulus");
+//                        tahunLulusList.add(id, tahunLulus);
+                        Tahun_lulus tahun_lulus = new Tahun_lulus(id, tahunLulus);
+                        tahunLulusList.add(tahun_lulus);
+                    }
+
+                    List<Integer> namaTahunLulusList = new ArrayList<>();
+                    for (Tahun_lulus tahun_lulus : tahunLulusList) {
+                        namaTahunLulusList.add(tahun_lulus.getTahun_lulus());
+                    }
+
+                    ArrayAdapter<Integer> adapter = new ArrayAdapter<>(tambahAlumni.this, android.R.layout.simple_spinner_item, namaTahunLulusList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerTL.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

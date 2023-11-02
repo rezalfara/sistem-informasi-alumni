@@ -140,22 +140,29 @@
                 android:hint="Foto"
                 android:textColorHint="@color/black"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTahunLulus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLength="1"
-                android:hint="Tahun Lulus"
-                android:textColorHint="@color/black"/>
-
 <!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/etJurusan"-->
+<!--                android:id="@+id/etTahunLulus"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:inputType="number"-->
-<!--                android:hint="Jurusan"-->
+<!--                android:maxLength="1"-->
+<!--                android:hint="Tahun Lulus"-->
 <!--                android:textColorHint="@color/black"/>-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tahun Lulus"
+                android:textSize="18dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <Spinner
+                android:id="@+id/spinnerTL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="match_parent"

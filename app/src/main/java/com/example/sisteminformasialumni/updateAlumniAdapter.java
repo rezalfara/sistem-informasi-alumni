@@ -43,7 +43,6 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
         holder.etNpm.setText(String.valueOf(alumni.getNpm()));
         holder.etTempatLahir.setText(alumni.getTempat_lahir());
         holder.etTglLahir.setText(alumni.getTgl_lahir());
-//        holder.etJk.setText(alumni.getJk());
 
         if (alumni.getJk() == "Laki-laki"){
             holder.radioButtonMale.setChecked(true);
@@ -55,7 +54,7 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
         holder.etPhone.setText(alumni.getNo_hp());
         holder.etAlamat.setText(alumni.getAlamat());
         holder.spinnerJurusan.getSelectedItem().toString();
-        holder.etTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
+        holder.spinnerTL.getSelectedItem().toString();
 
     }
 
@@ -66,10 +65,10 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
 
     class updateAlumniViewHolder extends RecyclerView.ViewHolder {
 
-        TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto, etTahunLulus;
+        TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto;
         RadioGroup radioGroupGender;
         RadioButton radioButtonMale, radioButtonFemale;
-        Spinner spinnerJurusan;
+        Spinner spinnerJurusan, spinnerTL;
 
         public updateAlumniViewHolder(View itemView) {
             super(itemView);
@@ -79,7 +78,6 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
             etNama = itemView.findViewById(R.id.etNama);
             etTempatLahir = itemView.findViewById(R.id.etTempatLahir);
             etTglLahir = itemView.findViewById(R.id.etTglLahir);
-//            etJk = itemView.findViewById(R.id.etJk);
             radioGroupGender = itemView.findViewById(R.id.radioGroupGender);
             radioButtonMale = itemView.findViewById(R.id.radioButtonMale);
             radioButtonFemale = itemView.findViewById(R.id.radioButtonFemale);
@@ -89,7 +87,7 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
             etPhone = itemView.findViewById(R.id.etPhone);
             etAlamat = itemView.findViewById(R.id.etAlamat);
             etFoto = itemView.findViewById(R.id.etFoto);
-            etTahunLulus = itemView.findViewById(R.id.etTahunLulus);
+            spinnerTL = itemView.findViewById(R.id.spinnerTL);
             spinnerJurusan = itemView.findViewById(R.id.spinnerJurusan);
 
         }
