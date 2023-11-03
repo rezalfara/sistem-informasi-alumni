@@ -27,10 +27,14 @@ import java.util.Map;
 public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapter.detailAlumniViewHolder>{
     private Context mCtx;
     private List<Alumni> alumniList;
+    private List<Jurusan> jurusanList;
+    private List<Tahun_lulus> tahunLulusList;
 
-    public detailAlumniAdapter(Context mCtx, List<Alumni> alumniList) {
+    public detailAlumniAdapter(Context mCtx, List<Alumni> alumniList, List<Jurusan> jurusanList, List<Tahun_lulus> tahunLulusList) {
         this.mCtx = mCtx;
         this.alumniList = alumniList;
+        this.jurusanList = jurusanList;
+        this.tahunLulusList = tahunLulusList;
     }
 
     @Override
@@ -59,8 +63,24 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
         holder.tvEmail.setText(alumni.getEmail());
         holder.tvNoHp.setText(alumni.getNo_hp());
         holder.tvAlamat.setText(alumni.getAlamat());
-        holder.tvJurusan.setText(String.valueOf(alumni.getId_jurusan()));
-        holder.tvTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
+//        holder.tvJurusan.setText(String.valueOf(alumni.getId_jurusan()));
+//        holder.tvTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
+
+        int idJurusan = alumni.getId_jurusan();
+        for (Jurusan jurusan : jurusanList){
+            if (jurusan.getId_jurusan() == idJurusan){
+                holder.tvJurusan.setText(jurusan.getNama_jurusan());
+                break;
+            }
+        }
+
+        int idTl = alumni.getId_tahun_lulus();
+        for (Tahun_lulus tahun_lulus : tahunLulusList){
+            if (tahun_lulus.getId_tahun_lulus() == idTl){
+                holder.tvTahunLulus.setText(String.valueOf(tahun_lulus.getTahun_lulus()));
+                break;
+            }
+        }
 
         holder.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

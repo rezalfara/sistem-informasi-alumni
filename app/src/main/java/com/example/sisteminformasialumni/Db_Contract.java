@@ -2,7 +2,7 @@ package com.example.sisteminformasialumni;
 
 public class Db_Contract {
 
-    public static String ip = "10.115.186.47";
+    public static String ip = "192.168.178.100";
 
     public static final String urlRegister = "http://"+ip+"/project/api-register.php";
     public static final String urlLogin = "http://"+ip+"/project/api-login.php";
@@ -14,6 +14,8 @@ public class Db_Contract {
 
     public static final String pathImage = "http://"+ip+"/project/img/";
     public static final String urlGetJurusan = "http://"+ip+"/project/api-get-jurusan.php";
+    public static final String urlGetJurusanById = "http://"+ip+"/project/api-read-jurusan-by-id.php?id_jurusan=";
     public static final String urlGetTahunLulus = "http://"+ip+"/project/api-get-tahunLulus.php";
+    public static final String urlGetTahunLulusById = "http://"+ip+"/project/api-read-tahunLulus-by-id.php?id_tahun_lulus=";
 
 }

@@ -26,6 +26,8 @@ import java.util.List;
 public class detailAlumni extends AppCompatActivity {
 
     private List<Alumni> detailAlumniList;
+    private List<Jurusan> jurusanList;
+    private List<Tahun_lulus> tahunLulusList;
     private RecyclerView rvDetailAlumni;
     private detailAlumniAdapter detailAlumniAdapter;
 
@@ -42,12 +44,18 @@ public class detailAlumni extends AppCompatActivity {
 
 //        //initializing the productlist
         detailAlumniList = new ArrayList<>();
+        jurusanList = new ArrayList<>();
+        tahunLulusList = new ArrayList<>();
 
         // Menerima data dari Intent
         Intent intent = getIntent();
         int alumniId = intent.getIntExtra("alumniId", 0); // 0 adalah nilai default jika data tidak ditemukan
+        int jurusanId = intent.getIntExtra("jurusanId", 0); // 0 adalah nilai default jika data tidak ditemukan
+        int tlId = intent.getIntExtra("tlId", 0); // 0 adalah nilai default jika data tidak ditemukan
 
         loadAlumniById(alumniId);
+        loadJurusan(jurusanId);
+        loadTahunLulus(tlId);
     }
 
     @Override
@@ -87,7 +95,85 @@ public class detailAlumni extends AppCompatActivity {
                             ));
 
                             // Membuat adapter dan mengaturnya ke recyclerview
-                            detailAlumniAdapter detailAlumniAdapter = new detailAlumniAdapter(detailAlumni.this, detailAlumniList);
+                            detailAlumniAdapter detailAlumniAdapter = new detailAlumniAdapter(detailAlumni.this, detailAlumniList, jurusanList, tahunLulusList);
+                            rvDetailAlumni.setAdapter(detailAlumniAdapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        //adding our stringrequest to queue
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    private void loadJurusan(int jurusanId) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetJurusanById+jurusanId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            // Parsing data JSON, karena sekarang responsenya adalah objek tunggal bukan array
+                            JSONObject jurusan = new JSONObject(response);
+
+                            // Mendapatkan data dari objek JSON
+                            int id_jurusan = jurusan.getInt("id_jurusan");
+                            String nama_jurusan = jurusan.getString("nama_jurusan");
+
+                            // Menambahkan data ke detailAlumniList
+                            jurusanList.add(new Jurusan(
+                                    id_jurusan, nama_jurusan
+                            ));
+
+                            // Membuat adapter dan mengaturnya ke recyclerview
+                            detailAlumniAdapter detailAlumniAdapter = new detailAlumniAdapter(detailAlumni.this, detailAlumniList, jurusanList, tahunLulusList);
+                            rvDetailAlumni.setAdapter(detailAlumniAdapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        //adding our stringrequest to queue
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    private void loadTahunLulus(int tlId) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetTahunLulusById+tlId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            // Parsing data JSON, karena sekarang responsenya adalah objek tunggal bukan array
+                            JSONObject tahun_lulus = new JSONObject(response);
+
+                            // Mendapatkan data dari objek JSON
+                            int id_tahun_lulus = tahun_lulus.getInt("id_tahun_lulus");
+                            int nama_tahun_lulus = tahun_lulus.getInt("tahun_lulus");
+
+                            // Menambahkan data ke detailAlumniList
+                            tahunLulusList.add(new Tahun_lulus(
+                                    id_tahun_lulus, nama_tahun_lulus
+                            ));
+
+                            // Membuat adapter dan mengaturnya ke recyclerview
+                            detailAlumniAdapter detailAlumniAdapter = new detailAlumniAdapter(detailAlumni.this, detailAlumniList, jurusanList, tahunLulusList);
                             rvDetailAlumni.setAdapter(detailAlumniAdapter);
 
                         } catch (JSONException e) {

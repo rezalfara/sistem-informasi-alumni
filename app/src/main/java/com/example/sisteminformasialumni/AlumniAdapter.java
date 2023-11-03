@@ -20,14 +20,13 @@ import java.util.List;
 public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniViewHolder> {
     private Context mCtx;
     private List<Alumni> alumniList;
-    private List<Jurusan> jurusanList; // Daftar jurusan
-    private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
-
+    private List<Jurusan> jurusanList; // Tambahkan List jurusanList
+    private List<Tahun_lulus> tahunLulusList;
 
     public AlumniAdapter(Context mCtx, List<Alumni> alumniList, List<Jurusan> jurusanList, List<Tahun_lulus> tahunLulusList) {
         this.mCtx = mCtx;
         this.alumniList = alumniList;
-        this.jurusanList = jurusanList;
+        this.jurusanList = jurusanList; // Inisialisasi jurusanList
         this.tahunLulusList = tahunLulusList;
     }
 
@@ -50,8 +49,22 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
                 .into(holder.imgAlumni);
 
         holder.tvNama.setText(alumni.getNama());
-        holder.tvJurusan.setText(String.valueOf(alumni.getId_jurusan()));
-        holder.tvTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
+
+        int idJurusan = alumni.getId_jurusan();
+        for (Jurusan jurusan : jurusanList){
+            if (jurusan.getId_jurusan() == idJurusan){
+                holder.tvJurusan.setText(jurusan.getNama_jurusan());
+                break;
+            }
+        }
+
+        int idTl = alumni.getId_tahun_lulus();
+        for (Tahun_lulus tahun_lulus : tahunLulusList){
+            if (tahun_lulus.getId_tahun_lulus() == idTl){
+                holder.tvTahunLulus.setText(String.valueOf(tahun_lulus.getTahun_lulus()));
+                break;
+            }
+        }
 
         holder.llAlumniList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,10 +74,14 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
                     // Gunakan adapterPosition untuk mengakses elemen dengan benar
                     Alumni selectedAlumni = alumniList.get(adapterPosition);
                     int alumniId = selectedAlumni.getId_alumni();
+                    int jurusanId = selectedAlumni.getId_jurusan();
+                    int tlId = selectedAlumni.getId_tahun_lulus();
 
                     // Menggunakan Intent untuk memanggil class lain
                     Intent intent = new Intent(mCtx, detailAlumni.class);
                     intent.putExtra("alumniId", alumniId);
+                    intent.putExtra("jurusanId", jurusanId);
+                    intent.putExtra("tlId", tlId);
                     mCtx.startActivity(intent);
                 }
             }

@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         //this method will fetch and parse json
         //to display it in recyclerview
         loadAlumni();
+        loadJurusan();
+        loadTahunLulus();
 
     }
 
@@ -110,6 +112,106 @@ public class MainActivity extends AppCompatActivity {
                                         alumni.getString("foto"),
                                         alumni.getInt("id_jurusan"),
                                         alumni.getInt("id_tahun_lulus")
+                                ));
+                            }
+
+                            //creating adapter object and setting it to recyclerview
+                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivity.this, alumniList, jurusanList, tahunLulusList);
+                            recyclerView.setAdapter(alumniAdapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        //adding our stringrequest to queue
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    private void loadJurusan() {
+
+        /*
+         * Creating a String Request
+         * The request type is GET defined by first parameter
+         * The URL is defined in the second parameter
+         * Then we have a Response Listener and a Error Listener
+         * In response listener we will get the JSON response as a String
+         * */
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetJurusan,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //converting the string to json array object
+                            JSONArray array = new JSONArray(response);
+
+                            //traversing through all the object
+                            for (int i = 0; i < array.length(); i++) {
+
+                                //getting product object from json array
+                                JSONObject jurusan = array.getJSONObject(i);
+
+                                //adding the product to product list
+                                jurusanList.add(new Jurusan(
+                                        jurusan.getInt("id_jurusan"),
+                                        jurusan.getString("nama_jurusan")
+                                ));
+                            }
+
+                            //creating adapter object and setting it to recyclerview
+                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivity.this, alumniList, jurusanList, tahunLulusList);
+                            recyclerView.setAdapter(alumniAdapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        //adding our stringrequest to queue
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    private void loadTahunLulus() {
+
+        /*
+         * Creating a String Request
+         * The request type is GET defined by first parameter
+         * The URL is defined in the second parameter
+         * Then we have a Response Listener and a Error Listener
+         * In response listener we will get the JSON response as a String
+         * */
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetTahunLulus,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //converting the string to json array object
+                            JSONArray array = new JSONArray(response);
+
+                            //traversing through all the object
+                            for (int i = 0; i < array.length(); i++) {
+
+                                //getting product object from json array
+                                JSONObject tahun_lulus = array.getJSONObject(i);
+
+                                //adding the product to product list
+                                tahunLulusList.add(new Tahun_lulus(
+                                        tahun_lulus.getInt("id_tahun_lulus"),
+                                        tahun_lulus.getInt("tahun_lulus")
                                 ));
                             }
 
