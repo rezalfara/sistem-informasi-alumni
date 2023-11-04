@@ -233,7 +233,6 @@ public class tambahAlumni extends AppCompatActivity {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         int id = jsonObject.getInt("id_tahun_lulus");
                         int tahunLulus = jsonObject.getInt("tahun_lulus");
-//                        tahunLulusList.add(id, tahunLulus);
                         Tahun_lulus tahun_lulus = new Tahun_lulus(id, tahunLulus);
                         tahunLulusList.add(tahun_lulus);
                     }

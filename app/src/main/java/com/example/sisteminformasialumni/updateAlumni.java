@@ -166,7 +166,7 @@ public class updateAlumni extends AppCompatActivity {
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerJurusan.setAdapter(adapter);
 
-                    int id_jurusan = getIntent().getIntExtra("jurusan",0);
+                    int id_jurusan = getIntent().getIntExtra("jurusanId",0);
 
                     for (int i = 0; i < spinnerJurusan.getCount(); i++) {
                         if (id_jurusan == jurusanList.get(i).getId_jurusan()) {
@@ -288,8 +288,8 @@ public class updateAlumni extends AppCompatActivity {
                             intent.putExtra("no_hp", no_hp);
                             intent.putExtra("alamat", alamat);
                             intent.putExtra("foto", foto);
-                            intent.putExtra("jurusan", id_jurusan);
-                            intent.putExtra("tahun_lulus", id_tahun_lulus);
+                            intent.putExtra("jurusanId", id_jurusan);
+                            intent.putExtra("tlId", id_tahun_lulus);
                             startActivity(intent);
 
                         } else {

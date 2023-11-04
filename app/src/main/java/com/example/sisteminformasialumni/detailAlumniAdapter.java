@@ -115,8 +115,8 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
                     intent.putExtra("no_hp", no_hp);
                     intent.putExtra("alamat", alamat);
                     intent.putExtra("foto", foto);
-                    intent.putExtra("jurusan", id_jurusan);
-                    intent.putExtra("tahun_lulus", id_tahun_lulus);
+                    intent.putExtra("jurusanId", id_jurusan);
+                    intent.putExtra("tlId", id_tahun_lulus);
 
                     mCtx.startActivity(intent);
                 }

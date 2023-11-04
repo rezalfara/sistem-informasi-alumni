@@ -29,7 +29,6 @@ public class detailAlumni extends AppCompatActivity {
     private List<Jurusan> jurusanList;
     private List<Tahun_lulus> tahunLulusList;
     private RecyclerView rvDetailAlumni;
-    private detailAlumniAdapter detailAlumniAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
