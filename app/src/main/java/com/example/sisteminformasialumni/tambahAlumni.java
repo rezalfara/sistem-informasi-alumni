@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 public class tambahAlumni extends AppCompatActivity {
-
     private TextInputEditText etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto;
     private RadioGroup radioGroupGender;
     private RadioButton radioButtonMale, radioButtonFemale;
