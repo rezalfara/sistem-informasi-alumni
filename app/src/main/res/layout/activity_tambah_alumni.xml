@@ -133,13 +133,13 @@
                 android:hint="Alamat"
                 android:textColorHint="@color/black"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etFoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Foto"
-                android:textColorHint="@color/black"/>
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/etFoto"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:inputType="text"-->
+<!--                android:hint="Foto"-->
+<!--                android:textColorHint="@color/black"/>-->
 
 <!--            <com.google.android.material.textfield.TextInputEditText-->
 <!--                android:id="@+id/etTahunLulus"-->
@@ -179,6 +179,31 @@
                 android:id="@+id/spinnerJurusan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foto"
+                android:textSize="18dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <Button
+                android:id="@+id/btnUploadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pilih Foto"
+                android:backgroundTint="@color/black"
+                android:layout_marginBottom="20dp"/>
+
+            <ImageView
+                android:id="@+id/fotoAlumni"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"/>
 
             <Button
                 android:id="@+id/btnAddAlumni"

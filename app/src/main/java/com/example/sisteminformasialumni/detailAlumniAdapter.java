@@ -63,8 +63,6 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
         holder.tvEmail.setText(alumni.getEmail());
         holder.tvNoHp.setText(alumni.getNo_hp());
         holder.tvAlamat.setText(alumni.getAlamat());
-//        holder.tvJurusan.setText(String.valueOf(alumni.getId_jurusan()));
-//        holder.tvTahunLulus.setText(String.valueOf(alumni.getId_tahun_lulus()));
 
         int idJurusan = alumni.getId_jurusan();
         for (Jurusan jurusan : jurusanList){

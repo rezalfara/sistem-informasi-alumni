@@ -86,7 +86,7 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
             etPhone = itemView.findViewById(R.id.etPhone);
             etPhone = itemView.findViewById(R.id.etPhone);
             etAlamat = itemView.findViewById(R.id.etAlamat);
-            etFoto = itemView.findViewById(R.id.etFoto);
+//            etFoto = itemView.findViewById(R.id.etFoto);
             spinnerTL = itemView.findViewById(R.id.spinnerTL);
             spinnerJurusan = itemView.findViewById(R.id.spinnerJurusan);
 

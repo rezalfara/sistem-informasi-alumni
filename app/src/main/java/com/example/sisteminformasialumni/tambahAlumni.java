@@ -3,11 +3,15 @@ package com.example.sisteminformasialumni;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -26,19 +30,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class tambahAlumni extends AppCompatActivity {
-    private TextInputEditText etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto;
+    private TextInputEditText etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat;
     private RadioGroup radioGroupGender;
     private RadioButton radioButtonMale, radioButtonFemale;
     private Spinner spinnerJurusan, spinnerTL;
-    private Button btnAddAlumni;
+    private Button btnUploadImage, btnAddAlumni;
     private List<Jurusan> jurusanList = new ArrayList<>();
     private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Bitmap bitmap;
+    private ImageView fotoAlumni;
 
 
     @Override
@@ -53,7 +64,8 @@ public class tambahAlumni extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
         etAlamat = findViewById(R.id.etAlamat);
-        etFoto = findViewById(R.id.etFoto);
+        fotoAlumni = findViewById(R.id.fotoAlumni);
+        btnUploadImage = findViewById(R.id.btnUploadImage);
         btnAddAlumni = findViewById(R.id.btnAddAlumni);
 
         radioGroupGender = findViewById(R.id.radioGroupGender);
@@ -66,6 +78,13 @@ public class tambahAlumni extends AppCompatActivity {
         // Mengambil data jurusan dari database
         fetchDataTahunLulus();
         fetchDataJurusan();
+
+        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser();
+            }
+        });
 
         btnAddAlumni.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,11 +115,16 @@ public class tambahAlumni extends AppCompatActivity {
                 String email = etEmail.getText().toString();
                 String phone = etPhone.getText().toString();
                 String alamat = etAlamat.getText().toString();
-                String foto = etFoto.getText().toString();
 
-                if (!(npm.isEmpty() || nama.isEmpty() || tempatLahir.isEmpty() || tglLahir.isEmpty() || gender.isEmpty() || email.isEmpty() || phone.isEmpty() || alamat.isEmpty() || foto.isEmpty() || id_jurusan.isEmpty() || id_tahun_lulus.isEmpty())){
+                if (!(npm.isEmpty() && nama.isEmpty() && tempatLahir.isEmpty() && tglLahir.isEmpty() && gender.isEmpty() && email.isEmpty() && phone.isEmpty() && alamat.isEmpty() && bitmap!=null && id_jurusan.isEmpty() && id_tahun_lulus.isEmpty())){
 
                     String jk = gender;
+
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
+                    byte[] imageBytes = byteArrayOutputStream.toByteArray();
+                    final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlCreate, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -126,7 +150,7 @@ public class tambahAlumni extends AppCompatActivity {
                             params.put("email", email);
                             params.put("no_hp", phone);
                             params.put("alamat", alamat);
-                            params.put("foto", foto);
+                            params.put("foto", imageString);
                             params.put("id_tahun_lulus", id_tahun_lulus);
                             params.put("id_jurusan", id_jurusan);
 
@@ -142,6 +166,28 @@ public class tambahAlumni extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                bitmap = BitmapFactory.decodeStream(inputStream);
+                fotoAlumni.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private int getIdJurusan(String namaJurusan) {

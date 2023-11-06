@@ -76,12 +76,14 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
                     int alumniId = selectedAlumni.getId_alumni();
                     int jurusanId = selectedAlumni.getId_jurusan();
                     int tlId = selectedAlumni.getId_tahun_lulus();
+                    String fotoAlumni = selectedAlumni.getFoto();
 
                     // Menggunakan Intent untuk memanggil class lain
                     Intent intent = new Intent(mCtx, detailAlumni.class);
                     intent.putExtra("alumniId", alumniId);
                     intent.putExtra("jurusanId", jurusanId);
                     intent.putExtra("tlId", tlId);
+                    intent.putExtra("foto",fotoAlumni);
                     mCtx.startActivity(intent);
                 }
             }
