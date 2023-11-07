@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 public class updateAlumni extends AppCompatActivity {
-    private TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto;
+    private TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat;
     private Spinner spinnerJurusan, spinnerTL;
     private RadioGroup radioGroupGender;
     private RadioButton radioButtonMale, radioButtonFemale;
@@ -47,6 +47,10 @@ public class updateAlumni extends AppCompatActivity {
     private List<Jurusan> jurusanList = new ArrayList<>();
     private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
     private List<Alumni> alumniList = new ArrayList<>();
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Bitmap bitmap;
+    private ImageView fotoAlumni;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +65,15 @@ public class updateAlumni extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
         etAlamat = findViewById(R.id.etAlamat);
-        etFoto = findViewById(R.id.etFoto);
         spinnerJurusan = findViewById(R.id.spinnerJurusan);
         spinnerTL = findViewById(R.id.spinnerTL);
+        fotoAlumni = findViewById(R.id.fotoAlumni);
 
         radioGroupGender = findViewById(R.id.radioGroupGender);
         radioButtonMale = findViewById(R.id.radioButtonMale);
         radioButtonFemale = findViewById(R.id.radioButtonFemale);
 
+        btnUploadImage = findViewById(R.id.btnUploadImage);
         btnUpdateAlumni = findViewById(R.id.btnUpdateAlumni);
 
         int id = getIntent().getIntExtra("alumniId", 0);
@@ -106,7 +111,21 @@ public class updateAlumni extends AppCompatActivity {
         etEmail.setText(email);
         etPhone.setText(no_hp);
         etAlamat.setText(alamat);
-        etFoto.setText(foto);
+
+        // Mengambil gambar dari path dan menampilkannya di ImageView
+        String imgPath = Db_Contract.pathImage + foto;
+
+        // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
+        Glide.with(this)
+                .load(imgPath)
+                .into(fotoAlumni);
+
+        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    showFileChooser();
+            }
+        });
 
         // Set a click listener for the updateButton
         btnUpdateAlumni.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +150,6 @@ public class updateAlumni extends AppCompatActivity {
                 String email = etEmail.getText().toString();
                 String no_hp = etPhone.getText().toString();
                 String alamat = etAlamat.getText().toString();
-                String foto = etFoto.getText().toString();
 
                 //TahunLulus
                 String selectedTL = spinnerTL.getSelectedItem().toString();
@@ -142,13 +160,34 @@ public class updateAlumni extends AppCompatActivity {
                 int id_jurusan = getIdJurusan(selectedJurusan);
 
 
-
                 // Send a request to your server to update the data
-                updateData(alumniId, npm, nama, tempat_lahir, tgl_lahir, gender, email, no_hp, alamat, foto, id_jurusan, id_tahun_lulus); // Implement this method
+                updateData(alumniId, npm, nama, tempat_lahir, tgl_lahir, gender, email, no_hp, alamat, id_jurusan, id_tahun_lulus); // Implement this method
                 // Provide user feedback (e.g., a Toast message) about the update result
 
             }
         });
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                bitmap = BitmapFactory.decodeStream(inputStream);
+                fotoAlumni.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void fetchDataJurusan() {
@@ -269,7 +308,13 @@ public class updateAlumni extends AppCompatActivity {
         return idTl;
     }
 
-    private void updateData(final int alumniId, final int npm, final String nama, final String tempat_lahir, final String tgl_lahir, final String gender, final String email, final String no_hp, final String alamat, final String foto, final int id_jurusan, final int id_tahun_lulus) {
+    private void updateData(final int alumniId, final int npm, final String nama, final String tempat_lahir, final String tgl_lahir, final String gender, final String email, final String no_hp, final String alamat, final int id_jurusan, final int id_tahun_lulus) {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
+        byte[] imageBytes = byteArrayOutputStream.toByteArray();
+        final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
         // Instantiate a RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -297,7 +342,7 @@ public class updateAlumni extends AppCompatActivity {
                             intent.putExtra("email", email);
                             intent.putExtra("no_hp", no_hp);
                             intent.putExtra("alamat", alamat);
-                            intent.putExtra("foto", foto);
+                            intent.putExtra("foto", imageString);
                             intent.putExtra("jurusanId", id_jurusan);
                             intent.putExtra("tlId", id_tahun_lulus);
                             startActivity(intent);
@@ -331,7 +376,7 @@ public class updateAlumni extends AppCompatActivity {
                 params.put("email", email);
                 params.put("no_hp", no_hp);
                 params.put("alamat", alamat);
-                params.put("foto", foto);
+                params.put("foto", imageString);
                 params.put("id_jurusan", String.valueOf(id_jurusan));
                 params.put("id_tahun_lulus", String.valueOf(id_tahun_lulus));
                 // Add other parameters if needed
