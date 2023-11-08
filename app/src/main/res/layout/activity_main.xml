@@ -22,7 +22,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Tambah "/>
+        android:text="Tambah"/>
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:backgroundTint="#ff0000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="KELUAR"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

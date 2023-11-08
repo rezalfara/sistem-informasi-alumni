@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
     private RecyclerView recyclerView;
     private AlumniAdapter alumniAdapter;
-    Button btnCreate;
+    Button btnCreate, btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnCreate = findViewById(R.id.btnAdd);
+        btnLogout = findViewById(R.id.btnLogout);
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("isLoggedIn");
+                editor.remove("username"); // Hapus informasi pengguna jika diperlukan
+                editor.apply();
+
+
+                startActivity(new Intent(MainActivity.this, Login.class));
+                finish();
+            }
+        });
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
