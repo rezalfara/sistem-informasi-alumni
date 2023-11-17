@@ -82,6 +82,34 @@ public class detailAlumniAdapter extends RecyclerView.Adapter<detailAlumniAdapte
             }
         }
 
+//        // Set click listener for imgAlumni
+//        holder.imgAlumni.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                    // Create an AlertDialog to display the full-screen image
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
+//                    LayoutInflater inflater = LayoutInflater.from(mCtx);
+//                    View dialogView = inflater.inflate(R.layout.dialog_fullscreen_image, null);
+//
+//                    // Find the ImageView in the dialog layout
+//                    ImageView fullscreenImage = dialogView.findViewById(R.id.fullScreenImageView);
+//
+//                    // Set the image in the full-screen dialog
+//                    String imgUrl = Db_Contract.pathImage + alumniList.get(position).getFoto();
+//                    Glide.with(mCtx)
+//                            .load(imgUrl)
+//                            .into(fullscreenImage);
+//
+//                    // Set up the AlertDialog
+//                    builder.setView(dialogView);
+//                    AlertDialog dialog = builder.create();
+//                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//
+//                    // Show the full-screen dialog
+//                    dialog.show();
+//                }
+//        });
+
         holder.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
