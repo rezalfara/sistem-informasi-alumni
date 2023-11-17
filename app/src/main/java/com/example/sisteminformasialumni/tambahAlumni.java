@@ -11,10 +11,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,11 +37,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class tambahAlumni extends AppCompatActivity {
+public class tambahAlumni extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     private TextInputEditText etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat;
     private RadioGroup radioGroupGender;
     private RadioButton radioButtonMale, radioButtonFemale;
@@ -50,7 +54,7 @@ public class tambahAlumni extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private ImageView fotoAlumni;
-
+    private String imageString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,15 @@ public class tambahAlumni extends AppCompatActivity {
 
         spinnerTL = findViewById(R.id.spinnerTL);
         spinnerJurusan = findViewById(R.id.spinnerJurusan);
+
+        // Set a click listener on the dateEditText to show the DatePickerDialog
+        etTglLahir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
 
         // Mengambil data jurusan dari database
         fetchDataTahunLulus();
@@ -116,14 +129,9 @@ public class tambahAlumni extends AppCompatActivity {
                 String phone = etPhone.getText().toString();
                 String alamat = etAlamat.getText().toString();
 
-                if (!(npm.isEmpty() && nama.isEmpty() && tempatLahir.isEmpty() && tglLahir.isEmpty() && gender.isEmpty() && email.isEmpty() && phone.isEmpty() && alamat.isEmpty() && bitmap!=null && id_jurusan.isEmpty() && id_tahun_lulus.isEmpty())){
+                if (!(npm.isEmpty() || nama.isEmpty() || tempatLahir.isEmpty() || tglLahir.isEmpty() || gender.isEmpty() || email.isEmpty() || phone.isEmpty() || alamat.isEmpty() && imageString.isEmpty() || id_jurusan.isEmpty() || id_tahun_lulus.isEmpty())){
 
                     String jk = gender;
-
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
-                    byte[] imageBytes = byteArrayOutputStream.toByteArray();
-                    final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlCreate, new Response.Listener<String>() {
                         @Override
@@ -134,7 +142,7 @@ public class tambahAlumni extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Ada Data Yang Masih Kosong", Toast.LENGTH_SHORT).show();
                         }
                     })
                     {
@@ -168,6 +176,28 @@ public class tambahAlumni extends AppCompatActivity {
         });
     }
 
+    private void showDatePickerDialog() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getSupportFragmentManager(), "DatePickerDialog");
+    }
+
+    // Callback method when a date is set in the DatePickerDialog
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        // Format the selected date
+        String selectedDate = String.format("%02d/%02d/%d", dayOfMonth, monthOfYear + 1, year);
+
+        // Set the selected date to your EditText or do whatever you need with it
+        etTglLahir.setText(selectedDate);
+    }
+
+
     private void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -184,6 +214,11 @@ public class tambahAlumni extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                 bitmap = BitmapFactory.decodeStream(inputStream);
                 fotoAlumni.setImageBitmap(bitmap);
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
+                byte[] imageBytes = byteArrayOutputStream.toByteArray();
+                imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
             } catch (IOException e) {
                 e.printStackTrace();
             }

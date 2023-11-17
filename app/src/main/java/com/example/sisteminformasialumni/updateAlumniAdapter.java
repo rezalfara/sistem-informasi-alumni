@@ -65,7 +65,7 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
 
     class updateAlumniViewHolder extends RecyclerView.ViewHolder {
 
-        TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat, etFoto;
+        TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat;
         RadioGroup radioGroupGender;
         RadioButton radioButtonMale, radioButtonFemale;
         Spinner spinnerJurusan, spinnerTL;
@@ -86,7 +86,6 @@ public class updateAlumniAdapter extends RecyclerView.Adapter<updateAlumniAdapte
             etPhone = itemView.findViewById(R.id.etPhone);
             etPhone = itemView.findViewById(R.id.etPhone);
             etAlamat = itemView.findViewById(R.id.etAlamat);
-//            etFoto = itemView.findViewById(R.id.etFoto);
             spinnerTL = itemView.findViewById(R.id.spinnerTL);
             spinnerJurusan = itemView.findViewById(R.id.spinnerJurusan);
 

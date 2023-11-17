@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,11 +37,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class updateAlumni extends AppCompatActivity {
+public class updateAlumni extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     private TextInputEditText etId, etNpm, etNama, etTempatLahir, etTglLahir, etEmail, etPhone, etAlamat;
     private Spinner spinnerJurusan, spinnerTL;
     private RadioGroup radioGroupGender;
@@ -120,6 +124,13 @@ public class updateAlumni extends AppCompatActivity {
                 .load(imgPath)
                 .into(fotoAlumni);
 
+        etTglLahir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
         btnUploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,13 +170,32 @@ public class updateAlumni extends AppCompatActivity {
                 String selectedJurusan = spinnerJurusan.getSelectedItem().toString();
                 int id_jurusan = getIdJurusan(selectedJurusan);
 
-
                 // Send a request to your server to update the data
                 updateData(alumniId, npm, nama, tempat_lahir, tgl_lahir, gender, email, no_hp, alamat, id_jurusan, id_tahun_lulus); // Implement this method
-                // Provide user feedback (e.g., a Toast message) about the update result
 
             }
         });
+    }
+
+    private void showDatePickerDialog() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getSupportFragmentManager(), "DatePickerDialog");
+    }
+
+    // Callback method when a date is set in the DatePickerDialog
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        // Format the selected date
+        String selectedDate = String.format("%02d/%02d/%d", dayOfMonth, monthOfYear + 1, year);
+
+        // Set the selected date to your EditText or do whatever you need with it
+        etTglLahir.setText(selectedDate);
     }
 
     private void showFileChooser() {
@@ -308,12 +338,32 @@ public class updateAlumni extends AppCompatActivity {
         return idTl;
     }
 
-    private void updateData(final int alumniId, final int npm, final String nama, final String tempat_lahir, final String tgl_lahir, final String gender, final String email, final String no_hp, final String alamat, final int id_jurusan, final int id_tahun_lulus) {
-
+    private String convertBitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
         byte[] imageBytes = byteArrayOutputStream.toByteArray();
-        final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+    private void updateData(final int alumniId, final int npm, final String nama, final String tempat_lahir, final String tgl_lahir, final String gender, final String email, final String no_hp, final String alamat, final int id_jurusan, final int id_tahun_lulus) {
+
+        // Declare imageString outside the if statement
+        String imageString;
+
+        // Check if the user has selected a new photo
+        if (bitmap != null) {
+            imageString = convertBitmapToBase64(bitmap);
+        } else {
+            // Get the Drawable from the ImageView
+            Drawable drawable = fotoAlumni.getDrawable();
+
+            // Convert the Drawable to a Bitmap
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            Bitmap updatedBitmap = bitmapDrawable.getBitmap();
+
+            // Convert the Bitmap to a base64-encoded string
+            imageString = convertBitmapToBase64(updatedBitmap);
+        }
 
         // Instantiate a RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);

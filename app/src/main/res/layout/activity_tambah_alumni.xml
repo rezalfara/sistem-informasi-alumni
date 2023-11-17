@@ -66,9 +66,12 @@
                 android:id="@+id/etTglLahir"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="none"
                 android:hint="Tanggal Lahir"
-                android:textColorHint="@color/black"
-                android:inputType="date"/>
+                android:focusable="false"
+                android:onClick="showDatePickerDialog"
+                android:textCursorDrawable="@null"
+                android:textColorHint="@color/black"/>
 
             <TextView
                 android:layout_width="match_parent"

@@ -79,9 +79,9 @@ public class Login extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        finish(); // Tutup aktivitas saat tombol "Back" ditekan
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+    }
 }
