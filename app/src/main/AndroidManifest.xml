@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,10 +18,28 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivityAlumni"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterAlumni"
+            android:exported="false" />
+        <activity
+            android:name=".LoginAlumni"
+            android:exported="false" />
+        <activity
+            android:name=".PilihLogin"
+            android:exported="false" />
+        <activity
+            android:name=".FullScreenImage"
+            android:exported="false" />
+        <activity
             android:name=".updateAlumni"
             android:exported="false" />
         <activity
             android:name=".detailAlumni"
+            android:exported="false" />
+        <activity
+            android:name=".detailAlumniOnly"
             android:exported="false" />
         <activity
             android:name=".tambahAlumni"

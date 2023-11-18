@@ -18,6 +18,9 @@ public class SplashScreen extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
+        SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
+        boolean isLoggedInAlumni = sharedPreferences2.getBoolean("isLoggedInAlumni", false);
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -26,9 +29,11 @@ public class SplashScreen extends AppCompatActivity {
                 if (isLoggedIn) {
                     // Pengguna sudah login, arahkan ke MainActivity
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                } else if (isLoggedInAlumni) {
+                    startActivity(new Intent(getApplicationContext(), MainActivityAlumni.class));
                 } else {
                     // Pengguna belum login, arahkan ke Login
-                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    startActivity(new Intent(getApplicationContext(), PilihLogin.class));
                 }
                 finish();
             }

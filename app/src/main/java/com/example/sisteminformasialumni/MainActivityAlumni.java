@@ -1,20 +1,14 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -29,44 +23,42 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityAlumni extends AppCompatActivity {
     private List<Alumni> alumniList;
     private List<Jurusan> jurusanList; // Daftar jurusan
     private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
     private RecyclerView recyclerView;
     private AlumniAdapter alumniAdapter;
-    Button btnCreate, btnLogout;
-
+    Button btnEditData, btnLogout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_alumni);
 
-        btnCreate = findViewById(R.id.btnAdd);
+        btnEditData = findViewById(R.id.btnEditData);
         btnLogout = findViewById(R.id.btnLogout);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("isLoggedIn");
-                editor.remove("username"); // Hapus informasi pengguna jika diperlukan
+                SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences2.edit();
+                editor.remove("isLoggedInAlumni");
+                editor.remove("npm"); // Hapus informasi pengguna jika diperlukan
                 editor.apply();
 
 
-                startActivity(new Intent(MainActivity.this, PilihLogin.class));
+                startActivity(new Intent(MainActivityAlumni.this, PilihLogin.class));
                 finish();
             }
         });
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, tambahAlumni.class));
-                finish();
-            }
-        });
+//        btnEditData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivityAlumni.this, editPofile.class));
+//            }
+//        });
 
         //getting the recyclerview from xml
         recyclerView = findViewById(R.id.recyclerView);
@@ -83,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         loadAlumni();
         loadJurusan();
         loadTahunLulus();
-
     }
 
     @Override
@@ -93,14 +84,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadAlumni() {
-
-        /*
-         * Creating a String Request
-         * The request type is GET defined by first parameter
-         * The URL is defined in the second parameter
-         * Then we have a Response Listener and a Error Listener
-         * In response listener we will get the JSON response as a String
-         * */
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlRead,
                 new Response.Listener<String>() {
                     @Override
@@ -133,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivity.this, alumniList, jurusanList, tahunLulusList);
+                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivityAlumni.this, alumniList, jurusanList, tahunLulusList);
                             recyclerView.setAdapter(alumniAdapter);
 
                         } catch (JSONException e) {
@@ -153,14 +136,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadJurusan() {
-
-        /*
-         * Creating a String Request
-         * The request type is GET defined by first parameter
-         * The URL is defined in the second parameter
-         * Then we have a Response Listener and a Error Listener
-         * In response listener we will get the JSON response as a String
-         * */
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetJurusan,
                 new Response.Listener<String>() {
                     @Override
@@ -183,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivity.this, alumniList, jurusanList, tahunLulusList);
+                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivityAlumni.this, alumniList, jurusanList, tahunLulusList);
                             recyclerView.setAdapter(alumniAdapter);
 
                         } catch (JSONException e) {
@@ -203,14 +178,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadTahunLulus() {
-
-        /*
-         * Creating a String Request
-         * The request type is GET defined by first parameter
-         * The URL is defined in the second parameter
-         * Then we have a Response Listener and a Error Listener
-         * In response listener we will get the JSON response as a String
-         * */
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetTahunLulus,
                 new Response.Listener<String>() {
                     @Override
@@ -233,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivity.this, alumniList, jurusanList, tahunLulusList);
+                            AlumniAdapter alumniAdapter = new AlumniAdapter(MainActivityAlumni.this, alumniList, jurusanList, tahunLulusList);
                             recyclerView.setAdapter(alumniAdapter);
 
                         } catch (JSONException e) {
@@ -251,5 +218,4 @@ public class MainActivity extends AppCompatActivity {
         //adding our stringrequest to queue
         Volley.newRequestQueue(this).add(stringRequest);
     }
-
 }

@@ -17,50 +17,47 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class Login extends AppCompatActivity {
-
-    private EditText etUsername, etPassword;
-    private Button btnLogin, btnRegister;
-
+public class LoginAlumni extends AppCompatActivity {
+    private EditText etNpm, etPassword;
+    private Button btnLoginAlumni, btnRegisterAlumni;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_alumni);
 
-        etUsername = findViewById(R.id.etUsername);
+        etNpm = findViewById(R.id.etNpm);
         etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        btnRegister = findViewById(R.id.btnRegister);
+        btnLoginAlumni = findViewById(R.id.btnLoginAlumni);
+        btnRegisterAlumni = findViewById(R.id.btnRegisterAlumni);
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        btnRegisterAlumni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Register.class));
+                startActivity(new Intent(LoginAlumni.this, RegisterAlumni.class));
             }
         });
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnLoginAlumni.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String username = etUsername.getText().toString();
+            public void onClick(View v) {
+                String npm = etNpm.getText().toString();
                 String password = etPassword.getText().toString();
 
-                if (!(username.isEmpty() || password.isEmpty())){
+                if (!(npm.isEmpty() || password.isEmpty())){
                     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlLogin + "?username=" + username + "&password=" + password, new Response.Listener<String>() {
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlLoginAlumni + "?npm=" + npm + "&password=" + password, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             if (response.equals("Selamat Datang")){
                                 // Setelah login berhasil
-                                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean("isLoggedIn", true);
+                                SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences2.edit();
+                                editor.putBoolean("isLoggedInAlumni", true);
                                 editor.apply();
 
                                 Toast.makeText(getApplicationContext(), "Login Berhasil", Toast.LENGTH_SHORT).show();
 
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivityAlumni.class));
                             }else{
                                 Toast.makeText(getApplicationContext(), "Login Gagal", Toast.LENGTH_SHORT).show();
                             }
@@ -73,15 +70,9 @@ public class Login extends AppCompatActivity {
                     });
                     requestQueue.add(stringRequest);
                 }else {
-                    Toast.makeText(getApplicationContext(), "Username atau Password Salah", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "NPM atau Password Salah", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        finishAffinity();
-//    }
 }

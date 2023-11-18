@@ -1,7 +1,10 @@
 package com.example.sisteminformasialumni;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,13 +81,30 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
                     int tlId = selectedAlumni.getId_tahun_lulus();
                     String fotoAlumni = selectedAlumni.getFoto();
 
-                    // Menggunakan Intent untuk memanggil class lain
-                    Intent intent = new Intent(mCtx, detailAlumni.class);
-                    intent.putExtra("alumniId", alumniId);
-                    intent.putExtra("jurusanId", jurusanId);
-                    intent.putExtra("tlId", tlId);
-                    intent.putExtra("foto",fotoAlumni);
-                    mCtx.startActivity(intent);
+                    SharedPreferences sharedPreferences = mCtx.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                    boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+
+                    SharedPreferences sharedPreferences2 = mCtx.getSharedPreferences("MyPrefs2", MODE_PRIVATE);
+                    boolean isLoggedInAlumni = sharedPreferences2.getBoolean("isLoggedInAlumni", false);
+
+                    if (isLoggedIn){
+                        // Menggunakan Intent untuk memanggil class lain
+                        Intent intent = new Intent(mCtx, detailAlumni.class);
+                        intent.putExtra("alumniId", alumniId);
+                        intent.putExtra("jurusanId", jurusanId);
+                        intent.putExtra("tlId", tlId);
+                        intent.putExtra("foto",fotoAlumni);
+                        mCtx.startActivity(intent);
+                    } else if (isLoggedInAlumni) {
+                        // Menggunakan Intent untuk memanggil class lain
+                        Intent intent = new Intent(mCtx, detailAlumniOnly.class);
+                        intent.putExtra("alumniId", alumniId);
+                        intent.putExtra("jurusanId", jurusanId);
+                        intent.putExtra("tlId", tlId);
+                        intent.putExtra("foto",fotoAlumni);
+                        mCtx.startActivity(intent);
+                    }
+
                 }
             }
         });
