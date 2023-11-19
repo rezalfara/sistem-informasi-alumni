@@ -357,12 +357,17 @@ public class updateAlumni extends AppCompatActivity implements DatePickerDialog.
             // Get the Drawable from the ImageView
             Drawable drawable = fotoAlumni.getDrawable();
 
-            // Convert the Drawable to a Bitmap
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            Bitmap updatedBitmap = bitmapDrawable.getBitmap();
+            if (drawable != null){
+                // Convert the Drawable to a Bitmap
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                Bitmap updatedBitmap = bitmapDrawable.getBitmap();
 
-            // Convert the Bitmap to a base64-encoded string
-            imageString = convertBitmapToBase64(updatedBitmap);
+                // Convert the Bitmap to a base64-encoded string
+                imageString = convertBitmapToBase64(updatedBitmap);
+            }else {
+                Toast.makeText(updateAlumni.this, "Foto wajib ada!", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
         // Instantiate a RequestQueue.

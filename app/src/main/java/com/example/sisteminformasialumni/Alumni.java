@@ -1,6 +1,8 @@
 package com.example.sisteminformasialumni;
 
-public class Alumni {
+import java.io.Serializable;
+
+public class Alumni implements Serializable{
     private int id_alumni;
     private int npm;
     private String nama;

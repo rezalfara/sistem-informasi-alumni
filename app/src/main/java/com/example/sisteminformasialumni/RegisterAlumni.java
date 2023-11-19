@@ -70,13 +70,13 @@ public class RegisterAlumni extends AppCompatActivity {
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlRegisterAlumni, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Toast.makeText(getApplicationContext(), "Register Alumni Berhasil", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), LoginAlumni.class));
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), "Ada Data Yang Masih Kosong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
                         }
                     })
                     {

@@ -1,7 +1,11 @@
 package com.example.sisteminformasialumni;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
@@ -11,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
     private List<Alumni> alumniList;
     private List<Jurusan> jurusanList; // Daftar jurusan
     private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
@@ -85,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         loadTahunLulus();
 
     }
+
 
     @Override
     public void onBackPressed() {

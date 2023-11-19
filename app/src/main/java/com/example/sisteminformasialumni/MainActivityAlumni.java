@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -35,6 +37,13 @@ public class MainActivityAlumni extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_alumni);
 
+        SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
+        String loggedInNPM = sharedPreferences2.getString("npm", "0");
+
+        // Tampilkan informasi dalam Toast
+        Toast.makeText(getApplicationContext(), "NPM: " + loggedInNPM, Toast.LENGTH_SHORT).show();
+
+
         btnEditData = findViewById(R.id.btnEditData);
         btnLogout = findViewById(R.id.btnLogout);
 
@@ -53,12 +62,30 @@ public class MainActivityAlumni extends AppCompatActivity {
             }
         });
 
-//        btnEditData.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivityAlumni.this, editPofile.class));
-//            }
-//        });
+        btnEditData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Find the Alumni object based on the logged-in npm
+                Alumni loggedInAlumni = findAlumniByNpm(loggedInNPM);
+
+                if (loggedInAlumni != null) {
+                    // Buat Intent untuk pindah ke halaman EditProfile
+                    Intent intent = new Intent(MainActivityAlumni.this, EditProfile.class);
+
+                    // Tambahkan data tambahan ke Intent jika diperlukan
+                    intent.putExtra("npm", loggedInNPM);
+
+                    // Mengirim objek Alumni
+                    intent.putExtra("alumni", loggedInAlumni);
+
+                    // Start activity dengan Intent
+                    startActivity(intent);
+                } else {
+                    // Handle case when Alumni object is not found
+                    Toast.makeText(MainActivityAlumni.this, "Alumni not found for npm: " + loggedInNPM, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         //getting the recyclerview from xml
         recyclerView = findViewById(R.id.recyclerView);
@@ -75,6 +102,15 @@ public class MainActivityAlumni extends AppCompatActivity {
         loadAlumni();
         loadJurusan();
         loadTahunLulus();
+    }
+
+    private Alumni findAlumniByNpm(String loggedInNPM) {
+        for (Alumni alumni : alumniList) {
+            if (String.valueOf(alumni.getNpm()).equals(loggedInNPM)) {
+                return alumni;
+            }
+        }
+        return null; // Alumni not found
     }
 
     @Override

@@ -5,37 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/my_drawer_layout"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Daftar Alumni"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:gravity="center"
-        android:layout_margin="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Daftar Alumni"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:layout_margin="20dp"/>
 
-    <Button
-        android:id="@+id/btnAdd"
-        android:backgroundTint="@color/black"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Tambah"/>
+        <Button
+            android:id="@+id/btnAdd"
+            android:backgroundTint="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Tambah"/>
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:backgroundTint="#ff0000"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="KELUAR"/>
+        <Button
+            android:id="@+id/btnLogout"
+            android:backgroundTint="#ff0000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="KELUAR"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
+
+
+
 
 </LinearLayout>

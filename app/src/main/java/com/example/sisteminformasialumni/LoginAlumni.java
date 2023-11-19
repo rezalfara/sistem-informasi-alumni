@@ -53,11 +53,15 @@ public class LoginAlumni extends AppCompatActivity {
                                 SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences2.edit();
                                 editor.putBoolean("isLoggedInAlumni", true);
+                                editor.putString("npm", npm);
                                 editor.apply();
 
                                 Toast.makeText(getApplicationContext(), "Login Berhasil", Toast.LENGTH_SHORT).show();
 
-                                startActivity(new Intent(getApplicationContext(), MainActivityAlumni.class));
+                                // Start MainActivityAlumni and send the NPM as an extra
+                                Intent intent = new Intent(getApplicationContext(), MainActivityAlumni.class);
+                                intent.putExtra("npm", npm);
+                                startActivity(intent);
                             }else{
                                 Toast.makeText(getApplicationContext(), "Login Gagal", Toast.LENGTH_SHORT).show();
                             }
