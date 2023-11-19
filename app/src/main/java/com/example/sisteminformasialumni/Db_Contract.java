@@ -10,7 +10,6 @@ public class Db_Contract {
     public static final String urlCreate = "http://"+ip+"/project/api-create-data.php";
     public static final String urlRead = "http://"+ip+"/project/api-read-data.php";
     public static final String urlReadById = "http://"+ip+"/project/api-read-data-by-id.php?id_alumni=";
-    public static final String urlReadByNpm = "http://"+ip+"/project/api-read-data-by-npm.php?npm=";
     public static final String urlUpdate = "http://"+ip+"/project/api-update-data.php";
     public static final String urlDelete = "http://"+ip+"/project/api-delete-data.php";
 
