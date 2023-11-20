@@ -1,5 +1,6 @@
 package com.example.sisteminformasialumni;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +34,8 @@ public class MainActivityAlumni extends AppCompatActivity {
     private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
     private RecyclerView recyclerView;
     private AlumniAdapter alumniAdapter;
-    Button btnEditData, btnLogout;
+    Button btnLogout;
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +47,63 @@ public class MainActivityAlumni extends AppCompatActivity {
         // Tampilkan informasi dalam Toast
         Toast.makeText(getApplicationContext(), "NPM: " + loggedInNPM, Toast.LENGTH_SHORT).show();
 
-
-        btnEditData = findViewById(R.id.btnEditData);
         btnLogout = findViewById(R.id.btnLogout);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        // Set checked pada item pertama saat pertama kali dibuka
+        bottomNavigationView.getMenu().findItem(R.id.action_page1).setChecked(true);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+
+                if (itemId == R.id.action_page1) {
+                    return false;
+                } else if (itemId == R.id.action_page2) {
+                    // Find the Alumni object based on the logged-in npm
+                    Alumni loggedInAlumni = findAlumniByNpm(loggedInNPM);
+
+                    if (loggedInAlumni != null) {
+                        // Buat Intent untuk pindah ke halaman EditProfile
+                        Intent intent = new Intent(MainActivityAlumni.this, HelloWorldAlumni.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        // Tambahkan data tambahan ke Intent jika diperlukan
+                        intent.putExtra("npm", loggedInNPM);
+
+                        // Mengirim objek Alumni
+                        intent.putExtra("alumni", loggedInAlumni);
+
+                        // Start activity dengan Intent
+                        startActivity(intent);
+                    } else {
+                        // Handle case when Alumni object is not found
+                        Toast.makeText(MainActivityAlumni.this, "Alumni not found for npm: " + loggedInNPM, Toast.LENGTH_SHORT).show();
+                    }
+                } else if (itemId == R.id.action_page3) {
+                    // Find the Alumni object based on the logged-in npm
+                    Alumni loggedInAlumni = findAlumniByNpm(loggedInNPM);
+
+                    if (loggedInAlumni != null) {
+                        // Buat Intent untuk pindah ke halaman EditProfile
+                        Intent intent = new Intent(MainActivityAlumni.this, EditProfile.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        // Tambahkan data tambahan ke Intent jika diperlukan
+                        intent.putExtra("npm", loggedInNPM);
+
+                        // Mengirim objek Alumni
+                        intent.putExtra("alumni", loggedInAlumni);
+
+                        // Start activity dengan Intent
+                        startActivity(intent);
+                    } else {
+                        // Handle case when Alumni object is not found
+                        Toast.makeText(MainActivityAlumni.this, "Alumni not found for npm: " + loggedInNPM, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return false;
+            }
+        });
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,31 +117,6 @@ public class MainActivityAlumni extends AppCompatActivity {
 
                 startActivity(new Intent(MainActivityAlumni.this, PilihLogin.class));
                 finish();
-            }
-        });
-
-        btnEditData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Find the Alumni object based on the logged-in npm
-                Alumni loggedInAlumni = findAlumniByNpm(loggedInNPM);
-
-                if (loggedInAlumni != null) {
-                    // Buat Intent untuk pindah ke halaman EditProfile
-                    Intent intent = new Intent(MainActivityAlumni.this, EditProfile.class);
-
-                    // Tambahkan data tambahan ke Intent jika diperlukan
-                    intent.putExtra("npm", loggedInNPM);
-
-                    // Mengirim objek Alumni
-                    intent.putExtra("alumni", loggedInAlumni);
-
-                    // Start activity dengan Intent
-                    startActivity(intent);
-                } else {
-                    // Handle case when Alumni object is not found
-                    Toast.makeText(MainActivityAlumni.this, "Alumni not found for npm: " + loggedInNPM, Toast.LENGTH_SHORT).show();
-                }
             }
         });
 

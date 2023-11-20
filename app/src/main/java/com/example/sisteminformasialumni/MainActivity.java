@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AlumniAdapter alumniAdapter;
     Button btnCreate, btnLogout;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,37 @@ public class MainActivity extends AppCompatActivity {
 
         btnCreate = findViewById(R.id.btnAdd);
         btnLogout = findViewById(R.id.btnLogout);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        // Set checked pada item pertama saat pertama kali dibuka
+        bottomNavigationView.getMenu().findItem(R.id.action_page1).setChecked(true);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+
+                if (itemId == R.id.action_page1) {
+//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//                    finish();
+                    return false;
+                } else if (itemId == R.id.action_page2) {
+                    // Tampilkan halaman kedua tanpa efek transisi
+                    Intent intent = new Intent(getApplicationContext(), HelloWorld.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    finish();
+                }else if (itemId == R.id.action_page3) {
+                    // Tampilkan halaman kedua tanpa efek transisi
+                    Intent intent = new Intent(getApplicationContext(), HelloWorld.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    finish();
+                }
+
+                return false;
+            }
+        });
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override

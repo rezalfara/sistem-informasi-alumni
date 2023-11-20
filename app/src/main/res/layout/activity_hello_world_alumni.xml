@@ -5,30 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".HelloWorldAlumni">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Daftar Alumni"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:gravity="center"
-        android:layout_margin="20dp"/>
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:backgroundTint="#ff0000"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="KELUAR"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
+        android:text="HELLO WORLD!"
+        android:textSize="40dp"
         android:layout_weight="1"/>
 
     <!-- Bottom Navigation -->
