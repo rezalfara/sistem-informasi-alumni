@@ -49,7 +49,7 @@ public class MainActivityAlumni extends AppCompatActivity {
 
         btnLogout = findViewById(R.id.btnLogout);
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_alumni);
         // Set checked pada item pertama saat pertama kali dibuka
         bottomNavigationView.getMenu().findItem(R.id.action_page1).setChecked(true);
 
@@ -66,30 +66,8 @@ public class MainActivityAlumni extends AppCompatActivity {
 
                     if (loggedInAlumni != null) {
                         // Buat Intent untuk pindah ke halaman EditProfile
-                        Intent intent = new Intent(MainActivityAlumni.this, HelloWorldAlumni.class);
+                        Intent intent = new Intent(MainActivityAlumni.this, Profil.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        // Tambahkan data tambahan ke Intent jika diperlukan
-                        intent.putExtra("npm", loggedInNPM);
-
-                        // Mengirim objek Alumni
-                        intent.putExtra("alumni", loggedInAlumni);
-
-                        // Start activity dengan Intent
-                        startActivity(intent);
-                    } else {
-                        // Handle case when Alumni object is not found
-                        Toast.makeText(MainActivityAlumni.this, "Alumni not found for npm: " + loggedInNPM, Toast.LENGTH_SHORT).show();
-                    }
-                } else if (itemId == R.id.action_page3) {
-                    // Find the Alumni object based on the logged-in npm
-                    Alumni loggedInAlumni = findAlumniByNpm(loggedInNPM);
-
-                    if (loggedInAlumni != null) {
-                        // Buat Intent untuk pindah ke halaman EditProfile
-                        Intent intent = new Intent(MainActivityAlumni.this, EditProfile.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        // Tambahkan data tambahan ke Intent jika diperlukan
-                        intent.putExtra("npm", loggedInNPM);
 
                         // Mengirim objek Alumni
                         intent.putExtra("alumni", loggedInAlumni);
