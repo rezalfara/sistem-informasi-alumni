@@ -38,7 +38,7 @@ public class Profil extends AppCompatActivity {
 
                 if (itemId == R.id.action_page1) {
                     // Tampilkan halaman kedua tanpa efek transisi
-                    Intent intent = new Intent(getApplicationContext(), MainActivityAlumni.class);
+                    Intent intent = new Intent(Profil.this, MainActivityAlumni.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra("alumni", alumni);
                     startActivity(intent);
