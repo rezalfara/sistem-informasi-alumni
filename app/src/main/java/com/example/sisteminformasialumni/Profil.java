@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Profil extends AppCompatActivity {
     private Alumni alumni;
+    private String imgUrl; // Simpan URL gambar terkini di sini
     TextView tvNama;
     ImageView ivAlumni;
     Button btnEditData, btnChangePassword, btnLogout;
@@ -67,17 +69,19 @@ public class Profil extends AppCompatActivity {
             // Mendapatkan nilai dari extra dengan kunci "alumni"
             alumni = (Alumni) intent.getSerializableExtra("alumni");
 
-
             // Menetapkan nilai ke elemen-elemen UI
             if (alumni != null) {
-                String imgUrl;
 
                 // Mengecek apakah ada foto baru yang dikirimkan
                 if (intent.hasExtra("updatedFoto")) {
                     imgUrl = intent.getStringExtra("updatedFoto");
                     // Mendekode string base64 ke bitmap dan menampilkan di ImageView
                     Bitmap updatedBitmap = convertBase64ToBitmap(imgUrl);
-                    ivAlumni.setImageBitmap(updatedBitmap);
+                    // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
+                    Glide.with(this)
+                            .load(updatedBitmap) // Gunakan gambar yang sudah didecode
+                            .transform(new CircleCrop())
+                            .into(ivAlumni);
                 } else {
                     // Jika tidak ada foto baru, menggunakan foto yang sudah ada
                     imgUrl = Db_Contract.pathImage + alumni.getFoto();
@@ -97,8 +101,8 @@ public class Profil extends AppCompatActivity {
                         // Create an Intent to open the FullscreenImageActivity
                         Intent intent = new Intent(Profil.this, FullScreenImage.class);
 
-                        // Pass the image URL to the FullscreenImageActivity
                         intent.putExtra("imgUrl", imgUrl);
+                        Log.d("Profil", "imgUrl in Profil: " + imgUrl); // Tambahkan log ini
 
                         // Start the FullscreenImageActivity
                         startActivity(intent);
@@ -134,9 +138,6 @@ public class Profil extends AppCompatActivity {
                 });
             }
         }
-
-
-
 
     }
 

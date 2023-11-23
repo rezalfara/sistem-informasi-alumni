@@ -220,7 +220,7 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
                             Toast.makeText(EditProfile.this, "Data Berhasil DiUpdate", Toast.LENGTH_SHORT).show();
 
                             alumni.setNama(nama); // Update other fields as needed
-                            alumni.setFoto(imageString); // Update other fields as needed
+//                            alumni.setFoto(imageString); // Update other fields as needed
 
                             Intent intent = new Intent(EditProfile.this, Profil.class);
                             // Jika perlu, Anda dapat mengirim data tambahan ke halaman tujuan
