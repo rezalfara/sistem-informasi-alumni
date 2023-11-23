@@ -53,4 +53,6 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
 
     implementation ("com.wdullaer:materialdatetimepicker:4.2.3")
+    implementation ("com.squareup.picasso:picasso:2.8")
+
 }

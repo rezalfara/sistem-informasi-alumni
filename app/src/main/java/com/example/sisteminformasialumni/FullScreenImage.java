@@ -2,6 +2,7 @@ package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -16,12 +17,14 @@ public class FullScreenImage extends AppCompatActivity {
 
         ImageView fullscreenImage = findViewById(R.id.fullscreenImageView);
 
-        // Get the image URL from the intent
-        String imgUrl = getIntent().getStringExtra("imgUrl");
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("imgUrl")) {
+            String imgUrl = intent.getStringExtra("imgUrl");
 
-        // Load the image into the full-screen ImageView using Glide
-        Glide.with(this)
-                .load(imgUrl)
-                .into(fullscreenImage);
+            // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
+            Glide.with(this)
+                    .load(imgUrl)
+                    .into(fullscreenImage);
+        }
     }
 }
