@@ -83,6 +83,7 @@ public class detailAlumniOnly extends AppCompatActivity {
                             // Mendapatkan data dari objek JSON
                             int id_alumni = alumni.getInt("id_alumni");
                             int npm = alumni.getInt("npm");
+                            String password = alumni.getString("password");
                             String nama = alumni.getString("nama");
                             String tempatLahir = alumni.getString("tempat_lahir");
                             String tanggalLahir = alumni.getString("tgl_lahir");
@@ -96,7 +97,7 @@ public class detailAlumniOnly extends AppCompatActivity {
 
                             // Menambahkan data ke detailAlumniList
                             detailAlumniList.add(new Alumni(
-                                    id_alumni, npm, nama, tempatLahir, tanggalLahir, jenisKelamin, email, noHp, alamat, foto, id_jurusan, id_tahunLulus
+                                    id_alumni, npm, password, nama, tempatLahir, tanggalLahir, jenisKelamin, email, noHp, alamat, foto, id_jurusan, id_tahunLulus
                             ));
 
                             // Membuat adapter dan mengaturnya ke recyclerview

@@ -74,14 +74,28 @@ public class Profil extends AppCompatActivity {
 
                 // Mengecek apakah ada foto baru yang dikirimkan
                 if (intent.hasExtra("updatedFoto")) {
-                    imgUrl = intent.getStringExtra("updatedFoto");
+                    String imgUrlUpdate = intent.getStringExtra("updatedFoto");
                     // Mendekode string base64 ke bitmap dan menampilkan di ImageView
-                    Bitmap updatedBitmap = convertBase64ToBitmap(imgUrl);
+                    Bitmap updatedBitmap = convertBase64ToBitmap(imgUrlUpdate);
                     // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
                     Glide.with(this)
                             .load(updatedBitmap) // Gunakan gambar yang sudah didecode
                             .transform(new CircleCrop())
                             .into(ivAlumni);
+
+                    ivAlumni.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Create an Intent to open the FullscreenImageActivity
+                            Intent intent = new Intent(Profil.this, FullScreenImage.class);
+
+                            intent.putExtra("imgUrlUpdate", imgUrlUpdate);
+                            Log.d("Profil", "imgUrl in Profil: " + imgUrl); // Tambahkan log ini
+                            // Start the FullscreenImageActivity
+                            startActivity(intent);
+                        }
+                    });
+
                 } else {
                     // Jika tidak ada foto baru, menggunakan foto yang sudah ada
                     imgUrl = Db_Contract.pathImage + alumni.getFoto();
@@ -90,24 +104,25 @@ public class Profil extends AppCompatActivity {
                             .load(imgUrl)
                             .transform(new CircleCrop())
                             .into(ivAlumni);
+
+                    ivAlumni.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Create an Intent to open the FullscreenImageActivity
+                            Intent intent = new Intent(Profil.this, FullScreenImage.class);
+
+                            intent.putExtra("imgUrl", imgUrl);
+                            Log.d("Profil", "imgUrl in Profil: " + imgUrl); // Tambahkan log ini
+                            // Start the FullscreenImageActivity
+                            startActivity(intent);
+                        }
+                    });
                 }
 
                 // Set other data to UI elements
                 tvNama.setText(alumni.getNama());
 
-                ivAlumni.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Create an Intent to open the FullscreenImageActivity
-                        Intent intent = new Intent(Profil.this, FullScreenImage.class);
 
-                        intent.putExtra("imgUrl", imgUrl);
-                        Log.d("Profil", "imgUrl in Profil: " + imgUrl); // Tambahkan log ini
-
-                        // Start the FullscreenImageActivity
-                        startActivity(intent);
-                    }
-                });
 
                 btnLogout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -128,6 +143,19 @@ public class Profil extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(Profil.this, EditProfile.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        // Mengirim objek Alumni
+                        intent.putExtra("alumni", alumni);
+                        // Start activity dengan Intent
+                        startActivity(intent);
+                    }
+                });
+
+                btnChangePassword.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Profil.this, ChangePassword.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                         // Mengirim objek Alumni

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Alumni implements Serializable{
     private int id_alumni;
     private int npm;
+    private String password;
     private String nama;
     private String tempat_lahir;
     private String tgl_lahir;
@@ -16,9 +17,10 @@ public class Alumni implements Serializable{
     private int id_jurusan;
     private int id_tahun_lulus;
 
-    public Alumni(int id_alumni, int npm, String nama, String tempat_lahir, String tgl_lahir, String jk, String email, String no_hp, String alamat, String foto, int id_jurusan, int id_tahun_lulus) {
+    public Alumni(int id_alumni, int npm, String password, String nama, String tempat_lahir, String tgl_lahir, String jk, String email, String no_hp, String alamat, String foto, int id_jurusan, int id_tahun_lulus) {
         this.id_alumni = id_alumni;
         this.npm = npm;
+        this.password = password;
         this.nama = nama;
         this.tempat_lahir = tempat_lahir;
         this.tgl_lahir = tgl_lahir;
@@ -45,6 +47,14 @@ public class Alumni implements Serializable{
 
     public void setNpm(int npm) {
         this.npm = npm;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getNama() {

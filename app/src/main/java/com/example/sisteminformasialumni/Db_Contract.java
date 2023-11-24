@@ -17,5 +17,7 @@ public class Db_Contract {
     public static final String urlGetJurusanById = "http://"+ip+"/project/api-read-jurusan-by-id.php?id_jurusan=";
     public static final String urlGetTahunLulus = "http://"+ip+"/project/api-get-tahunLulus.php";
     public static final String urlGetTahunLulusById = "http://"+ip+"/project/api-read-tahunLulus-by-id.php?id_tahun_lulus=";
+    public static final String urlGetPasswordByNpm = "http://"+ip+"/project/api-get-password-by-npm.php?npm=";
+    public static final String urlUpdatePasswordByNpm = "http://"+ip+"/project/api-update-password.php";
 
 }

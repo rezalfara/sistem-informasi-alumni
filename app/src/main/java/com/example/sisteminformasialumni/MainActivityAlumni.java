@@ -149,6 +149,7 @@ public class MainActivityAlumni extends AppCompatActivity {
                                 alumniList.add(new Alumni(
                                         alumni.getInt("id_alumni"),
                                         alumni.getInt("npm"),
+                                        alumni.getString("password"),
                                         alumni.getString("nama"),
                                         alumni.getString("tempat_lahir"),
                                         alumni.getString("tgl_lahir"),
