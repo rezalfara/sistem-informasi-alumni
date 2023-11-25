@@ -3,6 +3,7 @@ package com.example.sisteminformasialumni;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -109,13 +110,18 @@ public class ChangePassword extends AppCompatActivity {
                     public void onResponse(String response) {
                         if (response.equals("sukses")) {
                             // Data berhasil diperbarui
-                            // Lakukan tindakan yang sesuai di sini, misalnya menampilkan pesan sukses kepada pengguna
-                            Log.d("Response", response);
-                            Toast.makeText(ChangePassword.this, "Data Berhasil DiUpdate", Toast.LENGTH_SHORT).show();
+                            // Lakukan tindakan yang sesuai di sini, misalnya menampilkan pesan sukses kepada
+                            SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences2.edit();
+                            editor.remove("isLoggedInAlumni");
+                            editor.remove("npm"); // Hapus informasi pengguna jika diperlukan
+                            editor.apply();
 
-                            Intent intent = new Intent(ChangePassword.this, Profil.class);
-                            // Jika perlu, Anda dapat mengirim data tambahan ke halaman tujuan
-                            intent.putExtra("alumni", alumni);
+                            Log.d("Response", response);
+                            Toast.makeText(ChangePassword.this, "Password Telah Diubah, Silahkan Login Kembali!", Toast.LENGTH_LONG).show();
+
+                            Intent intent = new Intent(ChangePassword.this, LoginAlumni.class);
+
                             startActivity(intent);
 
                         } else {

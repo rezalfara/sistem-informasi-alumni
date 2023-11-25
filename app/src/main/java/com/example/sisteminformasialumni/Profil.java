@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -23,7 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Profil extends AppCompatActivity {
     private Alumni alumni;
-    private String imgUrl; // Simpan URL gambar terkini di sini
+    private Alumni updatedAlumni;
     TextView tvNama;
     ImageView ivAlumni;
     Button btnEditData, btnChangePassword, btnLogout;
@@ -65,16 +66,15 @@ public class Profil extends AppCompatActivity {
 
         // Mendapatkan data dari Intent
         Intent intent = getIntent();
-        if (intent != null) {
+        if (intent!=null){
             // Mendapatkan nilai dari extra dengan kunci "alumni"
             alumni = (Alumni) intent.getSerializableExtra("alumni");
+            String imgUrlUpdate = intent.getStringExtra("updatedFoto");
+            String imgUrl = Db_Contract.pathImage + alumni.getFoto();
 
-            // Menetapkan nilai ke elemen-elemen UI
-            if (alumni != null) {
+            if (alumni!=null){
 
-                // Mengecek apakah ada foto baru yang dikirimkan
-                if (intent.hasExtra("updatedFoto")) {
-                    String imgUrlUpdate = intent.getStringExtra("updatedFoto");
+                if (imgUrlUpdate!=null){
                     // Mendekode string base64 ke bitmap dan menampilkan di ImageView
                     Bitmap updatedBitmap = convertBase64ToBitmap(imgUrlUpdate);
                     // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
@@ -82,47 +82,62 @@ public class Profil extends AppCompatActivity {
                             .load(updatedBitmap) // Gunakan gambar yang sudah didecode
                             .transform(new CircleCrop())
                             .into(ivAlumni);
-
-                    ivAlumni.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Create an Intent to open the FullscreenImageActivity
-                            Intent intent = new Intent(Profil.this, FullScreenImage.class);
-
-                            intent.putExtra("imgUrlUpdate", imgUrlUpdate);
-                            Log.d("Profil", "imgUrl in Profil: " + imgUrl); // Tambahkan log ini
-                            // Start the FullscreenImageActivity
-                            startActivity(intent);
-                        }
-                    });
-
-                } else {
-                    // Jika tidak ada foto baru, menggunakan foto yang sudah ada
-                    imgUrl = Db_Contract.pathImage + alumni.getFoto();
+                }else {
                     // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
                     Glide.with(this)
                             .load(imgUrl)
                             .transform(new CircleCrop())
                             .into(ivAlumni);
-
-                    ivAlumni.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Create an Intent to open the FullscreenImageActivity
-                            Intent intent = new Intent(Profil.this, FullScreenImage.class);
-
-                            intent.putExtra("imgUrl", imgUrl);
-                            Log.d("Profil", "imgUrl in Profil: " + imgUrl); // Tambahkan log ini
-                            // Start the FullscreenImageActivity
-                            startActivity(intent);
-                        }
-                    });
                 }
 
                 // Set other data to UI elements
                 tvNama.setText(alumni.getNama());
 
+                ivAlumni.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Create an Intent to open the FullscreenImageActivity
+                        Intent intent = new Intent(Profil.this, FullScreenImage.class);
 
+                        if (imgUrlUpdate!=null){
+                            intent.putExtra("imgUrlUpdate", imgUrlUpdate);
+                            Log.d("Profil", "imgUrlUpdate in Profil: " + imgUrlUpdate); // Tambahkan log ini
+                        }else{
+                            intent.putExtra("imgUrl", imgUrl);
+                            Log.d("Profil", "imgUrl in Profil: " + imgUrl); // Tambahkan log ini
+                        }
+
+                        // Start the FullscreenImageActivity
+                        startActivity(intent);
+                    }
+                });
+
+                btnEditData.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Profil.this, EditProfile.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        if (imgUrlUpdate!=null){
+                            intent.putExtra("imgUrlUpdate", imgUrlUpdate);
+                        }
+//                        alumni.setNpm(alumni.getNpm());
+//                        alumni.setNama(alumni.getNama());
+//                        alumni.setTempat_lahir(alumni.getTempat_lahir());
+//                        alumni.setTgl_lahir(alumni.getTgl_lahir());
+//                        alumni.setJk(alumni.getJk());
+//                        alumni.setEmail(alumni.getEmail());
+//                        alumni.setNo_hp(alumni.getNo_hp());
+//                        alumni.setAlamat(alumni.getAlamat());
+//                        alumni.setId_tahun_lulus(alumni.getId_tahun_lulus());
+//                        alumni.setId_jurusan(alumni.getId_jurusan());
+                        // Mengirim objek Alumni
+                        intent.putExtra("alumni", alumni);
+                        // Start activity dengan Intent
+                        startActivity(intent);
+
+                    }
+                });
 
                 btnLogout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -139,19 +154,6 @@ public class Profil extends AppCompatActivity {
                     }
                 });
 
-                btnEditData.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Profil.this, EditProfile.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                        // Mengirim objek Alumni
-                        intent.putExtra("alumni", alumni);
-                        // Start activity dengan Intent
-                        startActivity(intent);
-                    }
-                });
-
                 btnChangePassword.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -164,9 +166,11 @@ public class Profil extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+            }else {
+                Toast.makeText(Profil.this, "Alumni tidak ditemukan", Toast.LENGTH_LONG).show();
             }
         }
-
     }
 
     private Bitmap convertBase64ToBitmap(String base64String) {

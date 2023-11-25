@@ -54,6 +54,7 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
     private RadioButton radioButtonMale, radioButtonFemale;
     private Button btnUploadImage, btnUpdateAlumni;
     private Alumni alumni;
+    private Alumni updatedAlumni;
     private List<Jurusan> jurusanList = new ArrayList<>();
     private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
     private List<Alumni> alumniList = new ArrayList<>();
@@ -89,9 +90,11 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
         Intent intent = getIntent();
         if (intent != null) {
             // Mendapatkan nilai dari extra dengan kunci "alumni"
+
+            String imgUrlUpdate = getIntent().getStringExtra("imgUrlUpdate");
+
             alumni = (Alumni) intent.getSerializableExtra("alumni");
 
-            // Menetapkan nilai ke elemen-elemen UI
             if (alumni != null) {
                 etId.setText(String.valueOf(alumni.getId_alumni()));
                 etNpm.setText(String.valueOf(alumni.getNpm()));
@@ -109,19 +112,23 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
                 etPhone.setText(alumni.getNo_hp());
                 etAlamat.setText(alumni.getAlamat());
 
-                // Mengambil gambar dari path dan menampilkannya di ImageView
-                String imgPath = Db_Contract.pathImage + alumni.getFoto();
-
-                // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
-                Glide.with(this)
-                        .load(imgPath)
-                        .into(fotoAlumni);
-
-                //Jurusan
                 fetchDataJurusan();
-
-                //Tahun Lulus
                 fetchDataTahunLulus();
+
+                if (imgUrlUpdate!=null){
+                    // Use the base64Image as needed, e.g., decode it into a Bitmap and load it into an ImageView
+                    Bitmap decodedBitmap = decodeBase64ToBitmap(imgUrlUpdate);
+
+                    fotoAlumni.setImageBitmap(decodedBitmap);
+                }else {
+                    // Mengambil gambar dari path dan menampilkannya di ImageView
+                    String imgPath = Db_Contract.pathImage + alumni.getFoto();
+
+                    // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
+                    Glide.with(this)
+                            .load(imgPath)
+                            .into(fotoAlumni);
+                }
 
                 etTglLahir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -174,8 +181,19 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
                     }
                 });
             }
+
         }
 
+    }
+
+    private Bitmap decodeBase64ToBitmap(String base64String) {
+        if (base64String != null) {
+            byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        } else {
+            // Handle the case where base64String is null (return a default Bitmap or handle accordingly)
+            return null;
+        }
     }
 
     private void updateData(final int alumniId, final int npm, final String nama, final String tempat_lahir, final String tgl_lahir, final String gender, final String email, final String no_hp, final String alamat, final int id_jurusan, final int id_tahun_lulus) {
@@ -219,7 +237,16 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
                             Log.d("Response", response);
                             Toast.makeText(EditProfile.this, "Data Berhasil DiUpdate", Toast.LENGTH_SHORT).show();
 
+                            alumni.setNpm(npm);
                             alumni.setNama(nama); // Update other fields as needed
+                            alumni.setTempat_lahir(tempat_lahir);
+                            alumni.setTgl_lahir(tgl_lahir);
+                            alumni.setJk(jk);
+                            alumni.setEmail(email);
+                            alumni.setNo_hp(no_hp);
+                            alumni.setAlamat(alamat);
+                            alumni.setId_jurusan(id_jurusan);
+                            alumni.setId_tahun_lulus(id_tahun_lulus);
 //                            alumni.setFoto(imageString); // Update other fields as needed
 
                             Intent intent = new Intent(EditProfile.this, Profil.class);
@@ -338,13 +365,15 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerJurusan.setAdapter(adapter);
 
-                    int id_jurusan = getIntent().getIntExtra("jurusanId",0);
-
-                    for (int i = 0; i < spinnerJurusan.getCount(); i++) {
-                        if (id_jurusan == jurusanList.get(i).getId_jurusan()) {
-                            // ID jurusan cocok, Anda dapat mengatur Spinner ke item tersebut
-                            spinnerJurusan.setSelection(i);
-                            break; // Keluar dari loop setelah item cocok ditemukan
+                    // Update the spinner selection based on the Alumni object
+                    if (alumni != null) {
+                        int id_jurusan = alumni.getId_jurusan();
+                        for (int i = 0; i < spinnerJurusan.getCount(); i++) {
+                            if (id_jurusan == jurusanList.get(i).getId_jurusan()) {
+                                // ID jurusan matches, set the spinner to that item
+                                spinnerJurusan.setSelection(i);
+                                break;
+                            }
                         }
                     }
 
@@ -402,6 +431,18 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
                     ArrayAdapter<Integer> adapter = new ArrayAdapter<>(EditProfile.this, android.R.layout.simple_spinner_item, namaTahunLulusList);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerTL.setAdapter(adapter);
+
+                    // Update the spinner selection based on the Alumni object
+                    if (alumni != null) {
+                        int id_tl = alumni.getId_tahun_lulus();
+                        for (int i = 0; i < spinnerTL.getCount(); i++) {
+                            if (id_tl == tahunLulusList.get(i).getId_tahun_lulus()) {
+                                // ID jurusan matches, set the spinner to that item
+                                spinnerTL.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

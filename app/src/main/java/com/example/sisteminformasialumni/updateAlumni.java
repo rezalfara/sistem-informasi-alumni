@@ -309,6 +309,16 @@ public class updateAlumni extends AppCompatActivity implements DatePickerDialog.
                     ArrayAdapter<Integer> adapter = new ArrayAdapter<>(updateAlumni.this, android.R.layout.simple_spinner_item, namaTahunLulusList);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerTL.setAdapter(adapter);
+
+                    int id_tl = getIntent().getIntExtra("tlId",0);
+
+                    for (int i = 0; i < spinnerTL.getCount(); i++) {
+                        if (id_tl == tahunLulusList.get(i).getId_tahun_lulus()) {
+                            // ID jurusan cocok, Anda dapat mengatur Spinner ke item tersebut
+                            spinnerTL.setSelection(i);
+                            break; // Keluar dari loop setelah item cocok ditemukan
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

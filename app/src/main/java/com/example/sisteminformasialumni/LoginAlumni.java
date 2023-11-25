@@ -79,4 +79,11 @@ public class LoginAlumni extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(LoginAlumni.this, PilihLogin.class));
+        finish();
+    }
 }
