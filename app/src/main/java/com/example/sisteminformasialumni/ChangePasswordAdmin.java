@@ -8,10 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,15 +24,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChangePassword extends AppCompatActivity {
-    private Alumni alumni;
+public class ChangePasswordAdmin extends AppCompatActivity {
+    private Admin admin;
     TextInputEditText etOld, etNew, etConfirm;
     Button btnChange;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_password);
+        setContentView(R.layout.activity_change_password_admin);
 
         etOld = findViewById(R.id.etOld);
         etNew = findViewById(R.id.etNew);
@@ -43,40 +40,39 @@ public class ChangePassword extends AppCompatActivity {
 
         // Mendapatkan data dari Intent
         Intent intent = getIntent();
-        alumni = (Alumni) intent.getSerializableExtra("alumni");
-        int npm = alumni.getNpm();
-//        // Tampilkan informasi dalam Toast
-//        Toast.makeText(getApplicationContext(), "NPM: " + npm, Toast.LENGTH_LONG).show();
-        getPasswordbyNpm(npm);
+        admin = (Admin) intent.getSerializableExtra("admin");
+        String username = admin.getUsername();
+
+        getPasswordbyUsername(username);
 
         btnChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String npm = String.valueOf(alumni.getNpm());
+                String username = admin.getUsername();
                 String baru = etNew.getText().toString();
                 String confirm = etConfirm.getText().toString();
 
                 if (!baru.equals(confirm)){
-                    Toast.makeText(ChangePassword.this, "Password Tidak Sama", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePasswordAdmin.this, "Password Tidak Sama", Toast.LENGTH_SHORT).show();
                 }else {
-                    updatePassword(Integer.parseInt(npm));
+                    updatePassword(username);
                 }
             }
         });
     }
 
-    private void getPasswordbyNpm(int npm) {
+    private void getPasswordbyUsername(String username) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetPasswordByNpm+npm,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetPasswordByUsername+username,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             // Parsing data JSON, karena sekarang responsenya adalah objek tunggal bukan array
-                            JSONObject alumni = new JSONObject(response);
+                            JSONObject admin = new JSONObject(response);
 
                             // Mendapatkan data dari objek JSON
-                            String password = alumni.getString("password");
+                            String password = admin.getString("password");
 
                             etOld.setText(password);
 
@@ -89,7 +85,7 @@ public class ChangePassword extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Handle error
-                        Toast.makeText(ChangePassword.this, "Error getting password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordAdmin.this, "Error getting password", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -97,29 +93,29 @@ public class ChangePassword extends AppCompatActivity {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    private void updatePassword(final int npm){
+    private void updatePassword(final String username){
         String baru = etNew.getText().toString();
         // Instantiate a RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
 
         // Create a request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlUpdatePasswordByNpm,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlUpdatePasswordByUsername,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if (response.equals("sukses")) {
                             // Data berhasil diperbarui
                             // Lakukan tindakan yang sesuai di sini, misalnya menampilkan pesan sukses kepada
-                            SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences2.edit();
-                            editor.remove("isLoggedInAlumni");
-                            editor.remove("npm"); // Hapus informasi pengguna jika diperlukan
+                            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.remove("isLoggedIn");
+                            editor.remove("username"); // Hapus informasi pengguna jika diperlukan
                             editor.apply();
 
                             Log.d("Response", response);
-                            Toast.makeText(ChangePassword.this, "Password Telah Diubah, Silahkan Login Kembali!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ChangePasswordAdmin.this, "Password Telah Diubah, Silahkan Login Kembali!", Toast.LENGTH_LONG).show();
 
-                            Intent intent = new Intent(ChangePassword.this, LoginAlumni.class);
+                            Intent intent = new Intent(ChangePasswordAdmin.this, Login.class);
 
                             startActivity(intent);
 
@@ -128,7 +124,7 @@ public class ChangePassword extends AppCompatActivity {
                             // Ini adalah contoh pernyataan log
                             // Operasi gagal
                             // Lakukan tindakan yang sesuai di sini, misalnya menampilkan pesan kesalahan kepada pengguna
-                            Toast.makeText(ChangePassword.this, "GAGAL!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChangePasswordAdmin.this, "GAGAL!!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
@@ -136,14 +132,14 @@ public class ChangePassword extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Handle kesalahan koneksi atau permintaan
-                        Toast.makeText(ChangePassword.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordAdmin.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() {
                 // Add your parameters to the request
                 Map<String, String> params = new HashMap<>();
-                params.put("npm", String.valueOf(npm));
+                params.put("username", username);
                 params.put("password", baru);
 
                 // Add other parameters if needed

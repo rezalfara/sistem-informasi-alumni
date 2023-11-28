@@ -18,6 +18,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ChangePasswordAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfilAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".ProfilAdmin"
+            android:exported="false" />
+        <activity
             android:name=".ChangePassword"
             android:exported="false" />
         <activity

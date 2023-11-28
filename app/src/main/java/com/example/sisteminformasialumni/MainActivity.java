@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private List<Alumni> alumniList;
+    private List<Admin> adminList;
     private List<Jurusan> jurusanList; // Daftar jurusan
     private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
     private RecyclerView recyclerView;
@@ -51,13 +52,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String loggedInUsername = sharedPreferences.getString("username", "0");
+
+        // Tampilkan informasi dalam Toast
+        Toast.makeText(getApplicationContext(), "Username: " + loggedInUsername, Toast.LENGTH_SHORT).show();
+
         btnCreate = findViewById(R.id.btnAdd);
         btnLogout = findViewById(R.id.btnLogout);
+
+        adminList = new ArrayList<>();
+        loadAdmin();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         // Set checked pada item pertama saat pertama kali dibuka
         bottomNavigationView.getMenu().findItem(R.id.action_page1).setChecked(true);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -74,11 +83,23 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }else if (itemId == R.id.action_page3) {
-                    // Tampilkan halaman kedua tanpa efek transisi
-                    Intent intent = new Intent(getApplicationContext(), HelloWorld.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-                    finish();
+                    // Find the Alumni object based on the logged-in npm
+                    Admin loggedInAdmin = findAdminByUsername(loggedInUsername);
+
+                    if (loggedInAdmin != null) {
+                        // Buat Intent untuk pindah ke halaman EditProfile
+                        Intent intent = new Intent(MainActivity.this, ProfilAdmin.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        // Mengirim objek Alumni
+                        intent.putExtra("admin", loggedInAdmin);
+
+                        // Start activity dengan Intent
+                        startActivity(intent);
+                    } else {
+                        // Handle case when Alumni object is not found
+                        Toast.makeText(MainActivity.this, "Admin not found for username: " + loggedInUsername, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 return false;
@@ -114,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //initializing the productlist
+
+
         alumniList = new ArrayList<>();
         jurusanList = new ArrayList<>();
         tahunLulusList = new ArrayList<>();
@@ -126,6 +149,57 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private Admin findAdminByUsername(String loggedInUsername) {
+        for (Admin admin : adminList) {
+            if (admin.getUsername().equals(loggedInUsername)) {
+                return admin;
+            }
+        }
+        return null; // Alumni not found
+    }
+
+    private void loadAdmin() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlReadAdmin,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //converting the string to json array object
+                            JSONArray array = new JSONArray(response);
+
+                            //traversing through all the object
+                            for (int i = 0; i < array.length(); i++) {
+
+                                //getting product object from json array
+                                JSONObject admin = array.getJSONObject(i);
+
+                                //adding the product to product list
+                                adminList.add(new Admin(
+                                        admin.getInt("id_admin"),
+                                        admin.getString("username"),
+                                        admin.getString("nama"),
+                                        admin.getString("password"),
+                                        admin.getString("alamat"),
+                                        admin.getString("foto")
+                                ));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        //adding our stringrequest to queue
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
 
     @Override
     public void onBackPressed() {

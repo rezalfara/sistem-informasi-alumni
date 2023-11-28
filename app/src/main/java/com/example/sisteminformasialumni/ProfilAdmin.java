@@ -3,7 +3,6 @@ package com.example.sisteminformasialumni;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -22,21 +21,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class Profil extends AppCompatActivity {
-    private Alumni alumni;
-    private Alumni updatedAlumni;
+public class ProfilAdmin extends AppCompatActivity {
+    private Admin admin;
     TextView tvNama;
-    ImageView ivAlumni;
+    ImageView ivAdmin;
     Button btnEditData, btnChangePassword, btnLogout;
     BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profil);
+        setContentView(R.layout.activity_profil_admin);
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation_alumni);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
         // Set checked pada item pertama saat pertama kali dibuka
-        bottomNavigationView.getMenu().findItem(R.id.action_page2).setChecked(true);
+        bottomNavigationView.getMenu().findItem(R.id.action_page3).setChecked(true);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -44,12 +42,18 @@ public class Profil extends AppCompatActivity {
 
                 if (itemId == R.id.action_page1) {
                     // Tampilkan halaman kedua tanpa efek transisi
-                    Intent intent = new Intent(Profil.this, MainActivityAlumni.class);
+                    Intent intent = new Intent(ProfilAdmin.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtra("alumni", alumni);
+                    intent.putExtra("admin", admin);
                     startActivity(intent);
                     finish();
                 } else if (itemId == R.id.action_page2) {
+                    // Tampilkan halaman kedua tanpa efek transisi
+                    Intent intent = new Intent(getApplicationContext(), HelloWorld.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    finish();
+                } else if (itemId == R.id.action_page3) {
                     return false;
                 }
 
@@ -57,9 +61,8 @@ public class Profil extends AppCompatActivity {
             }
         });
 
-
         tvNama = findViewById(R.id.tvNama);
-        ivAlumni = findViewById(R.id.ivAlumni);
+        ivAdmin = findViewById(R.id.ivAdmin);
         btnEditData = findViewById(R.id.btnEditData);
         btnChangePassword = findViewById(R.id.btnChangePassword);
         btnLogout = findViewById(R.id.btnLogout);
@@ -68,11 +71,12 @@ public class Profil extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent!=null){
             // Mendapatkan nilai dari extra dengan kunci "alumni"
-            alumni = (Alumni) intent.getSerializableExtra("alumni");
+            admin = (Admin) intent.getSerializableExtra("admin");
+            Log.d("ProfilAdmin", "Admin data from intent: " + admin);
             String imgUrlUpdate = intent.getStringExtra("updatedFoto");
-            String imgUrl = Db_Contract.pathImage + alumni.getFoto();
+            String imgUrl = Db_Contract.pathImageAdmin + admin.getFoto();
 
-            if (alumni!=null){
+            if (admin!=null){
 
                 if (imgUrlUpdate!=null){
                     // Mendekode string base64 ke bitmap dan menampilkan di ImageView
@@ -81,23 +85,23 @@ public class Profil extends AppCompatActivity {
                     Glide.with(this)
                             .load(updatedBitmap) // Gunakan gambar yang sudah didecode
                             .transform(new CircleCrop())
-                            .into(ivAlumni);
+                            .into(ivAdmin);
                 }else {
                     // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
                     Glide.with(this)
                             .load(imgUrl)
                             .transform(new CircleCrop())
-                            .into(ivAlumni);
+                            .into(ivAdmin);
                 }
 
                 // Set other data to UI elements
-                tvNama.setText(alumni.getNama());
+                tvNama.setText(admin.getNama());
 
-                ivAlumni.setOnClickListener(new View.OnClickListener() {
+                ivAdmin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Create an Intent to open the FullscreenImageActivity
-                        Intent intent = new Intent(Profil.this, FullScreenImage.class);
+                        Intent intent = new Intent(ProfilAdmin.this, FullScreenImage.class);
 
                         if (imgUrlUpdate!=null){
                             intent.putExtra("imgUrlUpdate", imgUrlUpdate);
@@ -115,15 +119,15 @@ public class Profil extends AppCompatActivity {
                 btnEditData.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(Profil.this, EditProfile.class);
+                        Intent intent = new Intent(ProfilAdmin.this, EditProfilAdmin.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                         if (imgUrlUpdate!=null){
                             intent.putExtra("imgUrlUpdate", imgUrlUpdate);
                         }
-//
+
                         // Mengirim objek Alumni
-                        intent.putExtra("alumni", alumni);
+                        intent.putExtra("admin", admin);
                         // Start activity dengan Intent
                         startActivity(intent);
 
@@ -133,14 +137,14 @@ public class Profil extends AppCompatActivity {
                 btnLogout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences2.edit();
-                        editor.remove("isLoggedInAlumni");
-                        editor.remove("npm"); // Hapus informasi pengguna jika diperlukan
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.remove("isLoggedIn");
+                        editor.remove("username"); // Hapus informasi pengguna jika diperlukan
                         editor.apply();
 
 
-                        startActivity(new Intent(Profil.this, PilihLogin.class));
+                        startActivity(new Intent(ProfilAdmin.this, PilihLogin.class));
                         finish();
                     }
                 });
@@ -148,18 +152,18 @@ public class Profil extends AppCompatActivity {
                 btnChangePassword.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(Profil.this, ChangePassword.class);
+                        Intent intent = new Intent(ProfilAdmin.this, ChangePasswordAdmin.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                         // Mengirim objek Alumni
-                        intent.putExtra("alumni", alumni);
+                        intent.putExtra("admin", admin);
                         // Start activity dengan Intent
                         startActivity(intent);
                     }
                 });
 
             }else {
-                Toast.makeText(Profil.this, "Alumni tidak ditemukan", Toast.LENGTH_LONG).show();
+                Toast.makeText(ProfilAdmin.this, "Admin tidak ditemukan", Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -333,7 +333,10 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
             try {
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                 bitmap = BitmapFactory.decodeStream(inputStream);
-                fotoAlumni.setImageBitmap(bitmap);
+//                fotoAlumni.setImageBitmap(bitmap);
+                if (bitmap != null) {
+                    fotoAlumni.setImageBitmap(bitmap);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
