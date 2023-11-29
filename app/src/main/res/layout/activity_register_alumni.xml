@@ -23,6 +23,10 @@
         app:cardCornerRadius="15dp"
         android:elevation="10dp">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,6 +46,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="masukkan NPM"
+                android:drawableStart="@drawable/ic_username"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="Nama"
+                android:textStyle="bold"
+                android:layout_margin="10dp"/>
+
+            <EditText
+                android:id="@+id/etNama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="masukkan nama"
                 android:drawableStart="@drawable/ic_username"
                 android:drawablePadding="10dp"/>
 
@@ -88,14 +108,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foto"
+                android:textSize="18dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <Button
+                android:id="@+id/btnUploadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pilih Foto"
+                android:backgroundTint="@color/black"
+                android:layout_marginBottom="20dp"/>
+
+            <ImageView
+                android:id="@+id/fotoAlumni"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"/>
+
             <Button
                 android:id="@+id/btnRegisterAlumni"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="REGISTER"
                 android:backgroundTint="#4CAF50"
-                android:layout_margin="20dp"/>
+                android:layout_marginBottom="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"/>
         </LinearLayout>
+
+        </ScrollView>
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

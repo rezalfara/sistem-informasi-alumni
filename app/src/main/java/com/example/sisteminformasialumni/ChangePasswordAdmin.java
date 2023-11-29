@@ -42,8 +42,9 @@ public class ChangePasswordAdmin extends AppCompatActivity {
         Intent intent = getIntent();
         admin = (Admin) intent.getSerializableExtra("admin");
         String username = admin.getUsername();
+        String password = admin.getPassword();
 
-        getPasswordbyUsername(username);
+        etOld.setText(password);
 
         btnChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,38 +60,6 @@ public class ChangePasswordAdmin extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void getPasswordbyUsername(String username) {
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetPasswordByUsername+username,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            // Parsing data JSON, karena sekarang responsenya adalah objek tunggal bukan array
-                            JSONObject admin = new JSONObject(response);
-
-                            // Mendapatkan data dari objek JSON
-                            String password = admin.getString("password");
-
-                            etOld.setText(password);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                        Toast.makeText(ChangePasswordAdmin.this, "Error getting password", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        //adding our stringrequest to queue
-        Volley.newRequestQueue(this).add(stringRequest);
     }
 
     private void updatePassword(final String username){
