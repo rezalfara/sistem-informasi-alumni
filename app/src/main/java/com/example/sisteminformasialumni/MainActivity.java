@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private AlumniAdapter alumniAdapter;
     Button btnCreate, btnLogout;
     BottomNavigationView bottomNavigationView;
+    // Declare SwipeRefreshLayout
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +170,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize SwipeRefreshLayout
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
+        // Set refresh listener
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Call your method to refresh data
+                refreshData();
+            }
+        });
+
+    }
+
+    private void refreshData() {
+        // Clear existing data
+        alumniList.clear();
+        jurusanList.clear();
+        tahunLulusList.clear();
+
+        // Call your methods to reload data
+        loadAlumni();
+        loadJurusan();
+        loadTahunLulus();
+
+        // Notify the adapter that the data has changed
+        alumniAdapter.notifyDataSetChanged();
+
+        // Hide the refresh indicator
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void filterList(String text) {
@@ -181,8 +214,6 @@ public class MainActivity extends AppCompatActivity {
         if (namesFiltered.isEmpty()) {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
             recyclerView.setVisibility(View.GONE);
-
-//            recyclerView.setAdapter(alumniAdapter);
 
         } else {
             recyclerView.setVisibility(View.VISIBLE);

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +38,8 @@ public class MainActivityAlumni extends AppCompatActivity {
     private AlumniAdapter alumniAdapter;
     Button btnLogout;
     BottomNavigationView bottomNavigationView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +139,36 @@ public class MainActivityAlumni extends AppCompatActivity {
                 return false;
             }
         });
+
+        // Initialize SwipeRefreshLayout
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
+        // Set refresh listener
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Call your method to refresh data
+                refreshData();
+            }
+        });
+    }
+
+    private void refreshData() {
+        // Clear existing data
+        alumniList.clear();
+        jurusanList.clear();
+        tahunLulusList.clear();
+
+        // Call your methods to reload data
+        loadAlumni();
+        loadJurusan();
+        loadTahunLulus();
+
+        // Notify the adapter that the data has changed
+        alumniAdapter.notifyDataSetChanged();
+
+        // Hide the refresh indicator
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void filterList(String text) {

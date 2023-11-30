@@ -40,12 +40,20 @@
             android:layout_margin="20dp"
             android:text="KELUAR"/>
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
         <!-- Bottom Navigation -->
@@ -55,5 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             app:menu="@menu/bottom_navigation_menu" />
+
+
 
 </LinearLayout>
