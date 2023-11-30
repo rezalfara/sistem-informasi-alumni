@@ -80,6 +80,12 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(Login.this, PilihLogin.class));
+        finish();
+    }
 //    @Override
 //    public void onBackPressed() {
 //        super.onBackPressed();
