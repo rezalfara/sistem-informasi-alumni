@@ -135,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //initializing the productlist
-
-
         alumniList = new ArrayList<>();
         jurusanList = new ArrayList<>();
         tahunLulusList = new ArrayList<>();
@@ -147,7 +145,55 @@ public class MainActivity extends AppCompatActivity {
         loadJurusan();
         loadTahunLulus();
 
+        alumniAdapter=new AlumniAdapter(this,alumniList, jurusanList, tahunLulusList);
+        recyclerView.setAdapter(alumniAdapter);
+
+        SearchView searchView=findViewById(R.id.searchView);
+        searchView.setFocusable(false);
+        searchView.setFocusableInTouchMode(false);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Show bottom navigation when submitting the search
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return false;
+            }
+        });
+
     }
+
+    private void filterList(String text) {
+        List<Alumni> namesFiltered = new ArrayList<>();
+
+        for (Alumni alumni : alumniList) {
+            if (alumni.getNama().toLowerCase().contains(text.toLowerCase())) {
+                namesFiltered.add(alumni);
+            }
+        }
+
+        if (namesFiltered.isEmpty()) {
+            Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+            recyclerView.setVisibility(View.GONE);
+
+//            recyclerView.setAdapter(alumniAdapter);
+
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            alumniAdapter.setFilteredData(namesFiltered);
+            alumniAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(alumniAdapter);
+        }
+    }
+
+
+
 
     private Admin findAdminByUsername(String loggedInUsername) {
         for (Admin admin : adminList) {

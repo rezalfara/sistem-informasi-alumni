@@ -2,6 +2,7 @@ package com.example.sisteminformasialumni;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -113,6 +114,49 @@ public class MainActivityAlumni extends AppCompatActivity {
         loadAlumni();
         loadJurusan();
         loadTahunLulus();
+
+        alumniAdapter=new AlumniAdapter(this,alumniList, jurusanList, tahunLulusList);
+        recyclerView.setAdapter(alumniAdapter);
+
+        SearchView searchView=findViewById(R.id.searchView);
+        searchView.setFocusable(false);
+        searchView.setFocusableInTouchMode(false);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Show bottom navigation when submitting the search
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return false;
+            }
+        });
+    }
+
+    private void filterList(String text) {
+        List<Alumni> namesFiltered = new ArrayList<>();
+
+        for (Alumni alumni : alumniList) {
+            if (alumni.getNama().toLowerCase().contains(text.toLowerCase())) {
+                namesFiltered.add(alumni);
+            }
+        }
+
+        if (namesFiltered.isEmpty()) {
+            Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+            recyclerView.setVisibility(View.GONE);
+
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            alumniAdapter.setFilteredData(namesFiltered);
+            alumniAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(alumniAdapter);
+        }
     }
 
     private Alumni findAlumniByNpm(String loggedInNPM) {

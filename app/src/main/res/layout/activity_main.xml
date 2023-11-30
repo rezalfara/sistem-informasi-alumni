@@ -17,6 +17,13 @@
             android:gravity="center"
             android:layout_margin="20dp"/>
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search Alumni"/>
+
         <Button
             android:id="@+id/btnAdd"
             android:backgroundTint="@color/black"

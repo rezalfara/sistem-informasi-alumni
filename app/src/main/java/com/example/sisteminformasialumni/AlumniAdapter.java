@@ -25,12 +25,16 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
     private List<Alumni> alumniList;
     private List<Jurusan> jurusanList; // Tambahkan List jurusanList
     private List<Tahun_lulus> tahunLulusList;
+    private List<Alumni> filteredList;
+
 
     public AlumniAdapter(Context mCtx, List<Alumni> alumniList, List<Jurusan> jurusanList, List<Tahun_lulus> tahunLulusList) {
         this.mCtx = mCtx;
         this.alumniList = alumniList;
         this.jurusanList = jurusanList; // Inisialisasi jurusanList
         this.tahunLulusList = tahunLulusList;
+        this.filteredList = new ArrayList<>(alumniList);
+
     }
 
     @Override
@@ -131,6 +135,10 @@ public class AlumniAdapter extends RecyclerView.Adapter<AlumniAdapter.AlumniView
             tvTahunLulus = itemView.findViewById(R.id.tvTahunLulus);
             imgAlumni = itemView.findViewById(R.id.imgAlumni);
         }
+    }
+
+    public void setFilteredData(List<Alumni> filteredList){
+        this.alumniList=filteredList;
     }
 
 }
