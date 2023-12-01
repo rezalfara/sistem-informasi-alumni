@@ -38,6 +38,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
+    private String loggedInUsername;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private List<Alumni> alumniList;
     private List<Admin> adminList;
@@ -56,16 +57,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String loggedInUsername = sharedPreferences.getString("username", "0");
-
-        // Tampilkan informasi dalam Toast
-        Toast.makeText(getApplicationContext(), "Username: " + loggedInUsername, Toast.LENGTH_SHORT).show();
+        loggedInUsername = sharedPreferences.getString("username", "0");
 
         btnCreate = findViewById(R.id.btnAdd);
         btnLogout = findViewById(R.id.btnLogout);
 
+        Intent intent = getIntent();
+        if (intent.hasExtra("admin")){
+            Admin admin = (Admin) intent.getSerializableExtra("admin");
+            loggedInUsername = admin.getUsername();
+        }
+
         adminList = new ArrayList<>();
         loadAdmin();
+
+        // Tampilkan informasi dalam Toast
+        Toast.makeText(getApplicationContext(), "Username: " + loggedInUsername, Toast.LENGTH_SHORT).show();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         // Set checked pada item pertama saat pertama kali dibuka
@@ -80,13 +87,25 @@ public class MainActivity extends AppCompatActivity {
 //                    finish();
                     return false;
                 } else if (itemId == R.id.action_page2) {
-                    // Tampilkan halaman kedua tanpa efek transisi
-                    Intent intent = new Intent(getApplicationContext(), HelloWorld.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-                    finish();
+                    // Find the Admin object based on the logged-in username
+                    Admin loggedInAdmin = findAdminByUsername(loggedInUsername);
+
+                    if (loggedInAdmin != null) {
+                        // Buat Intent untuk pindah ke halaman EditProfile
+                        Intent intent = new Intent(MainActivity.this, HelloWorld.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        // Mengirim objek Admin
+                        intent.putExtra("admin", loggedInAdmin);
+
+                        // Start activity dengan Intent
+                        startActivity(intent);
+                    } else {
+                        // Handle case when Alumni object is not found
+                        Toast.makeText(MainActivity.this, "Admin not found for username: " + loggedInUsername, Toast.LENGTH_SHORT).show();
+                    }
                 }else if (itemId == R.id.action_page3) {
-                    // Find the Alumni object based on the logged-in npm
+                    // Find the Admin object based on the logged-in username
                     Admin loggedInAdmin = findAdminByUsername(loggedInUsername);
 
                     if (loggedInAdmin != null) {
@@ -94,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(MainActivity.this, ProfilAdmin.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-                        // Mengirim objek Alumni
+                        // Mengirim objek Admin
                         intent.putExtra("admin", loggedInAdmin);
 
                         // Start activity dengan Intent
@@ -222,9 +241,6 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(alumniAdapter);
         }
     }
-
-
-
 
     private Admin findAdminByUsername(String loggedInUsername) {
         for (Admin admin : adminList) {

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivityAlumni extends AppCompatActivity {
+    private String loggedInNPM;
     private List<Alumni> alumniList;
     private List<Jurusan> jurusanList; // Daftar jurusan
     private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
@@ -46,12 +47,18 @@ public class MainActivityAlumni extends AppCompatActivity {
         setContentView(R.layout.activity_main_alumni);
 
         SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
-        String loggedInNPM = sharedPreferences2.getString("npm", "0");
+        loggedInNPM = sharedPreferences2.getString("npm", "0");
+
+        btnLogout = findViewById(R.id.btnLogout);
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("alumni")){
+            Alumni alumni = (Alumni) intent.getSerializableExtra("alumni");
+            loggedInNPM = String.valueOf(alumni.getNpm());
+        }
 
         // Tampilkan informasi dalam Toast
         Toast.makeText(getApplicationContext(), "NPM: " + loggedInNPM, Toast.LENGTH_SHORT).show();
-
-        btnLogout = findViewById(R.id.btnLogout);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_alumni);
         // Set checked pada item pertama saat pertama kali dibuka

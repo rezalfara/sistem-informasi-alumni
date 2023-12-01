@@ -2,6 +2,7 @@ package com.example.sisteminformasialumni;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +28,7 @@ public class ProfilAdmin extends AppCompatActivity {
     ImageView ivAdmin;
     Button btnEditData, btnChangePassword, btnLogout;
     BottomNavigationView bottomNavigationView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +48,12 @@ public class ProfilAdmin extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra("admin", admin);
                     startActivity(intent);
-                    finish();
                 } else if (itemId == R.id.action_page2) {
                     // Tampilkan halaman kedua tanpa efek transisi
-                    Intent intent = new Intent(getApplicationContext(), HelloWorld.class);
+                    Intent intent = new Intent(ProfilAdmin.this, HelloWorld.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtra("admin", admin);
                     startActivity(intent);
-                    finish();
                 } else if (itemId == R.id.action_page3) {
                     return false;
                 }
@@ -66,7 +67,25 @@ public class ProfilAdmin extends AppCompatActivity {
         btnEditData = findViewById(R.id.btnEditData);
         btnChangePassword = findViewById(R.id.btnChangePassword);
         btnLogout = findViewById(R.id.btnLogout);
+        RefreshData();
 
+        // Initialize SwipeRefreshLayout
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
+        // Set refresh listener
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                RefreshData();
+                // Hide the refresh indicator
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+        });
+
+    }
+
+    private void RefreshData() {
         // Mendapatkan data dari Intent
         Intent intent = getIntent();
         if (intent!=null){
@@ -82,13 +101,13 @@ public class ProfilAdmin extends AppCompatActivity {
                     // Mendekode string base64 ke bitmap dan menampilkan di ImageView
                     Bitmap updatedBitmap = convertBase64ToBitmap(imgUrlUpdate);
                     // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                             .load(updatedBitmap) // Gunakan gambar yang sudah didecode
                             .transform(new CircleCrop())
                             .into(ivAdmin);
                 }else {
                     // Menggunakan Glide untuk menampilkan gambar dari URL ke ImageView
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                             .load(imgUrl)
                             .transform(new CircleCrop())
                             .into(ivAdmin);
@@ -167,6 +186,7 @@ public class ProfilAdmin extends AppCompatActivity {
             }
         }
     }
+
 
     private Bitmap convertBase64ToBitmap(String base64String) {
         byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
