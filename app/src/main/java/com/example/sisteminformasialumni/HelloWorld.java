@@ -1,10 +1,14 @@
 package com.example.sisteminformasialumni;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +18,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -21,17 +28,25 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class HelloWorld extends AppCompatActivity {
-    private static final int REQUEST_PERMISSION = 1;
+    private static final int REQUEST_CODE = 11;
+    private static String READ_STORAGE_PERMISSION;
     Button btnLogout, btnDownload;
     BottomNavigationView bottomNavigationView;
     private List<Alumni> alumniList = new ArrayList<>();
@@ -45,6 +60,12 @@ public class HelloWorld extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         btnDownload = findViewById(R.id.btnDownload);
         SpinnerTL = findViewById(R.id.yearSpinner);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            READ_STORAGE_PERMISSION = Manifest.permission.READ_MEDIA_IMAGES;
+        }else {
+            READ_STORAGE_PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE;
+        }
 
         Intent intent = getIntent();
         if (intent.hasExtra("admin")) {
@@ -100,16 +121,83 @@ public class HelloWorld extends AppCompatActivity {
             btnDownload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String selectedYear = SpinnerTL.getSelectedItem().toString();
-                    String id_tahun_lulus = String.valueOf(getIdTl(Integer.parseInt(selectedYear)));
-
-                    Toast.makeText(HelloWorld.this, "Tahun Lulus "+id_tahun_lulus, Toast.LENGTH_LONG).show();
-
-
+                    showPermissionDialog();
                 }
             });
         }
     }
+
+    private void showPermissionDialog() {
+        if (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
+            downloadPdf();
+        }else {
+            ActivityCompat.requestPermissions(this, new String[]{ READ_STORAGE_PERMISSION }, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE){
+            if (grantResults.length > 0){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
+                    downloadPdf();
+                }else {
+                    Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }else {
+            showPermissionDialog();
+        }
+    }
+
+    private void downloadPdf() {
+        String selectedYear = SpinnerTL.getSelectedItem().toString();
+        int id_tahun_lulus = getIdTl(Integer.parseInt(selectedYear));
+
+        // Generate PDF file
+        Document document = new Document();
+        String uniqueId = UUID.randomUUID().toString();
+        String pdfFileName = "Alumni_Data_" + selectedYear + "_" + uniqueId + ".pdf";
+        String pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + pdfFileName;
+
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(pdfFilePath));
+            document.open();
+
+            // Add alumni data to the PDF
+            for (Alumni alumni : alumniList) {
+                if (alumni.getId_tahun_lulus() == id_tahun_lulus) {
+                    document.add(new Paragraph("NPM: " + alumni.getNpm()));
+                    document.add(new Paragraph("Name: " + alumni.getNama()));
+                    document.add(new Paragraph("Tempat Lahir: " + alumni.getTempat_lahir()));
+                    document.add(new Paragraph("Tanggal Lahir: " + alumni.getTgl_lahir()));
+                    document.add(new Paragraph("Jenis Kelamin: " + alumni.getJk()));
+                    document.add(new Paragraph("Email: " + alumni.getEmail()));
+                    document.add(new Paragraph("Phone: " + alumni.getNo_hp()));
+                    document.add(new Paragraph("Alamat : " + alumni.getAlamat()));
+                    document.add(new Paragraph("Foto : " + alumni.getFoto()));
+                    document.add(new Paragraph("Jurusan : " + alumni.getId_jurusan()));
+                    document.add(new Paragraph("Tahun Lulus : " + alumni.getId_tahun_lulus()));
+                    document.add(new Paragraph("\n"));
+                }
+            }
+
+            document.close();
+
+            Toast.makeText(this, "PDF Downloaded: " + pdfFilePath, Toast.LENGTH_LONG).show();
+
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error creating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     private int getIdTl(int namaTahunLulus) {
         int idTl = -1; // ID default jika tidak ditemukan
