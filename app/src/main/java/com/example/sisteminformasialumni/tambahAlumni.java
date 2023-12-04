@@ -226,7 +226,7 @@ public class tambahAlumni extends AppCompatActivity implements DatePickerDialog.
                 fotoAlumni.setImageBitmap(bitmap);
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                 byte[] imageBytes = byteArrayOutputStream.toByteArray();
                 imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
             } catch (IOException e) {

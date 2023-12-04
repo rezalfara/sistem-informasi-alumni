@@ -48,7 +48,6 @@ public class Profil extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra("alumni", alumni);
                     startActivity(intent);
-                    finish();
                 } else if (itemId == R.id.action_page2) {
                     return false;
                 }
