@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,9 +29,19 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import org.json.JSONArray;
@@ -40,6 +51,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -51,6 +64,7 @@ public class HelloWorld extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     private List<Alumni> alumniList = new ArrayList<>();
     private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
+    private List<Jurusan> jurusanList = new ArrayList<>();
     Spinner SpinnerTL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +131,7 @@ public class HelloWorld extends AppCompatActivity {
 
             loadAlumni();
             fetchDataTahunLulus();
+            loadJurusan();
 
             btnDownload.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -160,7 +175,7 @@ public class HelloWorld extends AppCompatActivity {
         int id_tahun_lulus = getIdTl(Integer.parseInt(selectedYear));
 
         // Generate PDF file
-        Document document = new Document();
+        Document document = new Document(PageSize.A4.rotate());
         String uniqueId = UUID.randomUUID().toString();
         String pdfFileName = "Alumni_Data_" + selectedYear + "_" + uniqueId + ".pdf";
         String pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + pdfFileName;
@@ -169,24 +184,151 @@ public class HelloWorld extends AppCompatActivity {
             PdfWriter.getInstance(document, new FileOutputStream(pdfFilePath));
             document.open();
 
+            // Add text above the table
+            // Create a paragraph with the desired text
+            Paragraph header = new Paragraph();
+            // Set alignment and other formatting if needed
+            header.setAlignment(Element.ALIGN_CENTER);
+            // Create a custom font with the desired size, bold, and underline
+            Font customFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 30, Font.BOLD | Font.UNDERLINE);
+            // Create a chunk with the text and custom font
+            Chunk chunk = new Chunk("Alumni Data Report - " + selectedYear, customFont);
+            header.add(chunk);
+            // Add the paragraph to the document
+            document.add(header);
+            // Add some spacing after the paragraph
+            document.add(new Paragraph("\n\n"));
+
+            // Create a table with 11 columns
+            PdfPTable table = new PdfPTable(11);
+            table.setWidthPercentage(100);
+            // Set the relative widths of the columns
+            //table.setWidths(new float[]{30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f});
+
+            // Add table headers
+            PdfPCell npm = new PdfPCell(new Phrase("NPM"));
+            npm.setPadding(8);
+            table.addCell(npm);
+
+            PdfPCell nama = new PdfPCell(new Phrase("Nama"));
+            nama.setPadding(8);
+            table.addCell(nama);
+
+            PdfPCell tempat_lahir = new PdfPCell(new Phrase("Tempat Lahir"));
+            tempat_lahir.setPadding(8);
+            table.addCell(tempat_lahir);
+
+            PdfPCell tgl_lahir = new PdfPCell(new Phrase("Tanggal Lahir"));
+            tgl_lahir.setPadding(8);
+            table.addCell(tgl_lahir);
+
+            PdfPCell jk = new PdfPCell(new Phrase("Jenis Kelamin"));
+            jk.setPadding(8);
+            table.addCell(jk);
+
+            PdfPCell email = new PdfPCell(new Phrase("Email"));
+            email.setPadding(8);
+            table.addCell(email);
+
+            PdfPCell phone = new PdfPCell(new Phrase("Phone"));
+            phone.setPadding(8);
+            table.addCell(phone);
+
+            PdfPCell alamat = new PdfPCell(new Phrase("Alamat"));
+            alamat.setPadding(8);
+            table.addCell(alamat);
+
+            PdfPCell foto = new PdfPCell(new Phrase("Foto"));
+            foto.setPadding(8);
+            table.addCell(foto);
+
+            PdfPCell jur = new PdfPCell(new Phrase("Jurusan"));
+            jur.setPadding(8);
+            table.addCell(jur);
+
+            PdfPCell tahun = new PdfPCell(new Phrase("Tahun Lulus"));
+            tahun.setPadding(8);
+            table.addCell(tahun);
+
+//            table.addCell("NPM");
+//            table.addCell("Nama");
+//            table.addCell("Tempat Lahir");
+//            table.addCell("Tanggal Lahir");
+//            table.addCell("Jenis Kelamin");
+//            table.addCell("Email");
+//            table.addCell("Phone");
+//            table.addCell("Alamat");
+//            table.addCell("Foto");
+//            table.addCell("Jurusan");
+//            table.addCell("Tahun Lulus");
+
             // Add alumni data to the PDF
             for (Alumni alumni : alumniList) {
-                if (alumni.getId_tahun_lulus() == id_tahun_lulus) {
-                    document.add(new Paragraph("NPM: " + alumni.getNpm()));
-                    document.add(new Paragraph("Name: " + alumni.getNama()));
-                    document.add(new Paragraph("Tempat Lahir: " + alumni.getTempat_lahir()));
-                    document.add(new Paragraph("Tanggal Lahir: " + alumni.getTgl_lahir()));
-                    document.add(new Paragraph("Jenis Kelamin: " + alumni.getJk()));
-                    document.add(new Paragraph("Email: " + alumni.getEmail()));
-                    document.add(new Paragraph("Phone: " + alumni.getNo_hp()));
-                    document.add(new Paragraph("Alamat : " + alumni.getAlamat()));
-                    document.add(new Paragraph("Foto : " + alumni.getFoto()));
-                    document.add(new Paragraph("Jurusan : " + alumni.getId_jurusan()));
-                    document.add(new Paragraph("Tahun Lulus : " + alumni.getId_tahun_lulus()));
-                    document.add(new Paragraph("\n"));
+                for (Jurusan jurusan : jurusanList){
+                    for (Tahun_lulus tahun_lulus : tahunLulusList){
+                        if (alumni.getId_tahun_lulus() == id_tahun_lulus && alumni.getId_jurusan() == jurusan.getId_jurusan() && alumni.getId_tahun_lulus() == tahun_lulus.getId_tahun_lulus()) {
+                            PdfPCell npmCell = new PdfPCell(new Phrase(String.valueOf(alumni.getNpm())));
+                            npmCell.setPadding(8);
+                            table.addCell(npmCell);
+
+                            PdfPCell namaCell = new PdfPCell(new Phrase(alumni.getNama()));
+                            namaCell.setPadding(8);
+                            table.addCell(namaCell);
+
+                            PdfPCell tempatCell = new PdfPCell(new Phrase(alumni.getTempat_lahir()));
+                            tempatCell.setPadding(8);
+                            table.addCell(tempatCell);
+
+                            PdfPCell tglCell = new PdfPCell(new Phrase(alumni.getTgl_lahir()));
+                            tglCell.setPadding(8);
+                            table.addCell(tglCell);
+
+                            PdfPCell jkCell = new PdfPCell(new Phrase(alumni.getJk()));
+                            jkCell.setPadding(8);
+                            table.addCell(jkCell);
+
+                            PdfPCell emailCell = new PdfPCell(new Phrase(alumni.getEmail()));
+                            emailCell.setPadding(8);
+                            table.addCell(emailCell);
+
+                            PdfPCell phoneCell = new PdfPCell(new Phrase(alumni.getNo_hp()));
+                            phoneCell.setPadding(8);
+                            table.addCell(phoneCell);
+
+                            PdfPCell alamatCell = new PdfPCell(new Phrase(alumni.getAlamat()));
+                            alamatCell.setPadding(8);
+                            table.addCell(alamatCell);
+
+                            PdfPCell fotoCell = new PdfPCell(new Phrase(alumni.getFoto()));
+                            fotoCell.setPadding(8);
+                            table.addCell(fotoCell);
+
+                            PdfPCell jurusanCell = new PdfPCell(new Phrase(jurusan.getNama_jurusan()));
+                            jurusanCell.setPadding(8);
+                            table.addCell(jurusanCell);
+
+                            PdfPCell tlCell = new PdfPCell(new Phrase(String.valueOf(tahun_lulus.getTahun_lulus())));
+                            tlCell.setPadding(8);
+                            table.addCell(tlCell);
+
+//                            table.addCell(String.valueOf(alumni.getNpm()));
+//                            table.addCell(alumni.getNama());
+//                            table.addCell(alumni.getTempat_lahir());
+//                            table.addCell(alumni.getTgl_lahir());
+//                            table.addCell(alumni.getJk());
+//                            table.addCell(alumni.getEmail());
+//                            table.addCell(alumni.getNo_hp());
+//                            table.addCell(alumni.getAlamat());
+//                            table.addCell(alumni.getFoto());
+//                            table.addCell(jurusan.getNama_jurusan());
+//                            table.addCell(String.valueOf(tahun_lulus.getTahun_lulus()));
+
+                        }
+                    }
                 }
             }
 
+            document.add(table);
             document.close();
 
             Toast.makeText(this, "PDF Downloaded: " + pdfFilePath, Toast.LENGTH_LONG).show();
@@ -196,7 +338,6 @@ public class HelloWorld extends AppCompatActivity {
             Toast.makeText(this, "Error creating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
 
     private int getIdTl(int namaTahunLulus) {
@@ -250,6 +391,53 @@ public class HelloWorld extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
+    }
+
+    private void loadJurusan() {
+
+        /*
+         * Creating a String Request
+         * The request type is GET defined by first parameter
+         * The URL is defined in the second parameter
+         * Then we have a Response Listener and a Error Listener
+         * In response listener we will get the JSON response as a String
+         * */
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetJurusan,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //converting the string to json array object
+                            JSONArray array = new JSONArray(response);
+
+                            //traversing through all the object
+                            for (int i = 0; i < array.length(); i++) {
+
+                                //getting product object from json array
+                                JSONObject jurusan = array.getJSONObject(i);
+
+                                //adding the product to product list
+                                jurusanList.add(new Jurusan(
+                                        jurusan.getInt("id_jurusan"),
+                                        jurusan.getString("nama_jurusan")
+                                ));
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        //adding our stringrequest to queue
+        Volley.newRequestQueue(this).add(stringRequest);
     }
 
     private void loadAlumni() {
