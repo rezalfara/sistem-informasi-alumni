@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
     private RecyclerView recyclerView;
     private AlumniAdapter alumniAdapter;
-    Button btnCreate, btnLogout;
+    Button btnCreate;
     BottomNavigationView bottomNavigationView;
     // Declare SwipeRefreshLayout
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         loggedInUsername = sharedPreferences.getString("username", "0");
 
         btnCreate = findViewById(R.id.btnAdd);
-        btnLogout = findViewById(R.id.btnLogout);
 
         Intent intent = getIntent();
         if (intent.hasExtra("admin")){
@@ -128,21 +127,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("isLoggedIn");
-                editor.remove("username"); // Hapus informasi pengguna jika diperlukan
-                editor.apply();
-
-
-                startActivity(new Intent(MainActivity.this, PilihLogin.class));
-                finish();
-            }
-        });
-
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +180,10 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                // Clear the query in the SearchView
+                searchView.setQuery("", false);
+                // Collapse the SearchView to hide the keyboard
+                searchView.clearFocus();
                 // Call your method to refresh data
                 refreshData();
             }

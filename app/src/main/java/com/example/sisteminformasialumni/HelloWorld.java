@@ -60,7 +60,7 @@ import java.util.UUID;
 public class HelloWorld extends AppCompatActivity {
     private static final int REQUEST_CODE = 11;
     private static String READ_STORAGE_PERMISSION;
-    Button btnLogout, btnDownload;
+    Button btnDownload;
     BottomNavigationView bottomNavigationView;
     private List<Alumni> alumniList = new ArrayList<>();
     private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
@@ -71,7 +71,6 @@ public class HelloWorld extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hello_world);
 
-        btnLogout = findViewById(R.id.btnLogout);
         btnDownload = findViewById(R.id.btnDownload);
         SpinnerTL = findViewById(R.id.yearSpinner);
 
@@ -111,21 +110,6 @@ public class HelloWorld extends AppCompatActivity {
                     }
 
                     return false;
-                }
-            });
-
-            btnLogout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.remove("isLoggedIn");
-                    editor.remove("username"); // Hapus informasi pengguna jika diperlukan
-                    editor.apply();
-
-
-                    startActivity(new Intent(HelloWorld.this, PilihLogin.class));
-                    finish();
                 }
             });
 
@@ -499,5 +483,10 @@ public class HelloWorld extends AppCompatActivity {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+    }
 
 }

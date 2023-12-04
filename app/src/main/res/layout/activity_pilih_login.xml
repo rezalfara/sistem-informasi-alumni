@@ -10,19 +10,25 @@
 
     <Button
         android:id="@+id/btnLoginAdmin"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:layout_gravity="center"
         android:text="Login Admin"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="15dp"/>
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="50dp"
+        android:drawableTop="@drawable/ic_admin"/>
 
     <Button
         android:id="@+id/btnLoginAlumni"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:layout_gravity="center"
         android:text="Login Alumni"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"/>
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:drawableTop="@drawable/student"/>
 
 </LinearLayout>

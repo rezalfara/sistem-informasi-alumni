@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,9 +10,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -29,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class detailAlumni extends AppCompatActivity {
-
     private List<Alumni> detailAlumniList;
     private List<Jurusan> jurusanList;
     private List<Tahun_lulus> tahunLulusList;
@@ -41,7 +43,6 @@ public class detailAlumni extends AppCompatActivity {
         setContentView(R.layout.activity_detail_alumni);
 
         //getting the recyclerview from xml
-
         rvDetailAlumni = findViewById(R.id.rvDetailAlumni);
         rvDetailAlumni.setHasFixedSize(true);
         rvDetailAlumni.setLayoutManager(new LinearLayoutManager(this));
@@ -62,6 +63,7 @@ public class detailAlumni extends AppCompatActivity {
         loadTahunLulus(tlId);
 
     }
+
 
     @Override
     public void onBackPressed() {

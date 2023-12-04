@@ -37,7 +37,6 @@ public class MainActivityAlumni extends AppCompatActivity {
     private List<Tahun_lulus> tahunLulusList; // Daftar tahun lulus
     private RecyclerView recyclerView;
     private AlumniAdapter alumniAdapter;
-    Button btnLogout;
     BottomNavigationView bottomNavigationView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -48,8 +47,6 @@ public class MainActivityAlumni extends AppCompatActivity {
 
         SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
         loggedInNPM = sharedPreferences2.getString("npm", "0");
-
-        btnLogout = findViewById(R.id.btnLogout);
 
         Intent intent = getIntent();
         if (intent.hasExtra("alumni")){
@@ -91,21 +88,6 @@ public class MainActivityAlumni extends AppCompatActivity {
                     }
                 }
                 return false;
-            }
-        });
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences2 = getSharedPreferences("MyPrefs2", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences2.edit();
-                editor.remove("isLoggedInAlumni");
-                editor.remove("npm"); // Hapus informasi pengguna jika diperlukan
-                editor.apply();
-
-
-                startActivity(new Intent(MainActivityAlumni.this, PilihLogin.class));
-                finish();
             }
         });
 
@@ -154,6 +136,10 @@ public class MainActivityAlumni extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                // Clear the query in the SearchView
+                searchView.setQuery("", false);
+                // Collapse the SearchView to hide the keyboard
+                searchView.clearFocus();
                 // Call your method to refresh data
                 refreshData();
             }
