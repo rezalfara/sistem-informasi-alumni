@@ -234,18 +234,6 @@ public class HelloWorld extends AppCompatActivity {
             tahun.setPadding(8);
             table.addCell(tahun);
 
-//            table.addCell("NPM");
-//            table.addCell("Nama");
-//            table.addCell("Tempat Lahir");
-//            table.addCell("Tanggal Lahir");
-//            table.addCell("Jenis Kelamin");
-//            table.addCell("Email");
-//            table.addCell("Phone");
-//            table.addCell("Alamat");
-//            table.addCell("Foto");
-//            table.addCell("Jurusan");
-//            table.addCell("Tahun Lulus");
-
             // Add alumni data to the PDF
             for (Alumni alumni : alumniList) {
                 for (Jurusan jurusan : jurusanList){
@@ -295,18 +283,6 @@ public class HelloWorld extends AppCompatActivity {
                             tlCell.setPadding(8);
                             table.addCell(tlCell);
 
-//                            table.addCell(String.valueOf(alumni.getNpm()));
-//                            table.addCell(alumni.getNama());
-//                            table.addCell(alumni.getTempat_lahir());
-//                            table.addCell(alumni.getTgl_lahir());
-//                            table.addCell(alumni.getJk());
-//                            table.addCell(alumni.getEmail());
-//                            table.addCell(alumni.getNo_hp());
-//                            table.addCell(alumni.getAlamat());
-//                            table.addCell(alumni.getFoto());
-//                            table.addCell(jurusan.getNama_jurusan());
-//                            table.addCell(String.valueOf(tahun_lulus.getTahun_lulus()));
-
                         }
                     }
                 }
@@ -322,7 +298,6 @@ public class HelloWorld extends AppCompatActivity {
             Toast.makeText(this, "Error creating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private int getIdTl(int namaTahunLulus) {
         int idTl = -1; // ID default jika tidak ditemukan
