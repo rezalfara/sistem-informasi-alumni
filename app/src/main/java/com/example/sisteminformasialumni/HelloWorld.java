@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,19 +47,26 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.squareup.picasso.Picasso;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class HelloWorld extends AppCompatActivity {
     private static final int REQUEST_CODE = 11;
@@ -175,7 +185,7 @@ public class HelloWorld extends AppCompatActivity {
             // Set alignment and other formatting if needed
             header.setAlignment(Element.ALIGN_CENTER);
             // Create a custom font with the desired size, bold, and underline
-            Font customFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 30, Font.BOLD | Font.UNDERLINE);
+            Font customFont = FontFactory.getFont(FontFactory.HELVETICA, 30, Font.BOLD | Font.UNDERLINE);
             // Create a chunk with the text and custom font
             Chunk chunk = new Chunk("Alumni Data Report - " + selectedYear, customFont);
             header.add(chunk);
@@ -185,61 +195,88 @@ public class HelloWorld extends AppCompatActivity {
             document.add(new Paragraph("\n\n"));
 
             // Create a table with 11 columns
-            PdfPTable table = new PdfPTable(11);
+            PdfPTable table = new PdfPTable(12);
             table.setWidthPercentage(100);
-            // Set the relative widths of the columns
-            //table.setWidths(new float[]{30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f});
+            // Menetapkan persentase lebar untuk setiap kolom
+            float[] columnWidths = {4f, 8f, 10f, 10f, 7f, 10f, 9f, 10f, 8f, 7f, 7f, 7f};
+            table.setWidths(columnWidths);
+
+            // Membuat objek Font dengan properti bold
+            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 
             // Add table headers
-            PdfPCell npm = new PdfPCell(new Phrase("NPM"));
+            PdfPCell no = new PdfPCell(new Phrase("No", boldFont));
+            no.setPadding(8);
+            no.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+            table.addCell(no);
+
+            PdfPCell npm = new PdfPCell(new Phrase("NPM", boldFont));
             npm.setPadding(8);
+            npm.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(npm);
 
-            PdfPCell nama = new PdfPCell(new Phrase("Nama"));
+            PdfPCell nama = new PdfPCell(new Phrase("Nama", boldFont));
             nama.setPadding(8);
+            nama.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(nama);
 
-            PdfPCell tempat_lahir = new PdfPCell(new Phrase("Tempat Lahir"));
+            PdfPCell tempat_lahir = new PdfPCell(new Phrase("Tempat Lahir", boldFont));
             tempat_lahir.setPadding(8);
+            tempat_lahir.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(tempat_lahir);
 
-            PdfPCell tgl_lahir = new PdfPCell(new Phrase("Tanggal Lahir"));
+            PdfPCell tgl_lahir = new PdfPCell(new Phrase("Tanggal Lahir", boldFont));
             tgl_lahir.setPadding(8);
+            tgl_lahir.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(tgl_lahir);
 
-            PdfPCell jk = new PdfPCell(new Phrase("Jenis Kelamin"));
+            PdfPCell jk = new PdfPCell(new Phrase("Jenis Kelamin", boldFont));
             jk.setPadding(8);
+            jk.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(jk);
 
-            PdfPCell email = new PdfPCell(new Phrase("Email"));
+            PdfPCell email = new PdfPCell(new Phrase("Email", boldFont));
             email.setPadding(8);
+            email.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(email);
 
-            PdfPCell phone = new PdfPCell(new Phrase("Phone"));
+            PdfPCell phone = new PdfPCell(new Phrase("Phone", boldFont));
             phone.setPadding(8);
+            phone.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(phone);
 
-            PdfPCell alamat = new PdfPCell(new Phrase("Alamat"));
+            PdfPCell alamat = new PdfPCell(new Phrase("Alamat", boldFont));
             alamat.setPadding(8);
+            alamat.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(alamat);
 
-            PdfPCell foto = new PdfPCell(new Phrase("Foto"));
+            PdfPCell foto = new PdfPCell(new Phrase("Foto", boldFont));
             foto.setPadding(8);
+            foto.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(foto);
 
-            PdfPCell jur = new PdfPCell(new Phrase("Jurusan"));
+            PdfPCell jur = new PdfPCell(new Phrase("Jurusan", boldFont));
             jur.setPadding(8);
+            jur.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(jur);
 
-            PdfPCell tahun = new PdfPCell(new Phrase("Tahun Lulus"));
+            PdfPCell tahun = new PdfPCell(new Phrase("Tahun Lulus", boldFont));
             tahun.setPadding(8);
+            tahun.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
             table.addCell(tahun);
 
+            int nomor = 1;
             // Add alumni data to the PDF
             for (Alumni alumni : alumniList) {
                 for (Jurusan jurusan : jurusanList){
                     for (Tahun_lulus tahun_lulus : tahunLulusList){
                         if (alumni.getId_tahun_lulus() == id_tahun_lulus && alumni.getId_jurusan() == jurusan.getId_jurusan() && alumni.getId_tahun_lulus() == tahun_lulus.getId_tahun_lulus()) {
+
+                            PdfPCell noCell = new PdfPCell(new Phrase(String.valueOf(nomor)));
+                            noCell.setPadding(8);
+                            noCell.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                            table.addCell(noCell);
+
                             PdfPCell npmCell = new PdfPCell(new Phrase(String.valueOf(alumni.getNpm())));
                             npmCell.setPadding(8);
                             table.addCell(npmCell);
@@ -283,6 +320,9 @@ public class HelloWorld extends AppCompatActivity {
                             PdfPCell tlCell = new PdfPCell(new Phrase(String.valueOf(tahun_lulus.getTahun_lulus())));
                             tlCell.setPadding(8);
                             table.addCell(tlCell);
+
+                            nomor++;
+
 
                         }
                     }
