@@ -44,6 +44,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -140,7 +141,7 @@ public class HelloWorld extends AppCompatActivity {
     private void showPermissionDialog() {
         if (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED){
             Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
-            downloadPdf();
+            downloadPdfAsync(); // Call the async method
         }else {
             ActivityCompat.requestPermissions(this, new String[]{ READ_STORAGE_PERMISSION }, REQUEST_CODE);
         }
@@ -154,7 +155,7 @@ public class HelloWorld extends AppCompatActivity {
             if (grantResults.length > 0){
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
-                    downloadPdf();
+                    downloadPdfAsync(); // Call the async method
                 }else {
                     Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
                 }
@@ -165,180 +166,406 @@ public class HelloWorld extends AppCompatActivity {
         }
     }
 
-    private void downloadPdf() {
-        String selectedYear = SpinnerTL.getSelectedItem().toString();
-        int id_tahun_lulus = getIdTl(Integer.parseInt(selectedYear));
+//    private void downloadPdf() {
+//        String selectedYear = SpinnerTL.getSelectedItem().toString();
+//        int id_tahun_lulus = getIdTl(Integer.parseInt(selectedYear));
+//
+//        // Generate PDF file
+//        Document document = new Document(PageSize.A4.rotate());
+//        String uniqueId = UUID.randomUUID().toString();
+//        String pdfFileName = "Alumni_Data_" + selectedYear + "_" + uniqueId + ".pdf";
+//        String pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + pdfFileName;
+//
+//        try {
+//            PdfWriter.getInstance(document, new FileOutputStream(pdfFilePath));
+//            document.open();
+//
+//            // Add text above the table
+//            // Create a paragraph with the desired text
+//            Paragraph header = new Paragraph();
+//            // Set alignment and other formatting if needed
+//            header.setAlignment(Element.ALIGN_CENTER);
+//            // Create a custom font with the desired size, bold, and underline
+//            Font customFont = FontFactory.getFont(FontFactory.HELVETICA, 30, Font.BOLD | Font.UNDERLINE);
+//            // Create a chunk with the text and custom font
+//            Chunk chunk = new Chunk("Alumni Data Report - " + selectedYear, customFont);
+//            header.add(chunk);
+//            // Add the paragraph to the document
+//            document.add(header);
+//            // Add some spacing after the paragraph
+//            document.add(new Paragraph("\n\n"));
+//
+//            // Create a table with 11 columns
+//            PdfPTable table = new PdfPTable(12);
+//            table.setWidthPercentage(100);
+//            // Menetapkan persentase lebar untuk setiap kolom
+//            float[] columnWidths = {4f, 8f, 10f, 10f, 7f, 10f, 9f, 10f, 8f, 7f, 7f, 7f};
+//            table.setWidths(columnWidths);
+//
+//            // Membuat objek Font dengan properti bold
+//            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+//
+//            // Add table headers
+//            PdfPCell no = new PdfPCell(new Phrase("No", boldFont));
+//            no.setPadding(8);
+//            no.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(no);
+//
+//            PdfPCell npm = new PdfPCell(new Phrase("NPM", boldFont));
+//            npm.setPadding(8);
+//            npm.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(npm);
+//
+//            PdfPCell nama = new PdfPCell(new Phrase("Nama", boldFont));
+//            nama.setPadding(8);
+//            nama.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(nama);
+//
+//            PdfPCell tempat_lahir = new PdfPCell(new Phrase("Tempat Lahir", boldFont));
+//            tempat_lahir.setPadding(8);
+//            tempat_lahir.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(tempat_lahir);
+//
+//            PdfPCell tgl_lahir = new PdfPCell(new Phrase("Tanggal Lahir", boldFont));
+//            tgl_lahir.setPadding(8);
+//            tgl_lahir.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(tgl_lahir);
+//
+//            PdfPCell jk = new PdfPCell(new Phrase("Jenis Kelamin", boldFont));
+//            jk.setPadding(8);
+//            jk.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(jk);
+//
+//            PdfPCell email = new PdfPCell(new Phrase("Email", boldFont));
+//            email.setPadding(8);
+//            email.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(email);
+//
+//            PdfPCell phone = new PdfPCell(new Phrase("Phone", boldFont));
+//            phone.setPadding(8);
+//            phone.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(phone);
+//
+//            PdfPCell alamat = new PdfPCell(new Phrase("Alamat", boldFont));
+//            alamat.setPadding(8);
+//            alamat.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(alamat);
+//
+//            PdfPCell foto = new PdfPCell(new Phrase("Foto", boldFont));
+//            foto.setPadding(8);
+//            foto.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(foto);
+//
+//            PdfPCell jur = new PdfPCell(new Phrase("Jurusan", boldFont));
+//            jur.setPadding(8);
+//            jur.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(jur);
+//
+//            PdfPCell tahun = new PdfPCell(new Phrase("Tahun Lulus", boldFont));
+//            tahun.setPadding(8);
+//            tahun.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//            table.addCell(tahun);
+//
+//            int nomor = 1;
+//            // Add alumni data to the PDF
+//            for (Alumni alumni : alumniList) {
+//                for (Jurusan jurusan : jurusanList){
+//                    for (Tahun_lulus tahun_lulus : tahunLulusList){
+//                        if (alumni.getId_tahun_lulus() == id_tahun_lulus && alumni.getId_jurusan() == jurusan.getId_jurusan() && alumni.getId_tahun_lulus() == tahun_lulus.getId_tahun_lulus()) {
+//
+//                            PdfPCell noCell = new PdfPCell(new Phrase(String.valueOf(nomor)));
+//                            noCell.setPadding(8);
+//                            noCell.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+//                            table.addCell(noCell);
+//
+//                            PdfPCell npmCell = new PdfPCell(new Phrase(String.valueOf(alumni.getNpm())));
+//                            npmCell.setPadding(8);
+//                            table.addCell(npmCell);
+//
+//                            PdfPCell namaCell = new PdfPCell(new Phrase(alumni.getNama()));
+//                            namaCell.setPadding(8);
+//                            table.addCell(namaCell);
+//
+//                            PdfPCell tempatCell = new PdfPCell(new Phrase(alumni.getTempat_lahir()));
+//                            tempatCell.setPadding(8);
+//                            table.addCell(tempatCell);
+//
+//                            PdfPCell tglCell = new PdfPCell(new Phrase(alumni.getTgl_lahir()));
+//                            tglCell.setPadding(8);
+//                            table.addCell(tglCell);
+//
+//                            PdfPCell jkCell = new PdfPCell(new Phrase(alumni.getJk()));
+//                            jkCell.setPadding(8);
+//                            table.addCell(jkCell);
+//
+//                            PdfPCell emailCell = new PdfPCell(new Phrase(alumni.getEmail()));
+//                            emailCell.setPadding(8);
+//                            table.addCell(emailCell);
+//
+//                            PdfPCell phoneCell = new PdfPCell(new Phrase(alumni.getNo_hp()));
+//                            phoneCell.setPadding(8);
+//                            table.addCell(phoneCell);
+//
+//                            PdfPCell alamatCell = new PdfPCell(new Phrase(alumni.getAlamat()));
+//                            alamatCell.setPadding(8);
+//                            table.addCell(alamatCell);
+//
+//                            PdfPCell fotoCell = new PdfPCell(new Phrase(alumni.getFoto()));
+//                            fotoCell.setPadding(8);
+//                            table.addCell(fotoCell);
+//
+//                            PdfPCell jurusanCell = new PdfPCell(new Phrase(jurusan.getNama_jurusan()));
+//                            jurusanCell.setPadding(8);
+//                            table.addCell(jurusanCell);
+//
+//                            PdfPCell tlCell = new PdfPCell(new Phrase(String.valueOf(tahun_lulus.getTahun_lulus())));
+//                            tlCell.setPadding(8);
+//                            table.addCell(tlCell);
+//
+//                            nomor++;
+//
+//                        }
+//                    }
+//                }
+//            }
+//
+//            document.add(table);
+//            document.close();
+//
+//            Toast.makeText(this, "PDF Downloaded: " + pdfFilePath, Toast.LENGTH_LONG).show();
+//
+//        } catch (DocumentException | IOException e) {
+//            e.printStackTrace();
+//            Toast.makeText(this, "Error creating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-        // Generate PDF file
-        Document document = new Document(PageSize.A4.rotate());
-        String uniqueId = UUID.randomUUID().toString();
-        String pdfFileName = "Alumni_Data_" + selectedYear + "_" + uniqueId + ".pdf";
-        String pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + pdfFileName;
 
-        try {
-            PdfWriter.getInstance(document, new FileOutputStream(pdfFilePath));
-            document.open();
+    private void downloadPdfAsync() {
+        new DownloadPdfAsyncTask().execute();
+    }
 
-            // Add text above the table
-            // Create a paragraph with the desired text
-            Paragraph header = new Paragraph();
-            // Set alignment and other formatting if needed
-            header.setAlignment(Element.ALIGN_CENTER);
-            // Create a custom font with the desired size, bold, and underline
-            Font customFont = FontFactory.getFont(FontFactory.HELVETICA, 30, Font.BOLD | Font.UNDERLINE);
-            // Create a chunk with the text and custom font
-            Chunk chunk = new Chunk("Alumni Data Report - " + selectedYear, customFont);
-            header.add(chunk);
-            // Add the paragraph to the document
-            document.add(header);
-            // Add some spacing after the paragraph
-            document.add(new Paragraph("\n\n"));
+    private class DownloadPdfAsyncTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                String selectedYear = SpinnerTL.getSelectedItem().toString();
+                int id_tahun_lulus = getIdTl(Integer.parseInt(selectedYear));
 
-            // Create a table with 11 columns
-            PdfPTable table = new PdfPTable(12);
-            table.setWidthPercentage(100);
-            // Menetapkan persentase lebar untuk setiap kolom
-            float[] columnWidths = {4f, 8f, 10f, 10f, 7f, 10f, 9f, 10f, 8f, 7f, 7f, 7f};
-            table.setWidths(columnWidths);
+                    Document document = new Document(PageSize.A4.rotate());
+                String uniqueId = UUID.randomUUID().toString();
+                String pdfFileName = "Alumni_Data_" + selectedYear + "_" + uniqueId + ".pdf";
+                String pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + pdfFileName;
 
-            // Membuat objek Font dengan properti bold
-            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+                PdfWriter.getInstance(document, new FileOutputStream(pdfFilePath));
+                document.open();
 
-            // Add table headers
-            PdfPCell no = new PdfPCell(new Phrase("No", boldFont));
-            no.setPadding(8);
-            no.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(no);
+                // Add text above the table
+                //Create a paragraph with the desired text
+                Paragraph header = new Paragraph();
+                // Set alignment and other formatting if needed
+                header.setAlignment(Element.ALIGN_CENTER);
+                // Create a custom font with the desired size, bold, and underline
+                Font customFont = FontFactory.getFont(FontFactory.HELVETICA, 30, Font.BOLD | Font.UNDERLINE);
+                // Create a chunk with the text and custom font
+                Chunk chunk = new Chunk("Alumni Data Report - " + selectedYear, customFont);
+                header.add(chunk);
+                // Add the paragraph to the document
+                document.add(header);
+                // Add some spacing after the paragraph
+                document.add(new Paragraph("\n\n"));
 
-            PdfPCell npm = new PdfPCell(new Phrase("NPM", boldFont));
-            npm.setPadding(8);
-            npm.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(npm);
+                // Create a table with 11 columns
+                PdfPTable table = new PdfPTable(12);
+                table.setWidthPercentage(100);
+                // Menetapkan persentase lebar untuk setiap kolom
+//                float[] columnWidths = {4f, 8f, 10f, 10f, 7f, 10f, 9f, 10f, 8f, 7f, 7f, 7f};
+//                table.setWidths(columnWidths);
 
-            PdfPCell nama = new PdfPCell(new Phrase("Nama", boldFont));
-            nama.setPadding(8);
-            nama.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(nama);
+                // Membuat objek Font dengan properti bold
+                Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 
-            PdfPCell tempat_lahir = new PdfPCell(new Phrase("Tempat Lahir", boldFont));
-            tempat_lahir.setPadding(8);
-            tempat_lahir.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(tempat_lahir);
+                // Add table headers
+                PdfPCell no = new PdfPCell(new Phrase("No", boldFont));
+                no.setPadding(8);
+                no.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(no);
 
-            PdfPCell tgl_lahir = new PdfPCell(new Phrase("Tanggal Lahir", boldFont));
-            tgl_lahir.setPadding(8);
-            tgl_lahir.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(tgl_lahir);
+                PdfPCell npm = new PdfPCell(new Phrase("NPM", boldFont));
+                npm.setPadding(8);
+                npm.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(npm);
 
-            PdfPCell jk = new PdfPCell(new Phrase("Jenis Kelamin", boldFont));
-            jk.setPadding(8);
-            jk.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(jk);
+                PdfPCell nama = new PdfPCell(new Phrase("Nama", boldFont));
+                nama.setPadding(8);
+                nama.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(nama);
 
-            PdfPCell email = new PdfPCell(new Phrase("Email", boldFont));
-            email.setPadding(8);
-            email.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(email);
+                PdfPCell tempat_lahir = new PdfPCell(new Phrase("Tempat Lahir", boldFont));
+                tempat_lahir.setPadding(8);
+                tempat_lahir.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(tempat_lahir);
 
-            PdfPCell phone = new PdfPCell(new Phrase("Phone", boldFont));
-            phone.setPadding(8);
-            phone.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(phone);
+                PdfPCell tgl_lahir = new PdfPCell(new Phrase("Tanggal Lahir", boldFont));
+                tgl_lahir.setPadding(8);
+                tgl_lahir.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(tgl_lahir);
 
-            PdfPCell alamat = new PdfPCell(new Phrase("Alamat", boldFont));
-            alamat.setPadding(8);
-            alamat.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(alamat);
+                PdfPCell jk = new PdfPCell(new Phrase("Jenis Kelamin", boldFont));
+                jk.setPadding(8);
+                jk.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(jk);
 
-            PdfPCell foto = new PdfPCell(new Phrase("Foto", boldFont));
-            foto.setPadding(8);
-            foto.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(foto);
+                PdfPCell email = new PdfPCell(new Phrase("Email", boldFont));
+                email.setPadding(8);
+                email.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(email);
 
-            PdfPCell jur = new PdfPCell(new Phrase("Jurusan", boldFont));
-            jur.setPadding(8);
-            jur.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(jur);
+                PdfPCell phone = new PdfPCell(new Phrase("Phone", boldFont));
+                phone.setPadding(8);
+                phone.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(phone);
 
-            PdfPCell tahun = new PdfPCell(new Phrase("Tahun Lulus", boldFont));
-            tahun.setPadding(8);
-            tahun.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-            table.addCell(tahun);
+                PdfPCell alamat = new PdfPCell(new Phrase("Alamat", boldFont));
+                alamat.setPadding(8);
+                alamat.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(alamat);
 
-            int nomor = 1;
-            // Add alumni data to the PDF
-            for (Alumni alumni : alumniList) {
-                for (Jurusan jurusan : jurusanList){
-                    for (Tahun_lulus tahun_lulus : tahunLulusList){
-                        if (alumni.getId_tahun_lulus() == id_tahun_lulus && alumni.getId_jurusan() == jurusan.getId_jurusan() && alumni.getId_tahun_lulus() == tahun_lulus.getId_tahun_lulus()) {
+                PdfPCell foto = new PdfPCell(new Phrase("Foto", boldFont));
+                foto.setPadding(8);
+                foto.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(foto);
 
-                            PdfPCell noCell = new PdfPCell(new Phrase(String.valueOf(nomor)));
-                            noCell.setPadding(8);
-                            noCell.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
-                            table.addCell(noCell);
+                PdfPCell jur = new PdfPCell(new Phrase("Jurusan", boldFont));
+                jur.setPadding(8);
+                jur.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(jur);
 
-                            PdfPCell npmCell = new PdfPCell(new Phrase(String.valueOf(alumni.getNpm())));
-                            npmCell.setPadding(8);
-                            table.addCell(npmCell);
+                PdfPCell tahun = new PdfPCell(new Phrase("Tahun Lulus", boldFont));
+                tahun.setPadding(8);
+                tahun.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                table.addCell(tahun);
 
-                            PdfPCell namaCell = new PdfPCell(new Phrase(alumni.getNama()));
-                            namaCell.setPadding(8);
-                            table.addCell(namaCell);
+                // Set the total width of the table to make it adjust according to content
+                table.setTotalWidth(PageSize.A4.rotate().getWidth()); // Menggunakan lebar halaman A4 dalam mode landscape
 
-                            PdfPCell tempatCell = new PdfPCell(new Phrase(alumni.getTempat_lahir()));
-                            tempatCell.setPadding(8);
-                            table.addCell(tempatCell);
+                int nomor = 1;
+                // Add alumni data to the PDF
+                for (Alumni alumni : alumniList) {
+                    for (Jurusan jurusan : jurusanList){
+                        for (Tahun_lulus tahun_lulus : tahunLulusList){
+                            if (alumni.getId_tahun_lulus() == id_tahun_lulus && alumni.getId_jurusan() == jurusan.getId_jurusan() && alumni.getId_tahun_lulus() == tahun_lulus.getId_tahun_lulus()) {
 
-                            PdfPCell tglCell = new PdfPCell(new Phrase(alumni.getTgl_lahir()));
-                            tglCell.setPadding(8);
-                            table.addCell(tglCell);
+                                PdfPCell noCell = new PdfPCell(new Phrase(String.valueOf(nomor)));
+                                noCell.setPadding(8);
+                                noCell.setHorizontalAlignment(Element.ALIGN_CENTER); // Mengatur alignment ke tengah
+                                table.addCell(noCell);
 
-                            PdfPCell jkCell = new PdfPCell(new Phrase(alumni.getJk()));
-                            jkCell.setPadding(8);
-                            table.addCell(jkCell);
+                                PdfPCell npmCell = new PdfPCell(new Phrase(String.valueOf(alumni.getNpm())));
+                                npmCell.setPadding(8);
+                                table.addCell(npmCell);
 
-                            PdfPCell emailCell = new PdfPCell(new Phrase(alumni.getEmail()));
-                            emailCell.setPadding(8);
-                            table.addCell(emailCell);
+                                PdfPCell namaCell = new PdfPCell(new Phrase(alumni.getNama()));
+                                namaCell.setPadding(8);
+                                table.addCell(namaCell);
 
-                            PdfPCell phoneCell = new PdfPCell(new Phrase(alumni.getNo_hp()));
-                            phoneCell.setPadding(8);
-                            table.addCell(phoneCell);
+                                PdfPCell tempatCell = new PdfPCell(new Phrase(alumni.getTempat_lahir()));
+                                tempatCell.setPadding(8);
+                                table.addCell(tempatCell);
 
-                            PdfPCell alamatCell = new PdfPCell(new Phrase(alumni.getAlamat()));
-                            alamatCell.setPadding(8);
-                            table.addCell(alamatCell);
+                                PdfPCell tglCell = new PdfPCell(new Phrase(alumni.getTgl_lahir()));
+                                tglCell.setPadding(8);
+                                table.addCell(tglCell);
 
-                            PdfPCell fotoCell = new PdfPCell(new Phrase(alumni.getFoto()));
-                            fotoCell.setPadding(8);
-                            table.addCell(fotoCell);
+                                PdfPCell jkCell = new PdfPCell(new Phrase(alumni.getJk()));
+                                jkCell.setPadding(8);
+                                table.addCell(jkCell);
 
-                            PdfPCell jurusanCell = new PdfPCell(new Phrase(jurusan.getNama_jurusan()));
-                            jurusanCell.setPadding(8);
-                            table.addCell(jurusanCell);
+                                PdfPCell emailCell = new PdfPCell(new Phrase(alumni.getEmail()));
+                                emailCell.setPadding(8);
+                                table.addCell(emailCell);
 
-                            PdfPCell tlCell = new PdfPCell(new Phrase(String.valueOf(tahun_lulus.getTahun_lulus())));
-                            tlCell.setPadding(8);
-                            table.addCell(tlCell);
+                                PdfPCell phoneCell = new PdfPCell(new Phrase(alumni.getNo_hp()));
+                                phoneCell.setPadding(8);
+                                table.addCell(phoneCell);
 
-                            nomor++;
+                                PdfPCell alamatCell = new PdfPCell(new Phrase(alumni.getAlamat()));
+                                alamatCell.setPadding(8);
+                                table.addCell(alamatCell);
 
+//                                PdfPCell fotoCell = new PdfPCell(new Phrase(alumni.getFoto()));
+//                                fotoCell.setPadding(8);
+//                                table.addCell(fotoCell);
 
+                                // Load image from URL using Picasso
+                                Bitmap bitmap = loadBitmapFromUrl(Db_Contract.pathImage + alumni.getFoto());
+                                PdfPCell fotoCell = new PdfPCell(new Phrase(""));
+                                fotoCell.setPadding(8);
+                                fotoCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                if (bitmap != null) {
+                                    Image image = Image.getInstance(getBytesFromBitmap(bitmap));
+                                    image.scaleAbsolute(40, 40); // Sesuaikan ukuran gambar sesuai kebutuhan
+                                    fotoCell.addElement(image);
+                                }
+                                table.addCell(fotoCell);
+
+                                PdfPCell jurusanCell = new PdfPCell(new Phrase(jurusan.getNama_jurusan()));
+                                jurusanCell.setPadding(8);
+                                table.addCell(jurusanCell);
+
+                                PdfPCell tlCell = new PdfPCell(new Phrase(String.valueOf(tahun_lulus.getTahun_lulus())));
+                                tlCell.setPadding(8);
+                                table.addCell(tlCell);
+
+                                nomor++;
+
+                            }
                         }
                     }
                 }
+
+                document.add(table);
+                document.close();
+
+                return pdfFilePath;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
             }
+        }
 
-            document.add(table);
-            document.close();
+        @Override
+        protected void onPostExecute(String pdfFilePath) {
+            super.onPostExecute(pdfFilePath);
 
-            Toast.makeText(this, "PDF Downloaded: " + pdfFilePath, Toast.LENGTH_LONG).show();
-
-        } catch (DocumentException | IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error creating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            if (pdfFilePath != null) {
+                Toast.makeText(HelloWorld.this, "PDF Downloaded: " + pdfFilePath, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(HelloWorld.this, "Error creating PDF", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
+    // Method to load Bitmap from URL using Picasso
+    private Bitmap loadBitmapFromUrl(String url) {
+        try {
+            return Picasso.get().load(url).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Method to convert Bitmap to byte array
+    private byte[] getBytesFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+
+
 
     private int getIdTl(int namaTahunLulus) {
         int idTl = -1; // ID default jika tidak ditemukan
