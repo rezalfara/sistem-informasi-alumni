@@ -10,6 +10,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -33,7 +34,9 @@ public class Register extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private ImageView fotoAlumni;
+    private ImageButton btnTogglePassword;
     private String imageString;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,14 @@ public class Register extends AppCompatActivity {
         fotoAlumni = findViewById(R.id.fotoAlumni);
         btnUploadImage = findViewById(R.id.btnUploadImage);
         btnRegister = findViewById(R.id.btnRegister);
+        btnTogglePassword = findViewById(R.id.btnTogglePassword);
+
+        btnTogglePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                togglePasswordVisibility();
+            }
+        });
 
         btnUploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +116,21 @@ public class Register extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible;
+
+        if (isPasswordVisible) {
+            etPassword.setInputType(etPassword.getInputType() & ~android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.hide); // Ganti gambar mata tertutup
+        } else {
+            etPassword.setInputType(etPassword.getInputType() | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.show); // Ganti gambar mata terbuka
+        }
+
+        // Set cursor position to the end
+        etPassword.setSelection(etPassword.getText().length());
     }
 
     private void showFileChooser() {

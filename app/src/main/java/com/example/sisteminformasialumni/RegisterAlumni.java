@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -44,6 +45,11 @@ public class RegisterAlumni extends AppCompatActivity {
     private Bitmap bitmap;
     private ImageView fotoAlumni;
     private String imageString;
+    private ImageButton btnTogglePassword;
+    private boolean isPasswordVisible = false;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,15 @@ public class RegisterAlumni extends AppCompatActivity {
         spinnerJurusan = findViewById(R.id.spinnerJurusan);
         btnUploadImage = findViewById(R.id.btnUploadImage);
         btnRegisterAlumni = findViewById(R.id.btnRegisterAlumni);
+        btnTogglePassword = findViewById(R.id.btnTogglePassword);
+
+        btnTogglePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                togglePasswordVisibility();
+            }
+        });
+
 
         // Mengambil data jurusan dari database
         fetchDataTahunLulus();
@@ -128,6 +143,21 @@ public class RegisterAlumni extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible;
+
+        if (isPasswordVisible) {
+            etPassword.setInputType(etPassword.getInputType() & ~android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.hide); // Ganti gambar mata tertutup
+        } else {
+            etPassword.setInputType(etPassword.getInputType() | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.show); // Ganti gambar mata terbuka
+        }
+
+        // Set cursor position to the end
+        etPassword.setSelection(etPassword.getText().length());
     }
 
     private int getIdJurusan(String namaJurusan) {

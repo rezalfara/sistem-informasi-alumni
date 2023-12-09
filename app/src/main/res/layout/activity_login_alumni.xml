@@ -41,6 +41,7 @@
                 android:id="@+id/etNpm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:hint="masukkan NPM"
                 android:drawableStart="@drawable/ic_username"
                 android:drawablePadding="10dp"/>
@@ -53,14 +54,32 @@
                 android:textStyle="bold"
                 android:layout_margin="10dp"/>
 
-            <EditText
-                android:id="@+id/etPassword"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="masukkan password"
-                android:inputType="textPassword"
-                android:drawableStart="@drawable/ic_password"
-                android:drawablePadding="10dp"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="masukkan password"
+                    android:inputType="textPassword"
+                    android:layout_weight="1"
+                    android:maxLength="6"
+                    android:drawableStart="@drawable/ic_password"
+                    android:drawablePadding="10dp"/>
+
+                <ImageButton
+                    android:id="@+id/btnTogglePassword"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/show"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="Toggle Password Visibility"/>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnLoginAlumni"
