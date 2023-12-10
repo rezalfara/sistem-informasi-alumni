@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -55,11 +57,24 @@ public class tambahAlumni extends AppCompatActivity implements DatePickerDialog.
     private Bitmap bitmap;
     private ImageView fotoAlumni;
     private String imageString;
+    private ImageButton btnBack;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tambah_alumni);
+
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         etNpm = findViewById(R.id.etNpm);
         etNama = findViewById(R.id.etNama);
@@ -146,13 +161,13 @@ public class tambahAlumni extends AppCompatActivity implements DatePickerDialog.
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, Db_Contract.urlCreate, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Toast.makeText(getApplicationContext(), "Tambah Data Berhasil", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), "Ada Data Yang Masih Kosong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
                         }
                     })
                     {

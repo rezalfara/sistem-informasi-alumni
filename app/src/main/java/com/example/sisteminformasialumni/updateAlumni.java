@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -51,15 +53,26 @@ public class updateAlumni extends AppCompatActivity implements DatePickerDialog.
     private List<Jurusan> jurusanList = new ArrayList<>();
     private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
     private List<Alumni> alumniList = new ArrayList<>();
-
     private static final int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private ImageView fotoAlumni;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_alumni);
+
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         etId = findViewById(R.id.etId);
         etNpm = findViewById(R.id.etNpm);
@@ -175,6 +188,11 @@ public class updateAlumni extends AppCompatActivity implements DatePickerDialog.
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void showDatePickerDialog() {

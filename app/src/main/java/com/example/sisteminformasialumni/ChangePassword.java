@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -30,11 +32,23 @@ public class ChangePassword extends AppCompatActivity {
     private Alumni alumni;
     TextInputEditText etOld, etNew, etConfirm;
     Button btnChange;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         etOld = findViewById(R.id.etOld);
         etNew = findViewById(R.id.etNew);
@@ -45,9 +59,12 @@ public class ChangePassword extends AppCompatActivity {
         Intent intent = getIntent();
         alumni = (Alumni) intent.getSerializableExtra("alumni");
         int npm = alumni.getNpm();
+        String oldPass = alumni.getPassword();
+
 //        // Tampilkan informasi dalam Toast
 //        Toast.makeText(getApplicationContext(), "NPM: " + npm, Toast.LENGTH_LONG).show();
-        getPasswordbyNpm(npm);
+//        getPasswordbyNpm(npm);
+        etOld.setText(oldPass);
 
         btnChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,37 +82,42 @@ public class ChangePassword extends AppCompatActivity {
         });
     }
 
-    private void getPasswordbyNpm(int npm) {
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetPasswordByNpm+npm,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            // Parsing data JSON, karena sekarang responsenya adalah objek tunggal bukan array
-                            JSONObject alumni = new JSONObject(response);
-
-                            // Mendapatkan data dari objek JSON
-                            String password = alumni.getString("password");
-
-                            etOld.setText(password);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                        Toast.makeText(ChangePassword.this, "Error getting password", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        //adding our stringrequest to queue
-        Volley.newRequestQueue(this).add(stringRequest);
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
+
+//    private void getPasswordbyNpm(int npm) {
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlGetPasswordByNpm+npm,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        try {
+//                            // Parsing data JSON, karena sekarang responsenya adalah objek tunggal bukan array
+//                            JSONObject alumni = new JSONObject(response);
+//
+//                            // Mendapatkan data dari objek JSON
+//                            String password = alumni.getString("password");
+//
+//                            etOld.setText(password);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // Handle error
+//                        Toast.makeText(ChangePassword.this, "Error getting password", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//        //adding our stringrequest to queue
+//        Volley.newRequestQueue(this).add(stringRequest);
+//    }
 
     private void updatePassword(final int npm){
         String baru = etNew.getText().toString();

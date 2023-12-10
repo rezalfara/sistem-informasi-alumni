@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,14 +36,25 @@ public class detailAlumniOnly extends AppCompatActivity {
     private List<Jurusan> jurusanList;
     private List<Tahun_lulus> tahunLulusList;
     private RecyclerView rvDetailAlumni;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_alumni);
 
-        //getting the recyclerview from xml
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
 
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        //getting the recyclerview from xml
         rvDetailAlumni = findViewById(R.id.rvDetailAlumni);
         rvDetailAlumni.setHasFixedSize(true);
         rvDetailAlumni.setLayoutManager(new LinearLayoutManager(this));
@@ -66,8 +79,6 @@ public class detailAlumniOnly extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(detailAlumniOnly.this, MainActivityAlumni.class));
-        finish();
     }
 
     private void loadAlumniById(int alumniId) {

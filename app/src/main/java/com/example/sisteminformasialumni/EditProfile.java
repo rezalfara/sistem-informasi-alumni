@@ -2,6 +2,7 @@ package com.example.sisteminformasialumni;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -62,10 +64,23 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
     private static final int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private ImageView fotoAlumni;
+    private ImageButton btnBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         etId = findViewById(R.id.etId);
         etNpm = findViewById(R.id.etNpm);
@@ -184,6 +199,11 @@ public class EditProfile extends AppCompatActivity implements DatePickerDialog.O
 
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private Bitmap decodeBase64ToBitmap(String base64String) {

@@ -38,6 +38,7 @@ public class detailAlumni extends AppCompatActivity {
     private List<Jurusan> jurusanList;
     private List<Tahun_lulus> tahunLulusList;
     private RecyclerView rvDetailAlumni;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,14 @@ public class detailAlumni extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         //getting the recyclerview from xml
         rvDetailAlumni = findViewById(R.id.rvDetailAlumni);
@@ -67,6 +76,11 @@ public class detailAlumni extends AppCompatActivity {
         loadJurusan(jurusanId);
         loadTahunLulus(tlId);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void loadAlumniById(int alumniId) {

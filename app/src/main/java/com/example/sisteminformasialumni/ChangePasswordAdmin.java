@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,10 +30,23 @@ public class ChangePasswordAdmin extends AppCompatActivity {
     private Admin admin;
     TextInputEditText etOld, etNew, etConfirm;
     Button btnChange;
+    private ImageButton btnBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password_admin);
+
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         etOld = findViewById(R.id.etOld);
         etNew = findViewById(R.id.etNew);
@@ -60,6 +75,11 @@ public class ChangePasswordAdmin extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void updatePassword(final String username){

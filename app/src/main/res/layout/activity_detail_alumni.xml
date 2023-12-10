@@ -14,6 +14,13 @@
         android:background="#E6E6E6"
         android:layout_marginBottom="25dp">
 
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"
+            android:background="@android:color/transparent"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
