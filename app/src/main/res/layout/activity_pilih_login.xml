@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".PilihLogin"
     android:orientation="vertical"
+    android:background="#E6E6E6"
     android:gravity="center_vertical">
 
     <Button
         android:id="@+id/btnLoginAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:background="@android:color/transparent"
         android:layout_gravity="center"
         android:text="Login Admin"
         android:textSize="20dp"
@@ -24,7 +25,7 @@
         android:id="@+id/btnLoginAlumni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:background="@android:color/transparent"
         android:layout_gravity="center"
         android:text="Login Alumni"
         android:textSize="20dp"

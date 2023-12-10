@@ -7,14 +7,23 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Daftar Alumni"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:gravity="center"
-        android:layout_margin="20dp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="#E6E6E6"
+        android:layout_marginBottom="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Daftar Alumni"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:textColor="@color/black"/>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
@@ -22,7 +31,6 @@
         android:layout_height="wrap_content"
         app:iconifiedByDefault="false"
         app:queryHint="Search Alumni"
-        android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

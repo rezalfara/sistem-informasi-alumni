@@ -76,7 +76,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/show"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="@android:color/transparent"
                     android:contentDescription="Toggle Password Visibility"/>
 
             </LinearLayout>
