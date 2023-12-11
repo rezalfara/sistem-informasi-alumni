@@ -429,6 +429,7 @@ public class updateAlumni extends AppCompatActivity implements DatePickerDialog.
                             intent.putExtra("jurusanId", id_jurusan);
                             intent.putExtra("tlId", id_tahun_lulus);
                             startActivity(intent);
+                            finish();
 
                         } else {
                             Log.e("Error", response);

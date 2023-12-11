@@ -46,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="masukkan username"
+                android:maxLength="15"
                 android:drawableStart="@drawable/ic_username"
                 android:drawablePadding="10dp"/>
 
@@ -62,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="masukkan nama"
+                android:maxLength="50"
                 android:drawableStart="@drawable/ic_username"
                 android:drawablePadding="10dp"/>
 
@@ -113,6 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="masukkan alamat"
+                android:maxLength="50"
                 android:drawableStart="@drawable/ic_alamat"
                 android:drawablePadding="10dp"/>
 

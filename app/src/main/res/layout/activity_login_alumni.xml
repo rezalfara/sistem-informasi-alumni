@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:hint="masukkan NPM"
+                android:maxLength="15"
                 android:drawableStart="@drawable/ic_username"
                 android:drawablePadding="10dp"/>
 

@@ -79,6 +79,8 @@ public class detailAlumniOnly extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        startActivity(new Intent(detailAlumniOnly.this, MainActivityAlumni.class));
+        finish();
     }
 
     private void loadAlumniById(int alumniId) {
