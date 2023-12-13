@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="selected_icon_color">#FF0000</color> <!-- Change to your desired color -->
+    <color name="default_icon_color">#EEF9FA</color> <!-- Change to your desired color -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="hijau">#4CAF50</color>
     <color name="kuning">#FFC107</color>
     <color name="abu">#929292</color>
+    <color name="main">#22A8BA</color>
+    <color name="second">#71786C</color>
 </resources>

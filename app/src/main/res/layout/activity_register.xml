@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/main"
     tools:context=".Register">
 
     <TextView
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:textSize="25dp"
         android:text="Register"
+        android:textColor="@color/default_icon_color"
         android:gravity="center"
         android:textStyle="bold"
         android:layout_margin="30dp"/>
@@ -21,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:cardCornerRadius="15dp"
+        android:backgroundTint="@color/default_icon_color"
         android:elevation="10dp">
 
         <ScrollView
@@ -134,7 +137,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pilih Foto"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="@color/main"
+                android:textColor="@color/default_icon_color"
                 android:layout_marginBottom="20dp"/>
 
             <ImageView
@@ -149,7 +153,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="REGISTER"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="@color/main"
+                android:textColor="@color/default_icon_color"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="40dp"
                 android:layout_marginRight="20dp"

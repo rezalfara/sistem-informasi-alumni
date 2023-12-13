@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/default_icon_color">
 
     <LinearLayout
         android:id="@+id/lldetail"
@@ -29,24 +30,26 @@
             <Button
                 android:id="@+id/btnUpdate"
                 android:drawableLeft="@drawable/editing"
+                android:drawableTint="@color/default_icon_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Update Data"
-                android:backgroundTint="#E6E6E6"
+                android:backgroundTint="@color/main"
                 android:layout_weight="1"
                 android:layout_marginRight="10dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/default_icon_color"/>
 
             <Button
                 android:id="@+id/btnDelete"
                 android:drawableLeft="@drawable/delete"
+                android:drawableTint="@color/default_icon_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hapus Data"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="#E6E6E6"
-                android:textColor="@color/black"/>
+                android:backgroundTint="@color/main"
+                android:textColor="@color/default_icon_color"/>
 
         </LinearLayout>
 

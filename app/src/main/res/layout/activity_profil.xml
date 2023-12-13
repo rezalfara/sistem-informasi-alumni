@@ -5,13 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EEF9FA"
     tools:context=".Profil">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#E6E6E6"
+        android:background="@color/main"
         android:layout_marginBottom="15dp">
 
         <TextView
@@ -21,7 +22,7 @@
             android:textStyle="bold"
             android:textSize="25dp"
             android:gravity="center"
-            android:textColor="@color/black"/>
+            android:textColor="#EEF9FA"/>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -63,6 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Edit Profil"
+            android:backgroundTint="@color/main"
+            android:textColor="@color/default_icon_color"
             android:textSize="15dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
@@ -74,6 +77,8 @@
             android:layout_height="wrap_content"
             android:text="Ubah Password"
             android:textSize="15dp"
+            android:backgroundTint="@color/main"
+            android:textColor="@color/default_icon_color"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="10dp"/>
@@ -83,7 +88,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Keluar"
-            android:backgroundTint="#ff0000"
+            android:backgroundTint="@color/second"
+            android:textColor="@color/default_icon_color"
             android:textSize="15dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"/>
@@ -96,6 +102,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_navigation_menu_alumni" />
+        android:background="#22A8BA"
+        app:menu="@menu/bottom_navigation_menu_alumni"
+        app:itemTextColor="@color/default_icon_color"
+        app:itemIconTint="@color/default_icon_color"
+        app:itemRippleColor="#08707A"
+        app:itemActiveIndicatorStyle="@null"
+        app:itemPaddingBottom="20dp"/>
 
   </RelativeLayout>

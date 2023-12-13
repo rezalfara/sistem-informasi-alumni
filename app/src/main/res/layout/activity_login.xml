@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/main"
     tools:context=".Login">
 
     <TextView
@@ -14,6 +15,7 @@
         android:text="Login"
         android:gravity="center"
         android:textStyle="bold"
+        android:textColor="@color/default_icon_color"
         android:layout_margin="30dp"/>
 
     <androidx.cardview.widget.CardView
@@ -21,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:cardCornerRadius="15dp"
+        android:backgroundTint="@color/default_icon_color"
         android:elevation="10dp">
 
         <LinearLayout
@@ -87,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:text="LOGIN"
                 android:layout_marginTop="15dp"
-                android:backgroundTint="@color/hijau"
+                android:backgroundTint="@color/main"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"/>
 
@@ -96,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="REGISTER"
-                android:backgroundTint="@color/kuning"
+                android:backgroundTint="@color/second"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"/>

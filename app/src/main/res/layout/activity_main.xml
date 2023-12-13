@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/my_drawer_layout"
+    android:background="#EEF9FA"
     tools:context=".MainActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#E6E6E6"
+            android:background="#22A8BA"
             android:layout_marginBottom="15dp">
 
                 <TextView
@@ -22,7 +23,7 @@
                     android:textStyle="bold"
                     android:textSize="25dp"
                     android:gravity="center"
-                    android:textColor="@color/black"/>
+                    android:textColor="#EEF9FA"/>
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -43,7 +44,6 @@
                 <Button
                     android:id="@+id/btnAdd"
                     style="@style/Widget.AppCompat.Button.Small"
-                    android:backgroundTint="@color/abu"
                     android:layout_width="wrap_content"
                     android:textSize="30dp"
                     android:layout_height="wrap_content"
@@ -70,13 +70,18 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-        <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:menu="@menu/bottom_navigation_menu" />
+            android:background="#22A8BA"
+            app:menu="@menu/bottom_navigation_menu"
+            app:itemTextColor="@color/default_icon_color"
+            app:itemIconTint="@color/default_icon_color"
+            app:itemRippleColor="#08707A"
+            app:itemActiveIndicatorStyle="@null"
+            app:itemPaddingBottom="20dp"/>
 
 
 
