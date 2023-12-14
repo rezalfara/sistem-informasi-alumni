@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -45,14 +46,24 @@ public class RegisterAlumni extends AppCompatActivity {
     private Bitmap bitmap;
     private ImageView fotoAlumni;
     private String imageString;
-    private ImageButton btnTogglePassword;
+    private ImageButton btnTogglePassword, btnBack;
     private boolean isPasswordVisible = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_alumni);
+
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         etNpm = findViewById(R.id.etNpm);
         etNama = findViewById(R.id.etNama);
@@ -142,6 +153,13 @@ public class RegisterAlumni extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(RegisterAlumni.this, LoginAlumni.class));
+        finish();
     }
 
     private void togglePasswordVisibility() {

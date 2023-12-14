@@ -6,27 +6,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class PilihLogin extends AppCompatActivity {
 
-    Button btnLoginAdmin, btnLoginAlumni;
+    LinearLayout llTop, llBottom;
+//    Button btnLoginAdmin, btnLoginAlumni;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pilih_login);
 
-        btnLoginAdmin = findViewById(R.id.btnLoginAdmin);
-        btnLoginAlumni = findViewById(R.id.btnLoginAlumni);
+        llTop = findViewById(R.id.llTop);
+        llBottom = findViewById(R.id.llBottom);
 
-        btnLoginAdmin.setOnClickListener(new View.OnClickListener() {
+        llTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
         });
 
-        btnLoginAlumni.setOnClickListener(new View.OnClickListener() {
+        llBottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), LoginAlumni.class));

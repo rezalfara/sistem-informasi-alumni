@@ -1,6 +1,7 @@
 package com.example.sisteminformasialumni;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,13 +29,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 public class Register extends AppCompatActivity {
-
     private EditText etUsername, etNama, etPassword, etAlamat;
     private Button btnUploadImage, btnRegister;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private ImageView fotoAlumni;
-    private ImageButton btnTogglePassword;
+    private ImageButton btnTogglePassword, btnBack;
     private String imageString;
     private boolean isPasswordVisible = false;
 
@@ -42,6 +42,17 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         etUsername = findViewById(R.id.etUsername);
         etNama = findViewById(R.id.etNama);
@@ -116,6 +127,13 @@ public class Register extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(Register.this, Login.class));
+        finish();
     }
 
     private void togglePasswordVisibility() {
