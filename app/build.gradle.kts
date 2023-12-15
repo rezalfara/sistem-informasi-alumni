@@ -57,6 +57,7 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.8")
 
     implementation ("com.itextpdf:itextg:5.5.10")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 
 

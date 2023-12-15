@@ -7,6 +7,7 @@
     import android.content.pm.PackageManager;
     import android.graphics.Bitmap;
     import android.graphics.BitmapFactory;
+    import android.graphics.Color;
     import android.graphics.Matrix;
     import android.os.AsyncTask;
     import android.os.Build;
@@ -30,8 +31,23 @@
     import com.android.volley.RequestQueue;
     import com.android.volley.Response;
     import com.android.volley.VolleyError;
+    import com.android.volley.toolbox.JsonArrayRequest;
     import com.android.volley.toolbox.StringRequest;
     import com.android.volley.toolbox.Volley;
+    import com.github.mikephil.charting.charts.BarChart;
+    import com.github.mikephil.charting.charts.PieChart;
+    import com.github.mikephil.charting.components.Legend;
+    import com.github.mikephil.charting.components.XAxis;
+    import com.github.mikephil.charting.components.YAxis;
+    import com.github.mikephil.charting.data.BarData;
+    import com.github.mikephil.charting.data.BarDataSet;
+    import com.github.mikephil.charting.data.BarEntry;
+    import com.github.mikephil.charting.data.PieData;
+    import com.github.mikephil.charting.data.PieDataSet;
+    import com.github.mikephil.charting.data.PieEntry;
+    import com.github.mikephil.charting.formatter.ValueFormatter;
+    import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+    import com.github.mikephil.charting.utils.ColorTemplate;
     import com.google.android.material.bottomnavigation.BottomNavigationView;
     import com.itextpdf.text.BadElementException;
     import com.itextpdf.text.Chunk;
@@ -78,11 +94,20 @@
         private List<Tahun_lulus> tahunLulusList = new ArrayList<>();
         private List<Jurusan> jurusanList = new ArrayList<>();
         Spinner SpinnerTL;
+        private PieChart pieChart;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_hello_world);
-    
+
+            pieChart = findViewById(R.id.pieChart);
+            pieChart.getDescription().setEnabled(false);
+            // Set up bar chart
+            // Get data from your PHP script (replace this with your actual data retrieval logic)
+            getDataFromPHP();
+
+
             btnDownload = findViewById(R.id.btnDownload);
             SpinnerTL = findViewById(R.id.yearSpinner);
     
@@ -137,7 +162,7 @@
                 });
             }
         }
-    
+
         private void showPermissionDialog() {
             if (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this, "Permission Accepted", Toast.LENGTH_SHORT).show();
@@ -564,10 +589,7 @@
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             return stream.toByteArray();
         }
-    
-    
-    
-    
+
         private int getIdTl(int namaTahunLulus) {
             int idTl = -1; // ID default jika tidak ditemukan
     
@@ -732,5 +754,87 @@
             super.onBackPressed();
             finishAffinity();
         }
-    
+
+        // Replace this method with actual data retrieval logic from your PHP script
+        private void displayPieChart(ArrayList<PieEntry> entries) {
+            // Create a dataset
+            PieDataSet dataSet = new PieDataSet(entries, null);
+            dataSet.setColors(ColorTemplate.LIBERTY_COLORS);
+            // Set ukuran font label di dalam sektor
+            dataSet.setValueTextSize(15f); // Gantilah dengan ukuran font yang diinginkan
+            // Set space between slices (adjust the value as needed, default is 0f)
+            dataSet.setSliceSpace(5f); // Set the desired space in pixels
+
+            // Create PieData object and set the dataset
+            PieData pieData = new PieData(dataSet);
+
+            // Set various configurations for the PieChart (optional)
+            pieChart.setEntryLabelColor(Color.BLACK);
+            pieChart.setUsePercentValues(false);
+            pieChart.setDrawHoleEnabled(true);
+            pieChart.setHoleColor(Color.WHITE);
+            pieChart.setTransparentCircleRadius(0f);
+
+            // Set the PieData to the chart
+            pieChart.setData(pieData);
+            // Set custom value formatter for the PieChart
+            pieData.setValueFormatter(new IntegerValueFormatter());
+
+
+            // Refresh the chart to display the data
+            pieChart.invalidate();
+        }
+
+        private void getDataFromPHP() {
+            // Dummy data for demonstration
+            ArrayList<PieEntry> entries = new ArrayList<>();
+            // entries.add(new PieEntry(30f, "2022")); // Uncomment this line if you want to keep the dummy data
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, Db_Contract.urlCountAlumni,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                //converting the string to json array object
+                                JSONArray array = new JSONArray(response);
+
+                                //traversing through all the object
+                                for (int i = 0; i < array.length(); i++) {
+                                    //getting product object from json array
+                                    JSONObject alumni = array.getJSONObject(i);
+                                    entries.add(new PieEntry(alumni.getInt("alumni_count") , alumni.getString("nama_jurusan")));
+                                }
+
+                                // Display the pie chart with the retrieved data
+                                displayPieChart(entries);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    });
+
+            //adding our stringrequest to queue
+            Volley.newRequestQueue(this).add(stringRequest);
+        }
+
+    }
+
+    // Custom ValueFormatter for displaying integer values in PieChart
+    class IntegerValueFormatter extends ValueFormatter {
+        @Override
+        public String getFormattedValue(float value) {
+            return String.valueOf(Math.round(value));
+        }
+
+        @Override
+        public String getPieLabel(float value, PieEntry pieEntry) {
+            return String.valueOf(Math.round(value));
+        }
     }
