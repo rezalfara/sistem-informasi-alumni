@@ -94,7 +94,7 @@ public class Login extends AppCompatActivity {
                                 handler.postDelayed(new Runnable() {
                                     public void run() {
                                         progressDialog.dismiss();
-                                        Toast.makeText(getApplicationContext(), "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
                                     }
                                 }, 3000); // 3000 milliseconds delay
 
@@ -106,7 +106,7 @@ public class Login extends AppCompatActivity {
                                 handler.postDelayed(new Runnable() {
                                     public void run() {
                                         progressDialog.dismiss();
-                                        Toast.makeText(getApplicationContext(), "Username atau password salah", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
                                     }
                                 }, 2000); // 3000 milliseconds delay
 
