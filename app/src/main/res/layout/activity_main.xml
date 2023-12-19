@@ -83,6 +83,4 @@
             app:itemActiveIndicatorStyle="@null"
             app:itemPaddingBottom="20dp"/>
 
-
-
 </LinearLayout>

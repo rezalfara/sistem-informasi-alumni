@@ -76,6 +76,24 @@ public class MainActivityAlumni extends AppCompatActivity {
 
                     if (loggedInAlumni != null) {
                         // Buat Intent untuk pindah ke halaman EditProfile
+                        Intent intent = new Intent(MainActivityAlumni.this, NewsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        // Mengirim objek Alumni
+                        intent.putExtra("alumni", loggedInAlumni);
+
+                        // Start activity dengan Intent
+                        startActivity(intent);
+                    } else {
+                        // Handle case when Alumni object is not found
+                        Toast.makeText(MainActivityAlumni.this, "Alumni not found for npm: " + loggedInNPM, Toast.LENGTH_SHORT).show();
+                    }
+                }else if (itemId == R.id.action_page3) {
+                    // Find the Alumni object based on the logged-in npm
+                    Alumni loggedInAlumni = findAlumniByNpm(loggedInNPM);
+
+                    if (loggedInAlumni != null) {
+                        // Buat Intent untuk pindah ke halaman EditProfile
                         Intent intent = new Intent(MainActivityAlumni.this, Profil.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 

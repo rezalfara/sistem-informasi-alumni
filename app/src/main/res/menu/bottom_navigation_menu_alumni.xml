@@ -6,6 +6,10 @@
         android:title="Home" />
     <item
         android:id="@+id/action_page2"
+        android:icon="@drawable/newspaper"
+        android:title="News" />
+    <item
+        android:id="@+id/action_page3"
         android:icon="@drawable/profile"
         android:title="Profil" />
     <!-- Tambahkan item untuk halaman lain jika diperlukan -->

@@ -36,7 +36,7 @@ public class ProfilAdmin extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         // Set checked pada item pertama saat pertama kali dibuka
-        bottomNavigationView.getMenu().findItem(R.id.action_page3).setChecked(true);
+        bottomNavigationView.getMenu().findItem(R.id.action_page4).setChecked(true);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -55,6 +55,12 @@ public class ProfilAdmin extends AppCompatActivity {
                     intent.putExtra("admin", admin);
                     startActivity(intent);
                 } else if (itemId == R.id.action_page3) {
+                    // Tampilkan halaman kedua tanpa efek transisi
+                    Intent intent = new Intent(ProfilAdmin.this, NewsActivityAdmin.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtra("admin", admin);
+                    startActivity(intent);
+                } else if (itemId == R.id.action_page4) {
                     return false;
                 }
 

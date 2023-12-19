@@ -83,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.action_page1) {
-//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//                    finish();
                     return false;
                 } else if (itemId == R.id.action_page2) {
                     // Find the Admin object based on the logged-in username
@@ -105,6 +103,24 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Admin not found for username: " + loggedInUsername, Toast.LENGTH_SHORT).show();
                     }
                 }else if (itemId == R.id.action_page3) {
+                    // Find the Admin object based on the logged-in username
+                    Admin loggedInAdmin = findAdminByUsername(loggedInUsername);
+
+                    if (loggedInAdmin != null) {
+                        // Buat Intent untuk pindah ke halaman EditProfile
+                        Intent intent = new Intent(MainActivity.this, NewsActivityAdmin.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                        // Mengirim objek Admin
+                        intent.putExtra("admin", loggedInAdmin);
+
+                        // Start activity dengan Intent
+                        startActivity(intent);
+                    } else {
+                        // Handle case when Alumni object is not found
+                        Toast.makeText(MainActivity.this, "Admin not found for username: " + loggedInUsername, Toast.LENGTH_SHORT).show();
+                    }
+                }else if (itemId == R.id.action_page4) {
                     // Find the Admin object based on the logged-in username
                     Admin loggedInAdmin = findAdminByUsername(loggedInUsername);
 

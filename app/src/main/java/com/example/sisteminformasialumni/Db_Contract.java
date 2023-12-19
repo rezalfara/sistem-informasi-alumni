@@ -1,7 +1,7 @@
 package com.example.sisteminformasialumni;
 
 public class Db_Contract {
-    public static String ip = "10.140.214.80";
+    public static String ip = "10.140.231.184";
     public static final String urlRegister = "http://"+ip+"/project/api-register.php";
     public static final String urlRegisterAlumni = "http://"+ip+"/project/api-register-alumni.php";
     public static final String urlLogin = "http://"+ip+"/project/api-login.php";
@@ -15,6 +15,7 @@ public class Db_Contract {
     public static final String urlDelete = "http://"+ip+"/project/api-delete-data.php";
     public static final String pathImage = "http://"+ip+"/project/img/";
     public static final String pathImageAdmin = "http://"+ip+"/project/imgAdmin/";
+    public static final String pathImageBerita = "http://"+ip+"/project/imgBerita/";
     public static final String urlGetJurusan = "http://"+ip+"/project/api-get-jurusan.php";
     public static final String urlGetJurusanById = "http://"+ip+"/project/api-read-jurusan-by-id.php?id_jurusan=";
     public static final String urlGetTahunLulus = "http://"+ip+"/project/api-get-tahunLulus.php";
@@ -24,5 +25,10 @@ public class Db_Contract {
     public static final String urlUpdatePasswordByNpm = "http://"+ip+"/project/api-update-password.php";
     public static final String urlUpdatePasswordByUsername = "http://"+ip+"/project/api-update-password-admin.php";
     public static final String urlCountAlumni = "http://"+ip+"/project/api-count-alumni.php";
+    public static final String urlReadBerita = "http://"+ip+"/project/api-read-berita.php";
+    public static final String urlUpdateBerita = "http://"+ip+"/project/api-update-berita.php";
+    public static final String urlReadBeritaById = "http://"+ip+"/project/api-read-berita-by-id.php?id_berita=";
+    public static final String urlDeleteBerita = "http://"+ip+"/project/api-delete-berita.php";
+    public static final String urlCreateBerita = "http://"+ip+"/project/api-create-berita.php";
 
 }
