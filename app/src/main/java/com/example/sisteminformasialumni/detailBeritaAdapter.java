@@ -115,7 +115,7 @@ public class detailBeritaAdapter extends RecyclerView.Adapter<detailBeritaAdapte
                                     // Kemungkinan menampilkan pesan sukses atau memperbarui tampilan RecyclerView
                                     Toast.makeText(mCtx, "Data berhasil dihapus", Toast.LENGTH_SHORT).show();
 
-                                    Intent intent = new Intent(mCtx, MainActivity.class);
+                                    Intent intent = new Intent(mCtx, NewsActivityAdmin.class);
                                     intent.putExtra("beritaId", beritaId);
                                     mCtx.startActivity(intent);
                                 }

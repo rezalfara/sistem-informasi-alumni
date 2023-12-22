@@ -19,6 +19,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.interfaces.ItemClickListener;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
@@ -61,8 +64,6 @@ public class NewsActivityAdmin extends AppCompatActivity {
             admin = (Admin) intent.getSerializableExtra("admin");
             loggedInUsername = String.valueOf(admin.getUsername());
         }
-
-        ImageSlider imageSlider = findViewById(R.id.image_slider);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         // Set checked pada item pertama saat pertama kali dibuka
@@ -177,6 +178,41 @@ public class NewsActivityAdmin extends AppCompatActivity {
                             //creating adapter object and setting it to recyclerview
                             NewsAdapter newsAdapter = new NewsAdapter(NewsActivityAdmin.this, beritaList);
                             rvBerita.setAdapter(newsAdapter);
+
+                            // Image list for the ImageSlider
+                            ArrayList<SlideModel> imageList = new ArrayList<>();
+                            ImageSlider imageSlider = findViewById(R.id.image_slider);
+                            // Assuming YourBeritaClass has getImageUrl() and getTitle() methods
+                            for (Berita berita : beritaList) {
+                                String imageUrl = Db_Contract.pathImageBerita + berita.getFoto();
+                                String title = berita.getJudul();
+
+                                // Assuming ScaleTypes.CENTER_CROP, change it based on your needs
+                                imageList.add(new SlideModel(imageUrl, title, ScaleTypes.CENTER_INSIDE));
+                            }
+                            imageSlider.setImageList(imageList);
+
+                            // Set ItemClickListener for ImageSlider
+                            imageSlider.setItemClickListener(new ItemClickListener() {
+                                @Override
+                                public void doubleClick(int i) {
+                                    // Handle double click if needed
+                                }
+
+                                @Override
+                                public void onItemSelected(int position) {
+                                    // Pass the selected position to the NewsAdapter
+                                    // Gunakan adapterPosition untuk mengakses elemen dengan benar
+                                    Berita selectedBerita = beritaList.get(position);
+                                    int beritaId = selectedBerita.getId_berita();
+
+                                    // Menggunakan Intent untuk memanggil class lain
+                                    Intent intent = new Intent(NewsActivityAdmin.this, detailBerita.class);
+                                    intent.putExtra("beritaId", beritaId);
+                                    startActivity(intent);
+
+                                }
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -96,7 +96,7 @@ public class tambahBerita extends AppCompatActivity implements DatePickerDialog.
                         @Override
                         public void onResponse(String response) {
                             Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), NewsActivityAdmin.class));
                         }
                     }, new Response.ErrorListener() {
                         @Override
